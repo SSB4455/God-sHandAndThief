@@ -1,5 +1,7 @@
 package org.bistu.kjcx.godandthief.statesystem;
 
+import org.bistu.kjcx.godandthief.MainSurfaceView;
+
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -31,7 +33,8 @@ public class SplashState implements IGameObject {
 	public void render(Canvas canvas) {
 		
 		canvas.drawColor(Color.BLACK);
-		canvas.drawLine(100, 100, 500, 100, paint);
+		canvas.drawLine(MainSurfaceView.SCREEN_W / 4, 0, MainSurfaceView.SCREEN_W / 2, MainSurfaceView.SCREEN_H, paint);
+		canvas.drawLine(0, MainSurfaceView.SCREEN_H, MainSurfaceView.SCREEN_W, 0, paint);
 		
 		//paint.setARGB(255, 255, 255, 255);		//A透明度越低越透明
 	}

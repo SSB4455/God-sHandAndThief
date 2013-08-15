@@ -62,6 +62,8 @@ public class MainSurfaceView extends SurfaceView implements Callback, Runnable {
 	public void surfaceCreated(SurfaceHolder holder) {		//Callback
 		stateSystem.addState("SplashState", new SplashState(context, stateSystem));
 		stateSystem.addState("MenuState", new MenuState(context, stateSystem));
+		stateSystem.addState("ThiefChooseState", new ThiefChooseState(context, stateSystem));
+		stateSystem.addState("ThiefPlayerState", new ThiefPlayerState(context, stateSystem));
 		stateSystem.changeState("SplashState");
 		
 		flag = true;
