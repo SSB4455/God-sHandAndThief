@@ -4,5 +4,8 @@
     <string name="app_name">God\'s hand and thief</string>
     <string name="hello_world">Hello world!</string>
     <string name="menu_settings">Settings</string>
+    <string name="gods_hand">God\'s Hand</string>
+    <string name="thief">Thief</string>
+    <string name="and_thief">And Thief</string>
 
 </resources>

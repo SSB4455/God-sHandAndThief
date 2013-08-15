@@ -7,30 +7,18 @@ import android.graphics.Paint;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
-import android.view.SurfaceHolder;
 
 public class SplashState implements IGameObject {
 	
 	private StateSystem stateSystem;
 	
-	private int screenW, screenH;
-	int i, j, laps, sideLength; 
-	float startX, stopX, startY, stopY;
-	long contractStep, diffuseStep;		// ’Àı≤Ω÷Ë£¨¿©…¢≤Ω÷Ë
-	float startXC, stopXC, startYC, stopYC;
-	
-	double includedXYAngle;
-	boolean isTurn, isC, isD, isC2, isD2;
-	double currentAngle;
-	Paint paint;
+	private Paint paint;
 	
 	
 	
-	public SplashState(Context context, StateSystem stateSystem, SurfaceHolder sfh) {
+	public SplashState(Context context, StateSystem stateSystem) {
 		this.stateSystem = stateSystem;
 		
-		screenW = sfh.getSurfaceFrame().right;
-		screenH = sfh.getSurfaceFrame().bottom;
 		
 		paint = new Paint();
 		paint.setColor(Color.WHITE);

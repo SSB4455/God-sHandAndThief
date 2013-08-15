@@ -4,9 +4,9 @@ import android.graphics.Canvas;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 
-public class MorePlayerState implements IGameObject {
+public class ThiefPlayerState implements IGameObject {
 
-	public MorePlayerState() {
+	public ThiefPlayerState() {
 		// TODO Auto-generated constructor stub
 	}
 

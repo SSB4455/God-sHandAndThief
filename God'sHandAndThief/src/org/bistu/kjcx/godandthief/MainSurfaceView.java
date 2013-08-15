@@ -6,6 +6,8 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Typeface;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
@@ -15,18 +17,19 @@ import android.view.SurfaceView;
 import android.widget.Toast;
 
 public class MainSurfaceView extends SurfaceView implements Callback, Runnable {
-
-	//创建一个SurfaceHolder 控制SurfaceView的
-	private SurfaceHolder sfh;
+	
+	public static int SCREEN_H, SCREEN_W;
+	
+	private SurfaceHolder sfh;		//创建一个SurfaceHolder 控制SurfaceView的
 	private StateSystem stateSystem;
 	
-	Context context;
+	private long [] time;
+	private long elapsedTime;
+	private boolean flag;
+
+	private Context context;
 	Canvas canvas;
-	
-	long [] time;
-	long elapsedTime;
-	boolean flag;
-	Paint paint;
+	private Paint paint;
 	
 	
 	
@@ -34,11 +37,16 @@ public class MainSurfaceView extends SurfaceView implements Callback, Runnable {
 		super(context);
 		
 		this.context = context;
+		DisplayMetrics dm = new DisplayMetrics();  
+		dm = getResources().getDisplayMetrics();
+		SCREEN_H = dm.heightPixels;
+		SCREEN_W = dm.widthPixels;
 		
 		time = new long[3];
 		
 		stateSystem = new StateSystem();
 		paint = new Paint();
+		paint.setTypeface(Typeface.createFromAsset(context.getAssets(), "fonts/UbuntuMono-R.ttf"));
 		paint.setColor(Color.WHITE);
 		
 		this.setClickable(true);
@@ -52,8 +60,8 @@ public class MainSurfaceView extends SurfaceView implements Callback, Runnable {
 	}	
 
 	public void surfaceCreated(SurfaceHolder holder) {		//Callback
-		stateSystem.addState("SplashState", new SplashState(context, stateSystem, sfh));
-		stateSystem.addState("MenuState", new MenuState(context, stateSystem, sfh));
+		stateSystem.addState("SplashState", new SplashState(context, stateSystem));
+		stateSystem.addState("MenuState", new MenuState(context, stateSystem));
 		stateSystem.changeState("SplashState");
 		
 		flag = true;
@@ -132,7 +140,7 @@ public class MainSurfaceView extends SurfaceView implements Callback, Runnable {
 
 	double calculateProcessTime() {
 		canvas.drawText("updateTime  = " + (time[1] - time[0]), 0, 10, paint);
-		canvas.drawText("renderTime    = " + (System.currentTimeMillis() - time[1]), 0, 21, paint);
+		canvas.drawText("renderTime  = " + (System.currentTimeMillis() - time[1]), 0, 21, paint);
 		elapsedTime = (System.currentTimeMillis() - time[2]);
 		canvas.drawText("elapsedTime = " + elapsedTime, 0, 32, paint);
 		//canvas.drawText("PostCanvasTime = " + (time[0] - time[2]), 0, 43, paint);
