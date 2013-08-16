@@ -13,7 +13,6 @@ public class Cloud extends GameActor {
 	private Context context;
 	
 	private int cloudSpeed, frameW, frameH;
-	private float cloudShrink;
 	private long go_elapsed;
 	
 	
@@ -41,11 +40,11 @@ public class Cloud extends GameActor {
 		}
 		
 		//³¬³öÆÁÄ»×ª»Ø
-		if(actorX < -frameW * cloudShrink) {
-			actorX = MainSurfaceView.SCREEN_W + (frameW * (cloudShrink - 1) / 2);
+		if(actorX < -frameW * shrink) {
+			actorX = MainSurfaceView.SCREEN_W + (frameW * (shrink - 1) / 2);
 		}
-		if(actorX > MainSurfaceView.SCREEN_W + (frameW * (cloudShrink - 1) / 2)) {
-			actorX = -frameW * cloudShrink;
+		if(actorX > MainSurfaceView.SCREEN_W + (frameW * (shrink - 1) / 2)) {
+			actorX = -frameW * shrink;
 		}
 	}
 	
@@ -53,9 +52,9 @@ public class Cloud extends GameActor {
 	public void render(Canvas canvas) {
 		canvas.save();
 		if(Background.FACE_TO == Background.TO_RIGHT)
-			canvas.scale(-cloudShrink, cloudShrink, actorX + frameW /2, actorY + frameH /2);
+			canvas.scale(-shrink, shrink, actorX + frameW /2, actorY + frameH /2);
 		else
-			canvas.scale(cloudShrink, cloudShrink, actorX + frameW /2, actorY + frameH /2);
+			canvas.scale(shrink, shrink, actorX + frameW /2, actorY + frameH /2);
 		canvas.drawBitmap(actorBitmap, actorX, actorY, paint);
 		canvas.restore();
 	}
@@ -67,12 +66,12 @@ public class Cloud extends GameActor {
 		frameW = actorBitmap.getWidth();
 		frameH = actorBitmap.getHeight();
 
-		cloudShrink = (MainSurfaceView.SCREEN_W / 6) / (float) frameW;
+		shrink = (MainSurfaceView.SCREEN_W / 6) / (float) frameW;
 		
 		actorX = Background.FACE_TO == Background.TO_LEFT ? MainSurfaceView.SCREEN_W : -frameW;
-		actorY = MainSurfaceView.SCREEN_H / 8;
+		actorY = MainSurfaceView.SCREEN_H / 8 + frameH * (shrink - 1) / 2;
 		
-		Log.i("Cloud", "cloudShrink = " + cloudShrink);
+		Log.i("Cloud", "cloudShrink = " + shrink);
 		paint = new Paint();
 	}
 	

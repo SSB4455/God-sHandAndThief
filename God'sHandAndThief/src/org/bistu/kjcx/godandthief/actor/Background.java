@@ -1,5 +1,7 @@
 package org.bistu.kjcx.godandthief.actor;
 
+import org.bistu.kjcx.godandthief.MainSurfaceView;
+
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
@@ -9,6 +11,7 @@ public class Background extends GameActor {
 	public static int FACE_TO = 0;
 	public static final int TO_RIGHT = 1;
 	public static final int TO_LEFT = 0;
+	public static final int FLOOR = MainSurfaceView.SCREEN_H * 3 / 4;
 	
 	private Ground ground;
 	private Cloud cloud;

@@ -11,10 +11,10 @@ public abstract class GameActor {
 	public String name;
 	protected ArrayList<GameActor> children = new ArrayList<GameActor>();
 	
-	float actorX, actorY;
+	protected float actorX, actorY, shrink;
 	String text;
-	Paint paint;
-	Bitmap actorBitmap;
+	protected Bitmap actorBitmap;
+	protected Paint paint;
 	
 	public enum ActorStatus {
 		Action,		//ÐÐ¶¯

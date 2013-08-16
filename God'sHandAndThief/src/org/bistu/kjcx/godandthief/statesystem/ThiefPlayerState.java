@@ -1,6 +1,7 @@
 package org.bistu.kjcx.godandthief.statesystem;
 
 import org.bistu.kjcx.godandthief.actor.Background;
+import org.bistu.kjcx.godandthief.actor.Businessman;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -15,6 +16,7 @@ public class ThiefPlayerState implements IGameObject {
 	
 	
 	private Background background;
+	private Businessman businessman;
 	
 	private Paint paint;
 	
@@ -25,18 +27,19 @@ public class ThiefPlayerState implements IGameObject {
 		this.stateSystem = stateSystem;
 		
 		background = new Background(context);
+		businessman = new Businessman(context);
 		
 		paint = new Paint();
 	}
 	
 	public void update(long elapsedTime) {
 		background.update(elapsedTime);
-		
+		businessman.update(elapsedTime);
 	}
 	
 	public void render(Canvas canvas) {
 		background.render(canvas);
-		
+		businessman.render(canvas);
 	}
 	
 	public boolean onKeyDown(int keyCode, KeyEvent event) {

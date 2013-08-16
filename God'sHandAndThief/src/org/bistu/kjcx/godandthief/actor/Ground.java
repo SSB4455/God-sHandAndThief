@@ -12,7 +12,6 @@ import android.util.Log;
 public class Ground extends GameActor {
 	
 	private int frameW, frameH;
-	private float groundShrink;
 	private long go_elapsed;
 	
 	
@@ -24,12 +23,12 @@ public class Ground extends GameActor {
 		frameW = actorBitmap.getWidth();
 		frameH = actorBitmap.getHeight();
 		
-		groundShrink = (MainSurfaceView.SCREEN_H / 4) / (float) frameH;
+		shrink = (MainSurfaceView.SCREEN_H - Background.FLOOR) / (float) frameH;
 		
-		actorX = 0;
+		actorX = frameW * (shrink - 1) / 2;
 		actorY = MainSurfaceView.SCREEN_H * 3 / 4 + (MainSurfaceView.SCREEN_H / 4 - frameH) / 2;
 		
-		Log.i("Ground", "groundShrink = " + groundShrink + "\nactorX = " + actorX + "\tactorY = " + actorY);
+		Log.i("Ground", "groundShrink = " + shrink + "\nactorX = " + actorX + "  actorY = " + actorY);
 		paint = new Paint();
 		
 	}
@@ -46,11 +45,11 @@ public class Ground extends GameActor {
 		}
 		
 		//³¬³öÆÁÄ»×ª»Ø
-		if(actorX < MainSurfaceView.SCREEN_W - frameW * (groundShrink + 1) / 2) {
-			actorX = frameW * (groundShrink - 1) / 2;
+		if(actorX < MainSurfaceView.SCREEN_W - frameW * (shrink + 1) / 2) {
+			actorX = frameW * (shrink - 1) / 2;
 		}
-		if(actorX > frameW * (groundShrink - 1) / 2) {
-			actorX = MainSurfaceView.SCREEN_W - frameW * (groundShrink + 1) / 2;
+		if(actorX > frameW * (shrink - 1) / 2) {
+			actorX = MainSurfaceView.SCREEN_W - frameW * (shrink + 1) / 2;
 		}
 	}
 	
@@ -58,9 +57,9 @@ public class Ground extends GameActor {
 	public void render(Canvas canvas) {
 		canvas.save();
 		if(Background.FACE_TO == Background.TO_RIGHT)
-			canvas.scale(-groundShrink, groundShrink, actorX + frameW /2, actorY + frameH /2);
+			canvas.scale(-shrink, shrink, actorX + frameW /2, actorY + frameH /2);
 		else
-			canvas.scale(groundShrink, groundShrink, actorX + frameW /2, actorY + frameH /2);
+			canvas.scale(shrink, shrink, actorX + frameW /2, actorY + frameH /2);
 		canvas.drawBitmap(actorBitmap, actorX, actorY, paint);
 		canvas.restore();
 	}
