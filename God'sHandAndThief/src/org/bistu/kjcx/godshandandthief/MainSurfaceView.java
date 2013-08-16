@@ -1,6 +1,6 @@
-package org.bistu.kjcx.godandthief;
+package org.bistu.kjcx.godshandandthief;
 
-import org.bistu.kjcx.godandthief.statesystem.*;
+import org.bistu.kjcx.godshandandthief.statesystem.*;
 
 import android.content.Context;
 import android.graphics.Canvas;

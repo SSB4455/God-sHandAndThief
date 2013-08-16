@@ -1,7 +1,7 @@
-package org.bistu.kjcx.godandthief.statesystem;
+package org.bistu.kjcx.godshandandthief.statesystem;
 
-import org.bistu.kjcx.godandthief.MainSurfaceView;
 import org.bistu.kjcx.godandthief.R;
+import org.bistu.kjcx.godshandandthief.MainSurfaceView;
 
 import android.content.Context;
 import android.graphics.Bitmap;

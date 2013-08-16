@@ -1,7 +1,7 @@
-package org.bistu.kjcx.godandthief.statesystem;
+package org.bistu.kjcx.godshandandthief.statesystem;
 
-import org.bistu.kjcx.godandthief.MainSurfaceView;
 import org.bistu.kjcx.godandthief.R;
+import org.bistu.kjcx.godshandandthief.MainSurfaceView;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -13,7 +13,7 @@ import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.widget.Toast;
 
-public class GodChooseState implements IGameObject {
+public class MenuState implements IGameObject {
 	
 	private Context context;
 	private StateSystem stateSystem;
@@ -21,33 +21,30 @@ public class GodChooseState implements IGameObject {
 	private final int X = 0, Y = 1;
 	private long exitTime = 0;
 	private float [][] menuLocation;
-	
-	private Bitmap gods_hand_bitmap, thief_bitmap, beta_bitmap;
 	private Bitmap [] menuButton;
-	
 	private Paint paint;
 	
 	
 	
-	public GodChooseState(Context context, StateSystem stateSystem) {
+	public MenuState(Context context, StateSystem stateSystem) {
 		this.context = context;
 		this.stateSystem = stateSystem;
 		
 		menuButton = new Bitmap[3];
-		menuButton[0] = gods_hand_bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.gods_hand);
-		menuButton[1] = thief_bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.thief);
-		menuButton[2] = beta_bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.beta);
+		menuButton[0] = BitmapFactory.decodeResource(context.getResources(), R.drawable.gods_hand);
+		menuButton[1] = BitmapFactory.decodeResource(context.getResources(), R.drawable.thief);
+		menuButton[2] = BitmapFactory.decodeResource(context.getResources(), R.drawable.beta);
 		
 		menuLocation = new float[3][];
 		menuLocation[0] = new float[2];
 		menuLocation[0][X] = MainSurfaceView.SCREEN_W / 4;
-		menuLocation[0][Y] = MainSurfaceView.SCREEN_H / 3 - gods_hand_bitmap.getHeight();
+		menuLocation[0][Y] = MainSurfaceView.SCREEN_H / 3 - menuButton[0].getHeight();
 		menuLocation[1] = new float[2];
 		menuLocation[1][X] = MainSurfaceView.SCREEN_W / 2;
 		menuLocation[1][Y] = MainSurfaceView.SCREEN_H / 2;
 		menuLocation[2] = new float[2];
-		menuLocation[2][X] = MainSurfaceView.SCREEN_W - beta_bitmap.getWidth();
-		menuLocation[2][Y] = MainSurfaceView.SCREEN_H - beta_bitmap.getHeight();
+		menuLocation[2][X] = MainSurfaceView.SCREEN_W - menuButton[2].getWidth();
+		menuLocation[2][Y] = MainSurfaceView.SCREEN_H - menuButton[2].getHeight();
 		
 		paint = new Paint();
 		paint.setColor(Color.WHITE);
@@ -81,7 +78,7 @@ public class GodChooseState implements IGameObject {
 						Toast.makeText(context, "You are God...", Toast.LENGTH_SHORT).show();
 					}
 					if(i == 1) {
-						//stateSystem.changeState("GodsHandPlayerState");
+						stateSystem.changeState("ThiefChooseState");
 						Toast.makeText(context, "You are thief...", Toast.LENGTH_SHORT).show();
 					}
 					if(i == 2) {

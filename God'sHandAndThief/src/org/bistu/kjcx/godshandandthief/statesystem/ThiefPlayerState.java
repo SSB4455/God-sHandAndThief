@@ -1,7 +1,7 @@
-package org.bistu.kjcx.godandthief.statesystem;
+package org.bistu.kjcx.godshandandthief.statesystem;
 
-import org.bistu.kjcx.godandthief.actor.Background;
-import org.bistu.kjcx.godandthief.actor.Businessman;
+import org.bistu.kjcx.godshandandthief.actor.Background;
+import org.bistu.kjcx.godshandandthief.actor.Businessman;
 
 import android.content.Context;
 import android.graphics.Canvas;

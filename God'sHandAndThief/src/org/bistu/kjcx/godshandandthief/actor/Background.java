@@ -1,6 +1,6 @@
-package org.bistu.kjcx.godandthief.actor;
+package org.bistu.kjcx.godshandandthief.actor;
 
-import org.bistu.kjcx.godandthief.MainSurfaceView;
+import org.bistu.kjcx.godshandandthief.MainSurfaceView;
 
 import android.content.Context;
 import android.graphics.Canvas;

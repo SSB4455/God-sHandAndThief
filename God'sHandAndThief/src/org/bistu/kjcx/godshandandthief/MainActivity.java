@@ -1,4 +1,4 @@
-package org.bistu.kjcx.godandthief;
+package org.bistu.kjcx.godshandandthief;
 
 import android.os.Bundle;
 import android.app.Activity;
