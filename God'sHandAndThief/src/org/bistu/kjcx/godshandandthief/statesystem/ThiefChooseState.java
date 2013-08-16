@@ -1,6 +1,6 @@
 package org.bistu.kjcx.godshandandthief.statesystem;
 
-import org.bistu.kjcx.godandthief.R;
+import org.bistu.kjcx.godshandandthief.R;
 import org.bistu.kjcx.godshandandthief.MainSurfaceView;
 
 import android.content.Context;
