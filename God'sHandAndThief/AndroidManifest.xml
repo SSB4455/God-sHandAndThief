@@ -14,7 +14,7 @@
         android:label="@string/app_name"
         android:theme="@android:style/Theme.NoTitleBar.Fullscreen" >
         <activity
-            android:name="org.bistu.kjcx.godandthief.MainActivity"
+            android:name="org.bistu.kjcx.godshandandthief.MainActivity"
             android:label="@string/app_name"
             android:screenOrientation="landscape" >
             <intent-filter>
