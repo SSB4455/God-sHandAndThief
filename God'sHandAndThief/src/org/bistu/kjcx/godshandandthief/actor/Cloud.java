@@ -19,12 +19,24 @@ public class Cloud extends GameActor {
 	
 	public Cloud(Context context) {
 		this.context = context;
-		setCloud();
+		
+		cloudSpeed = 100;
+		actorBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.super_mario_cloud);
+		
+		frameW = actorBitmap.getWidth();
+		frameH = actorBitmap.getHeight();
+
+		shrink = (MainSurfaceView.SCREEN_W / 6) / (float) frameW;
+		
+		actorX = Background.FACE_TO == Background.TO_LEFT ? MainSurfaceView.SCREEN_W : -frameW;
+		actorY = MainSurfaceView.SCREEN_H / 9 + frameH * (shrink - 1) / 2;
+		
+		Log.i(this.getClass().toString(), "cloudShrink = " + shrink);
+		paint = new Paint();
 	}
 	
 	public Cloud(Context context, float actorX) {
-		this.context = context;
-		setCloud();
+		this(context);
 		setActorX(actorX);
 	}
 	
@@ -57,22 +69,6 @@ public class Cloud extends GameActor {
 			canvas.scale(shrink, shrink, actorX + frameW /2, actorY + frameH /2);
 		canvas.drawBitmap(actorBitmap, actorX, actorY, paint);
 		canvas.restore();
-	}
-	
-	void setCloud() {
-		cloudSpeed = 100;
-		actorBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.super_mario_cloud);
-		
-		frameW = actorBitmap.getWidth();
-		frameH = actorBitmap.getHeight();
-
-		shrink = (MainSurfaceView.SCREEN_W / 6) / (float) frameW;
-		
-		actorX = Background.FACE_TO == Background.TO_LEFT ? MainSurfaceView.SCREEN_W : -frameW;
-		actorY = MainSurfaceView.SCREEN_H / 8 + frameH * (shrink - 1) / 2;
-		
-		Log.i("Cloud", "cloudShrink = " + shrink);
-		paint = new Paint();
 	}
 	
 	void setActorX(float actorX) {

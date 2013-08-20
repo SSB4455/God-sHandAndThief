@@ -41,7 +41,7 @@ public class SplashState implements IGameObject {
 	
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		if(keyCode == KeyEvent.KEYCODE_BACK)
-			Log.i("SplashScreenState", "onKeyDown ——> back");
+			Log.i(this.getClass().toString(), "onKeyDown ——> back");
 		stateSystem.changeState("MenuState");
 		return true;		//不让别人做了
 	}

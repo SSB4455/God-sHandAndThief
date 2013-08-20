@@ -79,6 +79,7 @@ public class ThiefChooseState implements IGameObject {
 						&& event.getY() < menuLocation[i][Y] + menuButton[i].getHeight()) {
 					if(i == 1) {
 						stateSystem.changeState("ThiefPlayerState");
+						((ThiefPlayerState) stateSystem.currentState).start("player");
 						Toast.makeText(context, "Comptuer pursue me...", Toast.LENGTH_SHORT).show();
 					}
 					if(i == 2) {
@@ -92,9 +93,10 @@ public class ThiefChooseState implements IGameObject {
 	}
 	
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		if(keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_DOWN)
-			Log.i("ThiefChooseState", "onKeyDown ——> back");
-		stateSystem.changeState("MenuState");
+		if(keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_DOWN) {
+			Log.i(this.getClass().toString(), "onKeyDown ——> back");
+			stateSystem.changeState("MenuState");
+		}
 		return true;		//不让别人做了
 	}
 	

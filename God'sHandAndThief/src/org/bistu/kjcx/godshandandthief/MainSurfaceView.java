@@ -41,6 +41,7 @@ public class MainSurfaceView extends SurfaceView implements Callback, Runnable {
 		dm = getResources().getDisplayMetrics();
 		SCREEN_H = dm.heightPixels;
 		SCREEN_W = dm.widthPixels;
+		Log.i("MainSurfaceView", "SCREEN_H = " + SCREEN_H + ", SCREEN_W = " + SCREEN_W);
 		
 		time = new long[3];
 		
@@ -53,7 +54,7 @@ public class MainSurfaceView extends SurfaceView implements Callback, Runnable {
 		this.setFocusable(true);
 		this.setFocusableInTouchMode(true);
 		this.setLongClickable(true);
-		//Log.i("TestSurfaceView", "structure ——> isFocused = " + isFocused());
+		//Log.i(this.getClass().toString(), "structure ——> isFocused = " + isFocused());
 		
 		sfh = this.getHolder();		//获取当前SurfaceView的SurfaceHolder
 		sfh.addCallback(this);		//设置当前SurfaceView的回调
@@ -73,7 +74,7 @@ public class MainSurfaceView extends SurfaceView implements Callback, Runnable {
 	
 	public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {		//Callback
 		Toast.makeText(context, "surfaceChanged", Toast.LENGTH_SHORT).show();
-		Log.i("TestSurfaceView", "surfaceChanged");
+		Log.i(this.getClass().toString(), "surfaceChanged");
 		//flag = false;
 	}
 	
@@ -107,24 +108,24 @@ public class MainSurfaceView extends SurfaceView implements Callback, Runnable {
 	
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		//Log.i("TestSurfaceView", "onKeyDown");
-		//Toast.makeText(context, "TestSurfaceView --> onKeyDown", Toast.LENGTH_SHORT).show();
+		//Log.i(this.getClass().toString(), "onKeyDown");
+		//Toast.makeText(context, "MainSurfaceView --> onKeyDown", Toast.LENGTH_SHORT).show();
 		
 		switch(keyCode) {
 		case KeyEvent.KEYCODE_DPAD_UP:
-			Log.i("TestSurfaceView", "onKeyDown ——> up");break;
+			Log.i(this.getClass().toString(), "onKeyDown ——> up");break;
 		
 		case KeyEvent.KEYCODE_DPAD_DOWN:
-			Log.i("TestSurfaceView", "onKeyDown ——> down");break;
+			Log.i(this.getClass().toString(), "onKeyDown ——> down");break;
 		
 		case KeyEvent.KEYCODE_DPAD_LEFT:
-			Log.i("TestSurfaceView", "onKeyDown ——> left");break;
+			Log.i(this.getClass().toString(), "onKeyDown ——> left");break;
 		
 		case KeyEvent.KEYCODE_DPAD_RIGHT:
-			Log.i("TestSurfaceView", "onKeyDown ——> right");break;
+			Log.i(this.getClass().toString(), "onKeyDown ——> right");break;
 			
 		case KeyEvent.KEYCODE_BACK:
-			Log.i("TestSurfaceView", "onKeyDown ——> back");
+			Log.i(this.getClass().toString(), "onKeyDown ——> back");
 		}
 		
 		//return false;		//false是继续做
@@ -134,7 +135,7 @@ public class MainSurfaceView extends SurfaceView implements Callback, Runnable {
 	
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
-		//Log.i("TestSurfaceView", "onTouchEvent ——> onTouch");
+		//Log.i(this.getClass().toString(), "onTouchEvent ——> onTouch");
 		
 		//return super.onTouchEvent(event);
 		return stateSystem.onTouchEvent(event);

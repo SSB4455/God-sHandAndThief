@@ -19,44 +19,43 @@ public class StateSystem {
 	
 	
 	public StateSystem() {
-		stateStore = new Hashtable<String, IGameObject>(3);
+		stateStore = new Hashtable<String, IGameObject>();
 		currentState = null;
 	}
 	
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		// TODO Auto-generated method stub
 		return currentState.onKeyDown(keyCode, event);
 	}
 	
 	public boolean onTouchEvent(MotionEvent event) {
-		//Log.i("StateSystem", "onTouchEvent");
+		//Log.i(this.getClass().toString(), "onTouchEvent");
 		return currentState.onTouchEvent(event);
 	} 
 	
 	public void update(long elapsedTime) {
-		//Log.i("StateSystem", "start update");
+		//Log.i(this.getClass().toString(), "start update");
 		currentState.update(elapsedTime);
 	}
 	
 	public void render() {
-		//Log.i("StateSystem", "start render");
+		//Log.i(this.getClass().toString(), "start render no canvas");
 		currentState.render();
 	}
 	
 	public void render(Canvas canvas) {
-		//Log.i("StateSystem", "start render with canvas");
+		//Log.i(this.getClass().toString(), "start render with canvas");
 		currentState.render(canvas);
 	}
 	
 	public boolean addState(String statName, IGameObject state) {
+		Log.i(this.getClass().toString(), "addState " + statName + " is succeed");
 		stateStore.put(statName, state);
-		Log.i("StateSystem", "addState " + statName + " is succeed");
 		return true;
 	}
 	
 	public boolean changeState(String stateName) {
+		Log.i(this.getClass().toString(), "changeState to " + stateName);
 		currentState = stateStore.get(stateName);
-		Log.i("StateSystem", "changeState to " + stateName);
 		return true;
 	}
 	
@@ -64,8 +63,4 @@ public class StateSystem {
 		return true;
 	}
 	
-	public void testArgument(SurfaceHolder sfh,Canvas canvas) {
-		this.sfh = sfh;
-		this.canvas = canvas;
-	}
 }

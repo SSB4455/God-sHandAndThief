@@ -14,12 +14,12 @@ public class Businessman extends GameActor {
 	
 	public static int SPEED = 300;
 	
-	int health, frameW, frameH, currentFrame = 0;
-	long go_elapsed = 0;
+	int health, frameW, frameH, currentFrame;
+	private long go_elapsed;
 	
 	boolean [] fling;
 	
-	Bitmap [] frame;
+	private Bitmap [] frame;
 	
 	
 	
@@ -29,16 +29,14 @@ public class Businessman extends GameActor {
 		frame = new Bitmap[5];
 		frameW = actorBitmap.getWidth();
 		frameH = actorBitmap.getHeight() / frame.length;
-		Log.i("Businessman", "frame.length = " + frame.length);
 		for(int i = 0; i < frame.length; i++) {
-			Log.i("Businessman", "actorBitmap.getWidth() = " + actorBitmap.getWidth() + ", actorBitmap.getHeight() = " + actorBitmap.getHeight());
 			frame[i] = Bitmap.createBitmap(actorBitmap, 0, frameH * i, frameW, frameH);
-			Log.i("Businessman", "frame[" + i + "] = " + 0 + "," + frameH * i + "," + frameW + "," + frameH);
 		}
 		currentFrame = 0;
-		Log.i("Businessman", "currentFrame = " + currentFrame);
+		go_elapsed = 0;
+		Log.i(this.getClass().toString(), "currentFrame = " + currentFrame);
 		
-		shrink = (MainSurfaceView.SCREEN_H / 5) / (float) frameH;
+		shrink = (MainSurfaceView.SCREEN_H / 4) / (float) frameH;
 		
 		actorX = MainSurfaceView.SCREEN_W / 5 + frameW * (shrink - 1) / 2;
 		actorY = Background.FLOOR - frameH - frameH * (shrink - 1) / 2;
@@ -53,11 +51,10 @@ public class Businessman extends GameActor {
 	@Override
 	public void update(long elapsedTime) {
 		go_elapsed += elapsedTime;
-		if(go_elapsed > 50) {
-			Log.i("Businessman", "go_elapsed = " + go_elapsed);
+		if(go_elapsed > 80) {
+			//Log.i("Businessman", "go_elapsed = " + go_elapsed);
 			currentFrame = ++currentFrame % frame.length;
 			go_elapsed = 0;
-			
 		}
 	}
 	

@@ -9,6 +9,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.widget.Toast;
@@ -35,6 +36,8 @@ public class MenuState implements IGameObject {
 		menuButton[1] = BitmapFactory.decodeResource(context.getResources(), R.drawable.thief);
 		menuButton[2] = BitmapFactory.decodeResource(context.getResources(), R.drawable.beta);
 		
+		Log.i(this.getClass().toString(), "menuButton.length = " + menuButton.length);
+		Log.i(this.getClass().toString(), "context.getResources() is " + BitmapFactory.decodeResource(context.getResources(), R.drawable.gods_hand));
 		menuLocation = new float[3][];
 		menuLocation[0] = new float[2];
 		menuLocation[0][X] = MainSurfaceView.SCREEN_W / 4;
@@ -49,7 +52,6 @@ public class MenuState implements IGameObject {
 		paint = new Paint();
 		paint.setColor(Color.WHITE);
 		paint.setTextSize(25);
-		
 	}
 	
 	public void update(long elapsedTime) {

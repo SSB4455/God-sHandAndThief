@@ -7,36 +7,31 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 
 public abstract class GameActor {
-	
-	public String name;
-	protected ArrayList<GameActor> children = new ArrayList<GameActor>();
-	
-	protected float actorX, actorY, shrink;
-	String text;
-	protected Bitmap actorBitmap;
-	protected Paint paint;
-	
 	public enum ActorStatus {
 		Action,		//行动
 		NoDisp,		//不显示
 		NoAction,	//无行动
 		Dead,		//死亡
 	}
+	protected ActorStatus status;
 	
-	public ActorStatus status;
-	
+	protected ArrayList<GameActor> children;
+	protected String name;
+	protected float actorX, actorY, shrink;
 	protected long level;
+	protected Bitmap actorBitmap;
+	protected Paint paint;
 	
 	
 	
 	public GameActor() {
-		this("no name");
-		
+		this.status = ActorStatus.Action;
 	}
 	
 	public GameActor(String name) {
+		this();
 		this.name = name;
-		this.status = ActorStatus.Action;
+		children = new ArrayList<GameActor>();
 	}
 	
 	public void update(long elapsedTime) {
@@ -44,16 +39,17 @@ public abstract class GameActor {
 			if(actorChild.status == ActorStatus.Action || actorChild.status == ActorStatus.NoDisp)
 				actorChild.update(elapsedTime);
 		}
-		
 	}
 	
 	public void render() {
 		for(GameActor actorChild : children)
+			if(actorChild.status == ActorStatus.Action || actorChild.status == ActorStatus.NoAction)
 				actorChild.render();
 	}
 	
 	public void render(Canvas canvas) {
 		for(GameActor actorChild : children)
+			if(actorChild.status == ActorStatus.Action || actorChild.status == ActorStatus.NoAction)
 				actorChild.render(canvas);
 	}
 	

@@ -28,7 +28,7 @@ public class Ground extends GameActor {
 		actorX = frameW * (shrink - 1) / 2;
 		actorY = MainSurfaceView.SCREEN_H * 3 / 4 + (MainSurfaceView.SCREEN_H / 4 - frameH) / 2;
 		
-		Log.i("Ground", "groundShrink = " + shrink + "\nactorX = " + actorX + "  actorY = " + actorY);
+		Log.i(this.getClass().toString(), "groundShrink = " + shrink + "\nactorX = " + actorX + "  actorY = " + actorY);
 		paint = new Paint();
 		
 	}
