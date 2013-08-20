@@ -8,7 +8,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.util.Log;
 
 public class Businessman extends GameActor {
 	
@@ -34,7 +33,6 @@ public class Businessman extends GameActor {
 		}
 		currentFrame = 0;
 		go_elapsed = 0;
-		Log.i(this.getClass().toString(), "currentFrame = " + currentFrame);
 		
 		shrink = (MainSurfaceView.SCREEN_H / 4) / (float) frameH;
 		
@@ -52,7 +50,7 @@ public class Businessman extends GameActor {
 	public void update(long elapsedTime) {
 		go_elapsed += elapsedTime;
 		if(go_elapsed > 80) {
-			//Log.i("Businessman", "go_elapsed = " + go_elapsed);
+			//Log.i(this.getClass().toString(), "go_elapsed = " + go_elapsed);
 			currentFrame = ++currentFrame % frame.length;
 			go_elapsed = 0;
 		}

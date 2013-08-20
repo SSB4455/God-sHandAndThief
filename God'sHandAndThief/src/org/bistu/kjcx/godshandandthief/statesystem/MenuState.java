@@ -2,6 +2,7 @@ package org.bistu.kjcx.godshandandthief.statesystem;
 
 import org.bistu.kjcx.godshandandthief.R;
 import org.bistu.kjcx.godshandandthief.MainSurfaceView;
+import org.bistu.kjcx.godshandandthief.actor.GodLayout;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -9,7 +10,6 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.widget.Toast;
@@ -36,8 +36,6 @@ public class MenuState implements IGameObject {
 		menuButton[1] = BitmapFactory.decodeResource(context.getResources(), R.drawable.thief);
 		menuButton[2] = BitmapFactory.decodeResource(context.getResources(), R.drawable.beta);
 		
-		Log.i(this.getClass().toString(), "menuButton.length = " + menuButton.length);
-		Log.i(this.getClass().toString(), "context.getResources() is " + BitmapFactory.decodeResource(context.getResources(), R.drawable.gods_hand));
 		menuLocation = new float[3][];
 		menuLocation[0] = new float[2];
 		menuLocation[0][X] = MainSurfaceView.SCREEN_W / 4;
@@ -80,6 +78,10 @@ public class MenuState implements IGameObject {
 						Toast.makeText(context, "You are God...", Toast.LENGTH_SHORT).show();
 					}
 					if(i == 1) {
+						GodLayout godLayout = new GodLayout(context);
+						IGameObject thiefChooseState = new ThiefChooseState(context, stateSystem);
+						((ThiefChooseState) thiefChooseState).godLayout = godLayout;
+						stateSystem.addState("ThiefChooseState", thiefChooseState);
 						stateSystem.changeState("ThiefChooseState");
 						Toast.makeText(context, "You are thief...", Toast.LENGTH_SHORT).show();
 					}

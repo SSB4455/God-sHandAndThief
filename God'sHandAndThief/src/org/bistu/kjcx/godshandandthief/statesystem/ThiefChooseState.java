@@ -2,6 +2,8 @@ package org.bistu.kjcx.godshandandthief.statesystem;
 
 import org.bistu.kjcx.godshandandthief.R;
 import org.bistu.kjcx.godshandandthief.MainSurfaceView;
+import org.bistu.kjcx.godshandandthief.actor.ComputerWithGod;
+import org.bistu.kjcx.godshandandthief.actor.GodLayout;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -20,6 +22,7 @@ public class ThiefChooseState implements IGameObject {
 	private StateSystem stateSystem;
 	
 	private final int X = 0, Y = 1;
+	GodLayout godLayout;
 	private float [][] menuLocation;
 	private Bitmap [] menuButton;
 	private Paint paint;
@@ -78,8 +81,10 @@ public class ThiefChooseState implements IGameObject {
 						&& menuLocation[i][Y] < event.getY() 
 						&& event.getY() < menuLocation[i][Y] + menuButton[i].getHeight()) {
 					if(i == 1) {
+						IGameObject thiefPlayerState = new ThiefPlayerState(context, stateSystem);
+						((ThiefPlayerState) thiefPlayerState).start("player", new ComputerWithGod(godLayout).createLayout(9));
+						stateSystem.addState("ThiefPlayerState", thiefPlayerState);
 						stateSystem.changeState("ThiefPlayerState");
-						((ThiefPlayerState) stateSystem.currentState).start("player");
 						Toast.makeText(context, "Comptuer pursue me...", Toast.LENGTH_SHORT).show();
 					}
 					if(i == 2) {

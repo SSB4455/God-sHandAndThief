@@ -10,15 +10,12 @@ import android.graphics.Paint;
 import android.util.Log;
 
 public class Cloud extends GameActor {
-	private Context context;
 	
 	private int cloudSpeed, frameW, frameH;
-	private long go_elapsed;
 	
 	
 	
 	public Cloud(Context context) {
-		this.context = context;
 		
 		cloudSpeed = 100;
 		actorBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.super_mario_cloud);
@@ -42,14 +39,11 @@ public class Cloud extends GameActor {
 	
 	@Override
 	public void update(long elapsedTime) {
-		go_elapsed += elapsedTime;
-		if(go_elapsed > 50) {
-			if(Background.FACE_TO == Background.TO_LEFT)
-				actorX -= (cloudSpeed * go_elapsed) / 1000;
-			else
-				actorX += (cloudSpeed * go_elapsed) / 1000;
-			go_elapsed = 0;
-		}
+		
+		if(Background.FACE_TO == Background.TO_LEFT)
+			actorX -= (cloudSpeed * elapsedTime) / 1000;
+		else
+			actorX += (cloudSpeed * elapsedTime) / 1000;
 		
 		//³¬³öÆÁÄ»×ª»Ø
 		if(actorX < -frameW * shrink) {

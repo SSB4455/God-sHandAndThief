@@ -14,6 +14,8 @@ public class SplashState implements IGameObject {
 	
 	private StateSystem stateSystem;
 	
+	private long splashTime;
+	
 	private Paint paint;
 	
 	
@@ -21,13 +23,16 @@ public class SplashState implements IGameObject {
 	public SplashState(Context context, StateSystem stateSystem) {
 		this.stateSystem = stateSystem;
 		
+		splashTime = 0;
 		
 		paint = new Paint();
 		paint.setColor(Color.WHITE);
 	}
 	
 	public void update(long elapsedTime) {
-		
+		splashTime += elapsedTime;
+		if(splashTime > 3000)
+			stateSystem.changeState("MenuState");
 	}
 	
 	public void render(Canvas canvas) {

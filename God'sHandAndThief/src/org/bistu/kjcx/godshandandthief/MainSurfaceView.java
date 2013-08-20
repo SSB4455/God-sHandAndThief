@@ -41,7 +41,7 @@ public class MainSurfaceView extends SurfaceView implements Callback, Runnable {
 		dm = getResources().getDisplayMetrics();
 		SCREEN_H = dm.heightPixels;
 		SCREEN_W = dm.widthPixels;
-		Log.i("MainSurfaceView", "SCREEN_H = " + SCREEN_H + ", SCREEN_W = " + SCREEN_W);
+		Log.i(this.getClass().toString(), "SCREEN_H = " + SCREEN_H + ", SCREEN_W = " + SCREEN_W);
 		
 		time = new long[3];
 		
@@ -63,8 +63,6 @@ public class MainSurfaceView extends SurfaceView implements Callback, Runnable {
 	public void surfaceCreated(SurfaceHolder holder) {		//Callback
 		stateSystem.addState("SplashState", new SplashState(context, stateSystem));
 		stateSystem.addState("MenuState", new MenuState(context, stateSystem));
-		stateSystem.addState("ThiefChooseState", new ThiefChooseState(context, stateSystem));
-		stateSystem.addState("ThiefPlayerState", new ThiefPlayerState(context, stateSystem));
 		stateSystem.changeState("SplashState");
 		
 		flag = true;

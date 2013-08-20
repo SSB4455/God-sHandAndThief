@@ -16,13 +16,13 @@ import android.widget.Toast;
 public class GodChooseState implements IGameObject {
 	
 	private Context context;
-	private StateSystem stateSystem;
+	//private StateSystem stateSystem;
 	
 	private final int X = 0, Y = 1;
 	private long exitTime = 0;
 	private float [][] menuLocation;
 	
-	private Bitmap gods_hand_bitmap, thief_bitmap, beta_bitmap;
+	private Bitmap gods_hand_bitmap, beta_bitmap;
 	private Bitmap [] menuButton;
 	
 	private Paint paint;
@@ -31,11 +31,10 @@ public class GodChooseState implements IGameObject {
 	
 	public GodChooseState(Context context, StateSystem stateSystem) {
 		this.context = context;
-		this.stateSystem = stateSystem;
+		//this.stateSystem = stateSystem;
 		
 		menuButton = new Bitmap[3];
 		menuButton[0] = gods_hand_bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.gods_hand);
-		menuButton[1] = thief_bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.thief);
 		menuButton[2] = beta_bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.beta);
 		
 		menuLocation = new float[3][];

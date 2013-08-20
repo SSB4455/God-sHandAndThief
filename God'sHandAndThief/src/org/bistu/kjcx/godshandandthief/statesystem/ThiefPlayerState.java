@@ -3,11 +3,10 @@ package org.bistu.kjcx.godshandandthief.statesystem;
 import org.bistu.kjcx.godshandandthief.R;
 import org.bistu.kjcx.godshandandthief.actor.Background;
 import org.bistu.kjcx.godshandandthief.actor.Businessman;
+import org.bistu.kjcx.godshandandthief.actor.GodLayout;
 import org.bistu.kjcx.godshandandthief.actor.ProgressBar;
-import org.bistu.kjcx.godshandandthief.actor.obstacle.*;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -20,10 +19,10 @@ public class ThiefPlayerState implements IGameObject {
 	private Context context;
 	private StateSystem stateSystem;
 	
+	private GodLayout godLayout;
 	private ProgressBar progressBar;
 	private Background background;
 	private Businessman businessman;
-	private Obstacle obstacleSupervisor;
 	
 	private Paint paint;
 	
@@ -33,13 +32,9 @@ public class ThiefPlayerState implements IGameObject {
 		this.context = context;
 		this.stateSystem = stateSystem;
 		
-		progressBar = new ProgressBar(BitmapFactory.decodeResource(context.getResources(), R.drawable.businessman_run));
+		//progressBar = new ProgressBar(BitmapFactory.decodeResource(context.getResources(), R.drawable.businessman_run));
 		background = new Background(context);
 		businessman = new Businessman(context);
-		
-		obstacleSupervisor = new Obstacle("obstacleSupervisor");
-		obstacleSupervisor.addChild(new Hole(context));
-		obstacleSupervisor.addChild(new Stone(context));
 		
 		paint = new Paint();
 		paint.setColor(Color.WHITE);
@@ -49,7 +44,7 @@ public class ThiefPlayerState implements IGameObject {
 		progressBar.update(elapsedTime);
 		if(progressBar.isPlay()) {
 			background.update(elapsedTime);
-			obstacleSupervisor.update(elapsedTime);
+			godLayout.update(elapsedTime);
 			businessman.update(elapsedTime);
 		}
 	}
@@ -58,13 +53,15 @@ public class ThiefPlayerState implements IGameObject {
 		background.render(canvas);
 		progressBar.render(canvas);
 		if(progressBar.isPlay()) {
-			obstacleSupervisor.render(canvas);
+			godLayout.render(canvas);
 			businessman.render(canvas);
 		}
 	}
 	
-	void start(String type) {
+	void start(String type, GodLayout godLayout) {
 		progressBar = new ProgressBar(BitmapFactory.decodeResource(context.getResources(), R.drawable.businessman_run));
+		this.godLayout = godLayout;
+		this.godLayout.setProgressBar(progressBar);
 	}
 	
 	public boolean onKeyDown(int keyCode, KeyEvent event) {

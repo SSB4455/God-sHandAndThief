@@ -1,13 +1,11 @@
 package org.bistu.kjcx.godshandandthief.actor.obstacle;
 
-import org.bistu.kjcx.godshandandthief.R;
 import org.bistu.kjcx.godshandandthief.MainSurfaceView;
 import org.bistu.kjcx.godshandandthief.actor.Background;
 import org.bistu.kjcx.godshandandthief.actor.Businessman;
 import org.bistu.kjcx.godshandandthief.actor.GameActor;
 
-import android.content.Context;
-import android.graphics.BitmapFactory;
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 
 public class Stone extends Obstacle {
@@ -18,9 +16,8 @@ public class Stone extends Obstacle {
 	
 	
 	
-	public Stone(Context context) {
-		super();
-		actorBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.stone);
+	public Stone(Bitmap bitmap) {
+		actorBitmap = bitmap;
 		frameW = actorBitmap.getWidth();
 		frameH = actorBitmap.getHeight();
 		

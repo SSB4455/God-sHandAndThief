@@ -12,7 +12,6 @@ import android.util.Log;
 public class Ground extends GameActor {
 	
 	private int frameW, frameH;
-	private long go_elapsed;
 	
 	
 	
@@ -35,14 +34,11 @@ public class Ground extends GameActor {
 	
 	@Override
 	public void update(long elapsedTime) {
-		go_elapsed += elapsedTime;
-		if(go_elapsed > 50) {
-			if(Background.FACE_TO == Background.TO_LEFT)
-				actorX -= (Businessman.SPEED * go_elapsed) / 1000;
-			else
-				actorX += (Businessman.SPEED * go_elapsed) / 1000;
-			go_elapsed = 0;
-		}
+		
+		if(Background.FACE_TO == Background.TO_LEFT)
+			actorX -= (Businessman.SPEED * elapsedTime) / 1000;
+		else
+			actorX += (Businessman.SPEED * elapsedTime) / 1000;
 		
 		//³¬³öÆÁÄ»×ª»Ø
 		if(actorX < MainSurfaceView.SCREEN_W - frameW * (shrink + 1) / 2) {
