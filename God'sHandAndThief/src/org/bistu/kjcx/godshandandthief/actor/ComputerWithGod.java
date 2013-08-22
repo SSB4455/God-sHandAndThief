@@ -2,7 +2,6 @@ package org.bistu.kjcx.godshandandthief.actor;
 
 import java.util.Random;
 
-import org.bistu.kjcx.godshandandthief.MainSurfaceView;
 import org.bistu.kjcx.godshandandthief.actor.obstacle.Obstacle.ObstacleType;
 
 import android.content.Context;
@@ -30,12 +29,12 @@ public class ComputerWithGod {
 	public GodLayout createLayout(int level) {		//难度只有0-9
 		godLayout = godLayout != null ? godLayout : new GodLayout(context);
 		level = level % 10;
-		long over = 0;
+		long interval = 2000;		//至少间隔2秒
+		long partLong = (ProgressBar.TOTAL_Long - interval * level) / level;
 		for(int i = 0; i < level; i++) {
-			long position = over + random.nextInt((int) ((ProgressBar.TOTAL_Long - over) / (level - i + 1)));
+			long position = i * (partLong + interval) + random.nextInt((int) partLong);
 			godLayout.addObstacle(position, i % 2 == 0 ? ObstacleType.Stone : ObstacleType.Hole);
-			over += (position - over) + MainSurfaceView.SCREEN_W / 2;
-			Log.i(this.getClass().toString(), "create a obstacle,over = " + over + " position = " + position + " type = " + (i % 2 == 0 ? ObstacleType.Stone + "" : ObstacleType.Hole + ""));
+			Log.i(this.getClass().toString(), "create a obstacle, position = " + position + " type = " + (i % 2 == 0 ? ObstacleType.Stone + "" : ObstacleType.Hole + ""));
 		}
 		
 		return godLayout;

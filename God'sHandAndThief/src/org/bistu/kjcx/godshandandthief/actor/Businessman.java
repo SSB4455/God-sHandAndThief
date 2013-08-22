@@ -16,7 +16,13 @@ public class Businessman extends GameActor implements OnGestureListener {
 	
 	public static int SPEED = 300;
 	
-	int health, frameW, frameH, currentFrame;
+	private int health, frameW, frameH, currentFrame;
+	private final int TO_RIGHT = 1;
+	private final int TO_LEFT = 0;
+	private final int IS_LEFT = 0;
+	private final int IS_RIGHT = 1;
+	private final int IS_UP = 2;
+	private final int IS_DOWN = 3;
 	private long go_elapsed;
 	
 	boolean [] fling;
