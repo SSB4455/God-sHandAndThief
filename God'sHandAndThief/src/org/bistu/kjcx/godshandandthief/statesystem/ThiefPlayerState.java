@@ -73,13 +73,12 @@ public class ThiefPlayerState implements IGameObject {
 	}
 	
 	public boolean onTouchEvent(MotionEvent event) {
-		// TODO Auto-generated method stub
-		return false;
+		
+		return businessman.onTouchEvent(event);
 	}
 
 	public void render() {
 		// TODO Auto-generated method stub
-		
 	}
 	
 }

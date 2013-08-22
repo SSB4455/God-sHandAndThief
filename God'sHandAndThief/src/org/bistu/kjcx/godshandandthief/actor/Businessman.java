@@ -8,8 +8,11 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.view.GestureDetector.OnGestureListener;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
 
-public class Businessman extends GameActor {
+public class Businessman extends GameActor implements OnGestureListener {
 	
 	public static int SPEED = 300;
 	
@@ -19,6 +22,7 @@ public class Businessman extends GameActor {
 	boolean [] fling;
 	
 	private Bitmap [] frame;
+	private GestureDetector mGestureDetector;
 	
 	
 	
@@ -43,6 +47,10 @@ public class Businessman extends GameActor {
 		
 		health = 3;
 		
+		//≥ı ºªØGestureDetector
+		mGestureDetector = new GestureDetector(context, this);
+		mGestureDetector.setIsLongpressEnabled(true);
+		
 		paint = new Paint();
 	}
 	
@@ -65,5 +73,48 @@ public class Businessman extends GameActor {
 			canvas.scale(shrink, shrink, actorX + frameW / 2, actorY + frameH / 2);
 		canvas.drawBitmap(frame[currentFrame], actorX, actorY, paint);
 		canvas.restore();
+	}
+	
+	public boolean onTouchEvent(MotionEvent event) {
+		
+		return mGestureDetector.onTouchEvent(event);
+	}
+
+	@Override
+	public boolean onDown(MotionEvent arg0) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
+			float velocityY) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public void onLongPress(MotionEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX,
+			float distanceY) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public void onShowPress(MotionEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public boolean onSingleTapUp(MotionEvent e) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 }

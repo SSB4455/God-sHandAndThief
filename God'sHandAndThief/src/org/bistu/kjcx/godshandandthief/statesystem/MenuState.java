@@ -110,7 +110,6 @@ public class MenuState implements IGameObject {
 	
 	public void render() {
 		// TODO Auto-generated method stub
-		
 	}
 	
 }
