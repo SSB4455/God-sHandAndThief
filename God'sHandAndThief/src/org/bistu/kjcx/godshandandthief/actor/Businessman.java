@@ -8,6 +8,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.util.Log;
 import android.view.GestureDetector.OnGestureListener;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
@@ -16,40 +17,62 @@ public class Businessman extends GameActor implements OnGestureListener {
 	
 	public static int SPEED = 300;
 	
-	private int health, frameW, frameH, currentFrame;
-	private final int TO_RIGHT = 1;
-	private final int TO_LEFT = 0;
-	private final int IS_LEFT = 0;
-	private final int IS_RIGHT = 1;
-	private final int IS_UP = 2;
-	private final int IS_DOWN = 3;
-	private long go_elapsed;
+	private int health, frameW, frameH, currentFrame, bodyMotion;
+	private int [] frameTotal;
+	private final int UP = 0;
+	private final int RIGHT = 1;
+	
+	private final int IS_RUN = 0;
+	private final int IS_UP = 1;
+	private final int IS_DOWN = 2;
+	private long brushTime, upTime, downTime;
 	
 	boolean [] fling;
 	
-	private Bitmap [] frame;
+	private Bitmap [][] frame;
 	private GestureDetector mGestureDetector;
 	
 	
 	
 	public Businessman(Context context) {
 		
+		frameTotal = new int[3];
+		frame = new Bitmap[3][];
+		
+		bodyMotion = IS_RUN;
+		frameTotal[bodyMotion] = 5;
 		actorBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.businessman_run);
-		frame = new Bitmap[5];
-		frameW = actorBitmap.getWidth();
-		frameH = actorBitmap.getHeight() / frame.length;
-		for(int i = 0; i < frame.length; i++) {
-			frame[i] = Bitmap.createBitmap(actorBitmap, 0, frameH * i, frameW, frameH);
+		frameW = actorBitmap.getWidth();			//100
+		frameH = actorBitmap.getHeight() / 5;		//120
+		frame[bodyMotion] = new Bitmap[frameTotal[bodyMotion]];
+		for(int i = 0; i < frameTotal[bodyMotion]; i++) {
+			frame[bodyMotion][i] = Bitmap.createBitmap(actorBitmap, 0, frameH * i, frameW, frameH);
 		}
-		currentFrame = 0;
-		go_elapsed = 0;
 		
-		shrink = (MainSurfaceView.SCREEN_H / 4) / (float) frameH;
+		bodyMotion = IS_UP;
+		frameTotal[bodyMotion] = 5;
+		actorBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.businessman_up);
+		frame[bodyMotion] = new Bitmap[frameTotal[bodyMotion]];
+		for(int i = 0; i < frameTotal[bodyMotion]; i++) {
+			frame[bodyMotion][i] = actorBitmap;
+		}
 		
-		actorX = MainSurfaceView.SCREEN_W / 5 + frameW * (shrink - 1) / 2;
+		bodyMotion = IS_DOWN;
+		frameTotal[bodyMotion] = 5;
+		actorBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.businessman_down);
+		frame[bodyMotion] = new Bitmap[frameTotal[bodyMotion]];
+		for(int i = 0; i < frameTotal[bodyMotion]; i++) {
+			frame[bodyMotion][i] = actorBitmap;
+		}
+		
+		brushTime = 0;
+		
+		shrink = (MainSurfaceView.SCREEN_H / 4) / (float) frameH;		//高度是屏幕高度1/4 
+		
+		actorX = MainSurfaceView.SCREEN_W / 5 + frameW * (shrink - 1) / 2;		//定位
 		actorY = Background.FLOOR - frameH - frameH * (shrink - 1) / 2;
 		
-		fling = new boolean[6];
+		fling = new boolean[2];
 		
 		health = 3;
 		
@@ -62,11 +85,40 @@ public class Businessman extends GameActor implements OnGestureListener {
 	
 	@Override
 	public void update(long elapsedTime) {
-		go_elapsed += elapsedTime;
-		if(go_elapsed > 80) {
-			//Log.i(this.getClass().toString(), "go_elapsed = " + go_elapsed);
-			currentFrame = ++currentFrame % frame.length;
-			go_elapsed = 0;
+		brushTime += elapsedTime;
+		if(fling[UP]) {
+			if(bodyMotion == IS_RUN) {
+				bodyMotion = IS_UP;
+				fling[UP] = false;
+			}
+		} else if(fling[RIGHT]) {
+			if(bodyMotion == IS_RUN) {
+				bodyMotion = IS_DOWN;
+				fling[RIGHT] = false;
+			}
+		}
+		
+		if(bodyMotion == IS_UP) {
+			actorY = Background.FLOOR - 100 - frameH - frameH * (shrink - 1) / 2;
+			if(upTime < 700)
+				upTime += elapsedTime;
+			else {
+				upTime = 0;
+				bodyMotion = IS_RUN;
+				actorY = Background.FLOOR - frameH - frameH * (shrink - 1) / 2;
+			}
+		}
+		if(bodyMotion == IS_DOWN)
+			if(downTime < 700)
+				downTime += elapsedTime;
+			else {
+				downTime = 0;
+				bodyMotion = IS_RUN;
+			}
+		
+		if(brushTime > 80) {
+			currentFrame = ++currentFrame % frameTotal[bodyMotion];
+			brushTime = 0;
 		}
 	}
 	
@@ -77,7 +129,7 @@ public class Businessman extends GameActor implements OnGestureListener {
 			canvas.scale(-shrink, shrink, actorX + frameW / 2, actorY + frameH / 2);
 		else
 			canvas.scale(shrink, shrink, actorX + frameW / 2, actorY + frameH / 2);
-		canvas.drawBitmap(frame[currentFrame], actorX, actorY, paint);
+		canvas.drawBitmap(frame[bodyMotion][currentFrame], actorX, actorY, paint);
 		canvas.restore();
 	}
 	
@@ -88,14 +140,27 @@ public class Businessman extends GameActor implements OnGestureListener {
 
 	@Override
 	public boolean onDown(MotionEvent arg0) {
-		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
 	@Override
-	public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
-			float velocityY) {
-		// TODO Auto-generated method stub
+	public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+		int distanceX = (int)(e2.getX() - e1.getX());
+		int distanceY = (int)(e2.getY() - e1.getY());
+		Log.i(this.getClass().toString(), "onFling ————> distanceX = " + distanceX);
+		Log.i(this.getClass().toString(), "onFling ————> distanceY = " + distanceY);
+		
+		int minL = 50;
+		int minOfHalfW = 40;
+		
+		if(distanceY < -minL && distanceX < minOfHalfW && distanceX > -minOfHalfW) {
+			fling[UP] = true;
+			Log.i(this.getClass().toString(), "Fling to up.");
+		}
+		if(distanceX > minL && distanceY < minOfHalfW && distanceY > -minOfHalfW) {
+			fling[RIGHT] = true;
+			Log.i(this.getClass().toString(), "Fling to right.");
+		}
 		return false;
 	}
 
@@ -106,10 +171,8 @@ public class Businessman extends GameActor implements OnGestureListener {
 	}
 
 	@Override
-	public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX,
-			float distanceY) {
-		// TODO Auto-generated method stub
-		return false;
+	public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+		return true;
 	}
 
 	@Override

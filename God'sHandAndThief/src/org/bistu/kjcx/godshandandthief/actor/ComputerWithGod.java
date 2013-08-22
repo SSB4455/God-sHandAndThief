@@ -13,9 +13,9 @@ public class ComputerWithGod {
 	Random random;
 	GodLayout godLayout;
 	
-	 
-	 
-	 public ComputerWithGod(Context context) {
+	
+	
+	public ComputerWithGod(Context context) {
 		this.context = context;
 		random = new Random();
 		
@@ -26,7 +26,7 @@ public class ComputerWithGod {
 		random = new Random();
 	}
 	
-	public GodLayout createLayout(int level) {		//难度只有0-9
+	public GodLayout createLayout(int level) {		//难度有0-9
 		godLayout = godLayout != null ? godLayout : new GodLayout(context);
 		level = level % 10;
 		long interval = 2000;		//至少间隔2秒

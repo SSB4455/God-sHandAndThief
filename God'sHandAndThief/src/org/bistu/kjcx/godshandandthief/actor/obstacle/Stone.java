@@ -10,10 +10,6 @@ import android.graphics.Canvas;
 
 public class Stone extends Obstacle {
 	
-	int frameW, frameH;
-	long go_elapsed;
-	boolean isBreak;
-	
 	
 	
 	public Stone(Bitmap bitmap) {
@@ -21,7 +17,7 @@ public class Stone extends Obstacle {
 		frameW = actorBitmap.getWidth();
 		frameH = actorBitmap.getHeight();
 		
-		shrink = (MainSurfaceView.SCREEN_H / 8) / (float) frameH;
+		shrink = (MainSurfaceView.SCREEN_H / 6) / (float) frameH;
 		
 		actorX = MainSurfaceView.SCREEN_W + frameW * (shrink - 1) / 2;
 		actorY = Background.FLOOR - frameH - frameH * (shrink - 1) / 2;
@@ -31,10 +27,8 @@ public class Stone extends Obstacle {
 	
 	@Override
 	public void update(long elapsedTime) {
-		go_elapsed += elapsedTime;
-		if(!isBreak && go_elapsed > 50) {
-			actorX -= (Businessman.SPEED * go_elapsed) / 1000;
-			go_elapsed = 0;
+		if(!isBreak) {
+			actorX -= (Businessman.SPEED * elapsedTime) / 1000;
 		}
 		if(actorX < -(frameW * ( 1 + shrink) / 2)) {
 			status = GameActor.ActorStatus.Dead;
@@ -51,4 +45,5 @@ public class Stone extends Obstacle {
 		canvas.drawBitmap(actorBitmap, actorX, actorY, paint);
 		canvas.restore();
 	}
+	
 }

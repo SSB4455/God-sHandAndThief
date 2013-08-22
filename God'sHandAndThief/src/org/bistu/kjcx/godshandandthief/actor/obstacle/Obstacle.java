@@ -11,14 +11,12 @@ public class Obstacle extends GameActor {
 	}
 	protected ObstacleType type;
 	
-	int frameW, frameH;
-	long go_elapsed;
-	boolean isBreak;
+	protected int frameW, frameH;
+	protected boolean isBreak;
 	
 	
 	
 	public Obstacle() {
-		go_elapsed = 0;
 		isBreak = false;
 		
 		paint = new Paint();
@@ -29,4 +27,7 @@ public class Obstacle extends GameActor {
 		
 	}
 	
+	public int getWidth() {
+		return frameW;
+	}
 }

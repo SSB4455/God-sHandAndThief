@@ -19,12 +19,14 @@ import android.widget.Toast;
 public class MainSurfaceView extends SurfaceView implements Callback, Runnable {
 	
 	public static int SCREEN_H, SCREEN_W;
+	private static int BRUSH_FRAME_FREQUENCY;
+	private static long BRUSH_FRAME_LONG;
 	
 	private SurfaceHolder sfh;		//创建一个SurfaceHolder 控制SurfaceView的
 	private StateSystem stateSystem;
 	
 	private long [] time;
-	private long elapsedTime;
+	private long elapsedTime, brushTime;
 	private boolean flag;
 
 	private Context context;
@@ -43,7 +45,9 @@ public class MainSurfaceView extends SurfaceView implements Callback, Runnable {
 		SCREEN_W = dm.widthPixels;
 		Log.i(this.getClass().toString(), "SCREEN_H = " + SCREEN_H + ", SCREEN_W = " + SCREEN_W);
 		
+		setBrushFrameFrequency(100);
 		time = new long[3];
+		brushTime = 0;
 		
 		stateSystem = new StateSystem();
 		paint = new Paint();
@@ -92,6 +96,7 @@ public class MainSurfaceView extends SurfaceView implements Callback, Runnable {
 			while(flag) {
 				canvas = sfh.lockCanvas();
 				time[0] = System.currentTimeMillis();
+				//brushTime += elapsedTime;
 				stateSystem.update(elapsedTime);
 				time[1] = System.currentTimeMillis();
 				stateSystem.render(canvas);
@@ -148,5 +153,18 @@ public class MainSurfaceView extends SurfaceView implements Callback, Runnable {
 		
 		return elapsedTime;
 	}
-
+	
+	private long setBrushFrameFrequency(int times) {
+		BRUSH_FRAME_FREQUENCY = times;
+		return BRUSH_FRAME_LONG = 1000 / times;
+	}
+	
+	public static int getBrushFrameFrequency() {
+		return BRUSH_FRAME_FREQUENCY;
+	}
+	
+	public static long getBrushFrameLong() {
+		return BRUSH_FRAME_LONG;
+	}
+	
 }

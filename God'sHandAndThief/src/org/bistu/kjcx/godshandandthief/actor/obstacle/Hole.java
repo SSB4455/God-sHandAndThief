@@ -10,10 +10,6 @@ import android.graphics.Canvas;
 
 public class Hole extends Obstacle {
 	
-	int frameW, frameH;
-	long go_elapsed;
-	boolean isBreak;
-	
 	
 	
 	public Hole(Bitmap bitmap) {
@@ -21,10 +17,10 @@ public class Hole extends Obstacle {
 		frameW = actorBitmap.getWidth();
 		frameH = actorBitmap.getHeight();
 		
-		shrink = (MainSurfaceView.SCREEN_H / 4) / (float) frameH;
+		shrink = (MainSurfaceView.SCREEN_H / 2) / (float) frameH;
 		
 		actorX = MainSurfaceView.SCREEN_W + frameW * (shrink - 1) / 2;
-		actorY = Background.FLOOR - frameH - frameH * (shrink - 1) / 2;
+		actorY = Background.FLOOR - MainSurfaceView.SCREEN_W / 9 - frameH - frameH * (shrink - 1) / 2;
 		
 		type = Obstacle.ObstacleType.Hole;
 		//Log.i(this.getClass().toString(), "shrink = " + shrink);
@@ -32,10 +28,8 @@ public class Hole extends Obstacle {
 	
 	@Override
 	public void update(long elapsedTime) {
-		go_elapsed += elapsedTime;
-		if(!isBreak && go_elapsed > 50) {
-			actorX -= (Businessman.SPEED * go_elapsed) / 1000;
-			go_elapsed = 0;
+		if(!isBreak) {
+			actorX -= (Businessman.SPEED * elapsedTime) / 1000;
 		}
 		if(actorX < -(frameW * ( 1 + shrink) / 2)) {
 			status = GameActor.ActorStatus.Dead;
