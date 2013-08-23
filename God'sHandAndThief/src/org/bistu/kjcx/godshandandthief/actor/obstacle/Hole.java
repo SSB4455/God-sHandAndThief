@@ -9,6 +9,7 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 
 public class Hole extends Obstacle {
+	private int interval;
 	
 	
 	
@@ -17,10 +18,15 @@ public class Hole extends Obstacle {
 		frameW = actorBitmap.getWidth();
 		frameH = actorBitmap.getHeight();
 		
-		shrink = (MainSurfaceView.SCREEN_H / 2) / (float) frameH;
+		hight = MainSurfaceView.SCREEN_H / 2;
+		shrink = hight / (float) frameH;
+		width = (int) (frameW * shrink);
+		incrementWHalf = (int) (frameW * (shrink - 1) / 2);
+		incrementHHalf = (int) (frameH * (shrink - 1) / 2);
 		
-		actorX = MainSurfaceView.SCREEN_W + frameW * (shrink - 1) / 2;
-		actorY = Background.FLOOR - MainSurfaceView.SCREEN_W / 9 - frameH - frameH * (shrink - 1) / 2;
+		actorX = MainSurfaceView.SCREEN_W + incrementWHalf;
+		interval = MainSurfaceView.SCREEN_W / 9;
+		actorY = Background.FLOOR - interval - frameH - incrementHHalf;
 		
 		type = Obstacle.ObstacleType.Hole;
 		//Log.i(this.getClass().toString(), "shrink = " + shrink);
@@ -31,7 +37,7 @@ public class Hole extends Obstacle {
 		if(!isBreak) {
 			actorX -= (Businessman.SPEED * elapsedTime) / 1000;
 		}
-		if(actorX < -(frameW * ( 1 + shrink) / 2)) {
+		if(getRight() < 0) {
 			status = GameActor.ActorStatus.Dead;
 		}
 	}

@@ -59,5 +59,17 @@ public class Ground extends GameActor {
 		canvas.drawBitmap(actorBitmap, actorX, actorY, paint);
 		canvas.restore();
 	}
+
+	@Override
+	public int getLeft() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int getRight() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 	
 }

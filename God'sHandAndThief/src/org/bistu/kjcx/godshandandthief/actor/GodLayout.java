@@ -16,8 +16,6 @@ import android.graphics.Paint;
 import android.util.Log;
 
 public class GodLayout extends GameActor {
-	Context context;
-	
 	class RecordObstacle {
 		boolean inScreen;
 		long position;
@@ -31,6 +29,7 @@ public class GodLayout extends GameActor {
 		
 	}
 	
+	Context context;
 	private long screenLong;
 	
 	private ProgressBar progressBar;
@@ -43,6 +42,7 @@ public class GodLayout extends GameActor {
 		super("God Layout");
 		this.context = context;
 		
+		/*
 		screenLong = (long) (MainSurfaceView.SCREEN_W / (float) Businessman.SPEED * 1000);
 		Log.i(this.getClass().toString(), "screenLong = " + screenLong);
 		
@@ -55,6 +55,7 @@ public class GodLayout extends GameActor {
 		obstacleStone.put(ObstacleType.Stone, stone);
 		
 		paint = new Paint();
+		*/
 	}
 	
 	@Override
@@ -92,7 +93,7 @@ public class GodLayout extends GameActor {
 	}
 	
 	public void addObstacle(long position, ObstacleType type) {
-		obstacleLayout.add(new RecordObstacle(position, type));
+		//obstacleLayout.add(new RecordObstacle(position, type));
 		
 		
 		Obstacle obstacle;
@@ -118,6 +119,22 @@ public class GodLayout extends GameActor {
 		if(this.progressBar == progressBar)
 			return true;
 		return false;
+	}
+	
+	public ArrayList<GameActor> getObstacles () {
+		return children;
+	}
+
+	@Override
+	public int getLeft() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int getRight() {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 	
 }

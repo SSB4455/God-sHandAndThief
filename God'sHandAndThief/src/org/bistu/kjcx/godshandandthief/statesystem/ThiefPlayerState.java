@@ -5,6 +5,7 @@ import org.bistu.kjcx.godshandandthief.actor.Background;
 import org.bistu.kjcx.godshandandthief.actor.Businessman;
 import org.bistu.kjcx.godshandandthief.actor.GodLayout;
 import org.bistu.kjcx.godshandandthief.actor.ProgressBar;
+import org.bistu.kjcx.godshandandthief.actor.obstacle.Obstacle;
 
 import android.content.Context;
 import android.graphics.BitmapFactory;
@@ -45,6 +46,11 @@ public class ThiefPlayerState implements IGameObject {
 		if(progressBar.isPlay()) {
 			background.update(elapsedTime);
 			godLayout.update(elapsedTime);
+			for(int i = 0; i < godLayout.getObstacles().size(); i++)
+				if(businessman.isCollisionWith((Obstacle) godLayout.getObstacles().get(i))) {
+					businessman.beInjured();
+					Log.i(this.getClass().toString(), "businessman is injured.");
+				}
 			businessman.update(elapsedTime);
 		}
 	}

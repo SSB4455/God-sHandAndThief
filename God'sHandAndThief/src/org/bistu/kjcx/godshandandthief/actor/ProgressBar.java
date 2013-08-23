@@ -50,5 +50,17 @@ public class ProgressBar extends GameActor {
 	public float getProgressP() {
 		return playTime;
 	}
+
+	@Override
+	public int getLeft() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int getRight() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 	
 }

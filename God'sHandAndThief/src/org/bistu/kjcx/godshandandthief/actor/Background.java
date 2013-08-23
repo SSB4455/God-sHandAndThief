@@ -39,4 +39,16 @@ public class Background extends GameActor {
 		cloud.render(canvas);
 		ground.render(canvas);
 	}
+
+	@Override
+	public int getLeft() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int getRight() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 }

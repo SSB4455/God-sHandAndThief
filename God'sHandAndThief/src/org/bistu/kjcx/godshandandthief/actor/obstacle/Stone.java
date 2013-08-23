@@ -17,10 +17,14 @@ public class Stone extends Obstacle {
 		frameW = actorBitmap.getWidth();
 		frameH = actorBitmap.getHeight();
 		
-		shrink = (MainSurfaceView.SCREEN_H / 6) / (float) frameH;
+		hight = MainSurfaceView.SCREEN_H / 6;
+		shrink = hight / (float) frameH;
+		width = (int) (frameW * shrink);
+		incrementWHalf = (int) (frameW * (shrink - 1) / 2);
+		incrementHHalf = (int) (frameH * (shrink - 1) / 2);
 		
-		actorX = MainSurfaceView.SCREEN_W + frameW * (shrink - 1) / 2;
-		actorY = Background.FLOOR - frameH - frameH * (shrink - 1) / 2;
+		actorX = MainSurfaceView.SCREEN_W + incrementWHalf;
+		actorY = Background.FLOOR - frameH - incrementHHalf;
 		
 		type = Obstacle.ObstacleType.Stone;
 	}
@@ -30,7 +34,7 @@ public class Stone extends Obstacle {
 		if(!isBreak) {
 			actorX -= (Businessman.SPEED * elapsedTime) / 1000;
 		}
-		if(actorX < -(frameW * ( 1 + shrink) / 2)) {
+		if(getRight() < 0) {
 			status = GameActor.ActorStatus.Dead;
 		}
 	}

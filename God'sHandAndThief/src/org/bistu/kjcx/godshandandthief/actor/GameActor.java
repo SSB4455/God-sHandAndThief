@@ -17,6 +17,7 @@ public abstract class GameActor {
 	
 	protected ArrayList<GameActor> children;
 	protected String name;
+	protected int width, hight;
 	protected float actorX, actorY, shrink;
 	protected long level;
 	protected Bitmap actorBitmap;
@@ -25,6 +26,7 @@ public abstract class GameActor {
 	
 	
 	public GameActor() {
+		shrink = 1;
 		this.status = ActorStatus.Action;
 	}
 	
@@ -78,6 +80,18 @@ public abstract class GameActor {
 	
 	boolean checkStatus(GameActor actor) {
 		return false;
+	}
+	
+	abstract public int getLeft();
+	
+	abstract public int getRight();
+	
+	public int getWidth() {
+		return width;
+	}
+	
+	public int getHight() {
+		return hight;
 	}
 	
 }

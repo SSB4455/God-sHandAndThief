@@ -11,7 +11,7 @@ public class Obstacle extends GameActor {
 	}
 	protected ObstacleType type;
 	
-	protected int frameW, frameH;
+	protected int frameW, frameH, incrementWHalf, incrementHHalf;
 	protected boolean isBreak;
 	
 	
@@ -27,7 +27,18 @@ public class Obstacle extends GameActor {
 		
 	}
 	
-	public int getWidth() {
-		return frameW;
+	public ObstacleType getType() {
+		return type;
 	}
+	
+	@Override
+	public int getLeft() {
+		return (int) (actorX - incrementWHalf);
+	}
+	
+	@Override
+	public int getRight() {
+		return (int) (actorX + frameW + incrementWHalf);
+	}
+	
 }
