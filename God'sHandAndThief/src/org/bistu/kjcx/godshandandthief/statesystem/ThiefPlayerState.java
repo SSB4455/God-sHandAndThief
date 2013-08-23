@@ -1,5 +1,6 @@
 package org.bistu.kjcx.godshandandthief.statesystem;
 
+import org.bistu.kjcx.godshandandthief.MainSurfaceView;
 import org.bistu.kjcx.godshandandthief.R;
 import org.bistu.kjcx.godshandandthief.actor.Background;
 import org.bistu.kjcx.godshandandthief.actor.Businessman;
@@ -8,6 +9,7 @@ import org.bistu.kjcx.godshandandthief.actor.ProgressBar;
 import org.bistu.kjcx.godshandandthief.actor.obstacle.Obstacle;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -20,6 +22,8 @@ public class ThiefPlayerState implements IGameObject {
 	private Context context;
 	private StateSystem stateSystem;
 	
+	private boolean isLose, isWin;
+	private Bitmap isLoseBitmap, isWinBitmap;
 	private GodLayout godLayout;
 	private ProgressBar progressBar;
 	private Background background;
@@ -37,6 +41,9 @@ public class ThiefPlayerState implements IGameObject {
 		background = new Background(context);
 		businessman = new Businessman(context);
 		
+		isLoseBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.lose);
+		isWinBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.win);
+		
 		paint = new Paint();
 		paint.setColor(Color.WHITE);
 	}
@@ -51,17 +58,26 @@ public class ThiefPlayerState implements IGameObject {
 					businessman.beInjured();
 					Log.i(this.getClass().toString(), "businessman is injured.");
 				}
+			if(businessman.getHreat() < 1) {
+				isLose = true;
+				progressBar.stop();
+			}
 			businessman.update(elapsedTime);
+		} else {
+			isWin = true;
+			progressBar.stop();
 		}
 	}
 	
 	public void render(Canvas canvas) {
 		background.render(canvas);
 		progressBar.render(canvas);
-		if(progressBar.isPlay()) {
-			godLayout.render(canvas);
-			businessman.render(canvas);
-		}
+		godLayout.render(canvas);
+		businessman.render(canvas);
+		if(isWin)
+			canvas.drawBitmap(isWinBitmap, MainSurfaceView.SCREEN_W / 5, MainSurfaceView.SCREEN_H - isWinBitmap.getHeight(), paint);
+		if(isLose)
+			canvas.drawBitmap(isLoseBitmap, MainSurfaceView.SCREEN_W / 5, MainSurfaceView.SCREEN_H - isLoseBitmap.getHeight(), paint);
 	}
 	
 	void start(String type, GodLayout godLayout) {

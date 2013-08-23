@@ -23,10 +23,11 @@ public class ProgressBar extends GameActor {
 	
 	@Override
 	public void update(long elapsedTime) {
-		playTime += elapsedTime;
+		if(isPlay)
+			playTime += elapsedTime;
 		if(playTime > TOTAL_Long) {
 			isPlay = false;
-			playTime = 0;
+			//playTime = 0;
 		}
 		
 	}
@@ -41,6 +42,10 @@ public class ProgressBar extends GameActor {
 	
 	public boolean isPlay() {
 		return isPlay;
+	}
+	
+	public void stop() {
+		isPlay = false;
 	}
 	
 	public long getProgressL() {

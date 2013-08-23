@@ -249,6 +249,10 @@ public class Businessman extends GameActor implements OnGestureListener {
 		return false;
 	}
 
+	public int getHreat() {
+		return health;
+	}
+
 	@Override
 	public int getLeft() {
 		return (int) (actorX - incrementWHalf);
