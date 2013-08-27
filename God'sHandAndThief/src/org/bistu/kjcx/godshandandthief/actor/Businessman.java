@@ -22,6 +22,7 @@ public class Businessman extends GameActor implements OnGestureListener {
 	private int heartStartX, heartY, heartInterval;
 	private int upHight;
 	private int [] frameTotal;
+	private float scrollX, scrollY;
 	private final int UP = 0;
 	private final int RIGHT = 1;
 	
@@ -110,20 +111,22 @@ public class Businessman extends GameActor implements OnGestureListener {
 	@Override
 	public void update(long elapsedTime) {
 		brushTime += elapsedTime;
-		if(fling[UP]) {		//处理输入操作
-			if(bodyMotion == IS_RUN)
-				bodyMotion = IS_UP;
-			fling[UP] = false;
-		} else if(fling[RIGHT]) {
+		//处理输入操作
+		if(fling[RIGHT]) {
 			if(bodyMotion == IS_RUN)
 				bodyMotion = IS_DOWN;
+		}
+		if(fling[UP]) {
+			if(bodyMotion == IS_RUN || bodyMotion == IS_DOWN)
+				bodyMotion = IS_UP;
 			fling[RIGHT] = false;
+			fling[UP] = false;
 		}
 		
 		//处理身体姿势
 		if(bodyMotion == IS_UP) {
 			actorY = Background.FLOOR - frameH - incrementHHalf - hight;
-			if(upTime < 800)
+			if(upTime < 800 || fling[UP])
 				upTime += elapsedTime;
 			else {
 				upTime = 0;
@@ -132,11 +135,12 @@ public class Businessman extends GameActor implements OnGestureListener {
 			}
 		}
 		if(bodyMotion == IS_DOWN)
-			if(downTime < 800)
+			if(downTime < 800 || fling[RIGHT])
 				downTime += elapsedTime;
 			else {
 				downTime = 0;
 				bodyMotion = IS_RUN;
+				actorY = Background.FLOOR - frameH - incrementHHalf;
 			}
 		if(bodyMotion == IS_INJURED)
 			if(injuredTime < 500)
@@ -144,6 +148,7 @@ public class Businessman extends GameActor implements OnGestureListener {
 			else {
 				injuredTime = 0;
 				bodyMotion = IS_RUN;
+				actorY = Background.FLOOR - frameH - incrementHHalf;		//防止不在地面跑
 			}
 		
 		if(brushTime > 80) {
@@ -170,8 +175,8 @@ public class Businessman extends GameActor implements OnGestureListener {
 	public boolean isCollisionWith(Obstacle obstacle) {
 		if(getLeft() < obstacle.getRight() - 10 && obstacle.getLeft() + 10 < getRight()) {
 			
-			Log.i(this.getClass().toString(), "businessman left = " + getLeft() + ", right = " + getRight());
-			Log.i(this.getClass().toString(), "obstacle left = " + obstacle.getLeft() + ", right = " + obstacle.getRight());
+			//Log.i(this.getClass().toString(), "businessman left = " + getLeft() + ", right = " + getRight());
+			//Log.i(this.getClass().toString(), "obstacle left = " + obstacle.getLeft() + ", right = " + obstacle.getRight());
 			switch(obstacle.getType()) {
 			case Hole :
 				if(bodyMotion == IS_DOWN || bodyMotion == IS_INJURED)
@@ -196,80 +201,77 @@ public class Businessman extends GameActor implements OnGestureListener {
 		bodyMotion = IS_INJURED;
 	}
 	
-	@Override
-	public boolean onDown(MotionEvent arg0) {
-		return true;
-	}
-	
 	public boolean onTouchEvent(MotionEvent event) {
-		
+		//Log.v(this.getClass().toString(), "onTouchEvent");
+		switch (event.getAction()) {
+	    case MotionEvent.ACTION_UP:
+	    	Log.d(this.getClass().toString(), "scrollX = " + scrollX + ", scrollY = " + scrollY);
+	    	fling[RIGHT] = false;
+	    	scrollX = 0;
+			scrollY = 0;
+	        break;
+	    }
 		return mGestureDetector.onTouchEvent(event);
 	}
 	
 	@Override
+	public boolean onDown(MotionEvent arg0) {
+		//一次点击只唤醒一次
+		//Log.v(this.getClass().toString(), "onDonw");
+		return true;
+	}
+	
+	@Override
 	public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-		int distanceX = (int)(e2.getX() - e1.getX());
-		int distanceY = (int)(e2.getY() - e1.getY());
-		Log.i(this.getClass().toString(), "onFling ————> distanceX = " + distanceX);
-		Log.i(this.getClass().toString(), "onFling ————> distanceY = " + distanceY);
+		// TODO Auto-generated method stub
 		
-		int minL = 50;
-		int minWHalf = 40;
-		
-		if(distanceY < -minL && distanceX < minWHalf && distanceX > -minWHalf) {
-			fling[UP] = true;
-			Log.i(this.getClass().toString(), "Fling to up.");
-		}
-		if(distanceX > minL && distanceY < minWHalf && distanceY > -minWHalf) {
-			fling[RIGHT] = true;
-			Log.i(this.getClass().toString(), "Fling to right.");
-		}
 		return false;
 	}
 	
 	@Override
 	public void onLongPress(MotionEvent e) {
-		// TODO Auto-generated method stub
+		//一旦点击稍有移动就进入scroll再进入filing 不走长按这条线了 只有按住不动才能唤醒这个方法（只唤醒一次）
+		//Log.v(this.getClass().toString(), "onLongPress");
 		
 	}
 	
 	@Override
 	public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
-		int distanceX1 = (int)(e2.getX() - e1.getX());
-		int distanceY1 = (int)(e2.getY() - e1.getY());
-		Log.i(this.getClass().toString(), "onScroll ————> distanceX = " + distanceX1);
-		Log.i(this.getClass().toString(), "onScroll ————> distanceY = " + distanceY1);
+		scrollX -= distanceX;
+		scrollY -= distanceY;
+		Log.d(this.getClass().toString(), "onScroll ——> distanceX = " + distanceX + ", distanceY = " + distanceY);
 		
-		int minL = 50;
-		int minWHalf = 40;
+		int scrollLength = MainSurfaceView.SCREEN_W / 9;
 		
-		if(distanceY1 < -minL && distanceX1 < minWHalf && distanceX1 > -minWHalf) {
-			//fling[UP] = true;
+		if(scrollLength < -scrollY) {
+			fling[UP] = true;
 			Log.i(this.getClass().toString(), "onScroll to up.");
 		}
-		if(distanceX1 > minL && distanceY1 < minWHalf && distanceY1 > -minWHalf) {
-			//fling[RIGHT] = true;
+		if(scrollX > scrollLength && scrollY < scrollLength / 2) {
+			fling[RIGHT] = true;
 			Log.i(this.getClass().toString(), "onScroll to right.");
 		}
-		return true;
+		return false;
 	}
 	
 	@Override
 	public void onShowPress(MotionEvent e) {
+		//Log.v(this.getClass().toString(), "onShowPress");
 		// TODO Auto-generated method stub
 		
 	}
 	
 	@Override
 	public boolean onSingleTapUp(MotionEvent e) {
+		//Log.v(this.getClass().toString(), "onSingleTapUp");
 		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
-
+	
 	public int getHreat() {
 		return health;
 	}
-
+	
 	@Override
 	public int getLeft() {
 		return (int) (actorX - incrementWHalf);
