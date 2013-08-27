@@ -179,6 +179,7 @@ public class Businessman extends GameActor implements OnGestureListener {
 				else
 					return true;
 			case Stone :
+			case Pit :
 				if(bodyMotion == IS_UP || bodyMotion == IS_INJURED)
 					return false;
 				else
@@ -234,6 +235,22 @@ public class Businessman extends GameActor implements OnGestureListener {
 	
 	@Override
 	public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+		int distanceX1 = (int)(e2.getX() - e1.getX());
+		int distanceY1 = (int)(e2.getY() - e1.getY());
+		Log.i(this.getClass().toString(), "onScroll ！！！！> distanceX = " + distanceX1);
+		Log.i(this.getClass().toString(), "onScroll ！！！！> distanceY = " + distanceY1);
+		
+		int minL = 50;
+		int minWHalf = 40;
+		
+		if(distanceY1 < -minL && distanceX1 < minWHalf && distanceX1 > -minWHalf) {
+			//fling[UP] = true;
+			Log.i(this.getClass().toString(), "onScroll to up.");
+		}
+		if(distanceX1 > minL && distanceY1 < minWHalf && distanceY1 > -minWHalf) {
+			//fling[RIGHT] = true;
+			Log.i(this.getClass().toString(), "onScroll to right.");
+		}
 		return true;
 	}
 	

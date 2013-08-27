@@ -33,7 +33,7 @@ public class GodLayout extends GameActor {
 	private long screenLong;
 	
 	private ProgressBar progressBar;
-	private HashMap<ObstacleType, Obstacle> obstacleStone;
+	private HashMap<ObstacleType, Obstacle> obstacleStorage;
 	private ArrayList<RecordObstacle> obstacleLayout;		//obstacleSupervisor
 	
 	
@@ -46,13 +46,13 @@ public class GodLayout extends GameActor {
 		screenLong = (long) (MainSurfaceView.SCREEN_W / (float) Businessman.SPEED * 1000);
 		Log.i(this.getClass().toString(), "screenLong = " + screenLong);
 		
-		obstacleStone = new HashMap<ObstacleType, Obstacle>();
+		obstacleStorage = new HashMap<ObstacleType, Obstacle>();
 		obstacleLayout = new ArrayList<RecordObstacle>();
 		
 		Obstacle hole = new Hole(BitmapFactory.decodeResource(context.getResources(), R.drawable.hole));
 		Obstacle stone = new Stone(BitmapFactory.decodeResource(context.getResources(), R.drawable.stone));
-		obstacleStone.put(ObstacleType.Hole, hole);
-		obstacleStone.put(ObstacleType.Stone, stone);
+		obstacleStorage.put(ObstacleType.Hole, hole);
+		obstacleStorage.put(ObstacleType.Stone, stone);
 		
 		paint = new Paint();
 		*/
@@ -96,21 +96,23 @@ public class GodLayout extends GameActor {
 		//obstacleLayout.add(new RecordObstacle(position, type));
 		
 		
-		Obstacle obstacle;
+		Obstacle obstacle = null;
 		switch(type) {
 		case Hole : 
 			obstacle = new Hole(BitmapFactory.decodeResource(context.getResources(), R.drawable.hole));
-			obstacle.actorX = position / 1000 * Businessman.SPEED;
-			children.add(obstacle);
 			break;
 		case Stone:
 			obstacle = new Stone(BitmapFactory.decodeResource(context.getResources(), R.drawable.stone));
-			obstacle.actorX = position / 1000 * Businessman.SPEED;
-			children.add(obstacle);
+			break;
+		case Pit:
+			obstacle = new Pit();
 			break;
 		default:
+			obstacle = new Pit();
 			break;
 		}
+		obstacle.actorX = position / 1000 * Businessman.SPEED;
+		children.add(obstacle);
 		
 	}
 	

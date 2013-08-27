@@ -5,6 +5,7 @@ import org.bistu.kjcx.godshandandthief.MainSurfaceView;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.util.Log;
 
 public class Background extends GameActor {
 	
@@ -22,6 +23,7 @@ public class Background extends GameActor {
 		cloud = new Cloud(context);
 		ground = new Ground(context);
 		
+		Log.i(this.getClass().toString(), "FLOOR = " + FLOOR);
 		paint = new Paint();
 	}
 	

@@ -8,6 +8,7 @@ public class Obstacle extends GameActor {
 	public enum ObstacleType {
 		Hole,		//¶´
 		Stone,		//Ê¯Í·
+		Pit,		//¿Ó
 	}
 	protected ObstacleType type;
 	

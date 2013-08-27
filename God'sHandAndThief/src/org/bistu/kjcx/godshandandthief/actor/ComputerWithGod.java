@@ -33,8 +33,8 @@ public class ComputerWithGod {
 		long partLong = (ProgressBar.TOTAL_Long - interval * level) / level;
 		for(int i = 0; i < level; i++) {
 			long position = i * (partLong + interval) + random.nextInt((int) partLong);
-			godLayout.addObstacle(position, i % 2 == 0 ? ObstacleType.Stone : ObstacleType.Hole);
-			Log.i(this.getClass().toString(), "create a obstacle, position = " + position + " type = " + (i % 2 == 0 ? ObstacleType.Stone + "" : ObstacleType.Hole + ""));
+			godLayout.addObstacle(position, i % 2 == 0 ? ObstacleType.Pit : ObstacleType.Hole);
+			Log.i(this.getClass().toString(), "create a obstacle, position = " + position + " type = " + (i % 2 == 0 ? ObstacleType.Pit + "" : ObstacleType.Hole + ""));
 		}
 		
 		return godLayout;
