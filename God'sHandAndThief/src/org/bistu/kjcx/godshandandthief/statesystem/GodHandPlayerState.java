@@ -61,11 +61,10 @@ public class GodHandPlayerState implements IGameObject {
 		godLayout = godLayout == null ? new GodLayout(context) : godLayout;
 		level = level % 10;
 		long interval = 1000;		//至少间隔1秒
-		long partLong = (ProgressBar.TOTAL_Long - interval - interval * level) / level;		//多减一个间隔时间是为了给第一个障碍的间隔
+		long partLong = (ProgressBar.TOTAL_Long - 4000 - interval * level) / level;		//多减4s是为了给第一个障碍的间隔预留2s为最后一个障碍预留2s
 		for(int i = 0; i < level; i++) {
-			long position = i * (partLong + interval) + random.nextInt((int) partLong);
-			if(i == 0)
-				position += interval;		//第一个障碍多添加一个间隔时间
+			long position = 2000 + i * (partLong + interval) + random.nextInt((int) partLong);
+			//第一个障碍多添加2s的准备时间
 			godLayout.addObstacle(position, i % 2 == 0 ? ObstacleType.Pit : ObstacleType.Hole);
 			Log.v(this.getClass().toString(), "create a obstacle, position = " + position + " type = " + (i % 2 == 0 ? ObstacleType.Pit + "" : ObstacleType.Hole + ""));
 		}

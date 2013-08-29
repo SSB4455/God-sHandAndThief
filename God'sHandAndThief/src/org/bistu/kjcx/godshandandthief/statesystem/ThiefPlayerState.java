@@ -64,7 +64,7 @@ public class ThiefPlayerState implements IGameObject {
 				progressBar.stop();
 			}
 			businessman.update(elapsedTime);
-		} else {
+		} else if(!isLose) {
 			isWin = true;
 			progressBar.stop();
 		}
@@ -104,7 +104,15 @@ public class ThiefPlayerState implements IGameObject {
 	}
 	
 	public boolean onTouchEvent(MotionEvent event) {
-		
+		if((isWin || isLose) && type == "withComputer") {
+			GodHandPlayerState godHandPlayerState = new GodHandPlayerState(context, stateSystem);
+			godLayout = godHandPlayerState.createAutoGodLayout(9);
+			progressBar = new ProgressBar(BitmapFactory.decodeResource(context.getResources(), R.drawable.businessman_run));
+			godLayout.setProgressBar(progressBar);
+			isWin = false;
+			isLose = false;
+			businessman.setHreat(businessman.getHreat() + 1);
+		}
 		return businessman.onTouchEvent(event);
 	}
 

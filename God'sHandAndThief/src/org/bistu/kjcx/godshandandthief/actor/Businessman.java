@@ -16,7 +16,7 @@ import android.view.MotionEvent;
 
 public class Businessman extends GameActor implements OnGestureListener {
 	
-	public static int SPEED = 300;
+	public static int SPEED = MainSurfaceView.SCREEN_W / 2;
 	
 	private int health, frameW, frameH, incrementWHalf, incrementHHalf, currentFrame, bodyMotion;
 	private int heartStartX, heartY, heartInterval;
@@ -94,8 +94,8 @@ public class Businessman extends GameActor implements OnGestureListener {
 		
 		actorX = MainSurfaceView.SCREEN_W / 5 + incrementWHalf;		//¶¨Î»
 		actorY = Background.FLOOR - frameH - incrementHHalf;
-		Log.i(this.getClass().toString(), "actorX = " + actorX + ", frameW = " + frameW + ", frameH = " + frameH);
-		Log.i(this.getClass().toString(), "incrementWHalf = " + incrementWHalf + ", incrementHHalf = " + incrementHHalf);
+		Log.d(this.getClass().toString(), "actorX = " + actorX + ", frameW = " + frameW + ", frameH = " + frameH);
+		Log.d(this.getClass().toString(), "incrementWHalf = " + incrementWHalf + ", incrementHHalf = " + incrementHHalf);
 		
 		fling = new boolean[2];
 		
@@ -143,7 +143,7 @@ public class Businessman extends GameActor implements OnGestureListener {
 				actorY = Background.FLOOR - frameH - incrementHHalf;
 			}
 		if(bodyMotion == IS_INJURED)
-			if(injuredTime < 500)
+			if(injuredTime < 700)
 				injuredTime += elapsedTime;
 			else {
 				injuredTime = 0;
@@ -173,10 +173,11 @@ public class Businessman extends GameActor implements OnGestureListener {
 	}
 	
 	public boolean isCollisionWith(Obstacle obstacle) {
-		if(getLeft() < obstacle.getRight() - 10 && obstacle.getLeft() + 10 < getRight()) {
+		int allowMistake = obstacle.getWidth() / 4;
+		if(obstacle.getLeft() < getRight() - allowMistake && getLeft() + allowMistake < obstacle.getRight()) {
 			
-			//Log.i(this.getClass().toString(), "businessman left = " + getLeft() + ", right = " + getRight());
-			//Log.i(this.getClass().toString(), "obstacle left = " + obstacle.getLeft() + ", right = " + obstacle.getRight());
+			//Log.d(this.getClass().toString(), "businessman left = " + getLeft() + ", right = " + getRight());
+			//Log.d(this.getClass().toString(), "obstacle left = " + obstacle.getLeft() + ", right = " + obstacle.getRight());
 			switch(obstacle.getType()) {
 			case Hole :
 				if(bodyMotion == IS_DOWN || bodyMotion == IS_INJURED)
@@ -241,15 +242,15 @@ public class Businessman extends GameActor implements OnGestureListener {
 		scrollY -= distanceY;
 		Log.d(this.getClass().toString(), "onScroll ¡ª¡ª> distanceX = " + distanceX + ", distanceY = " + distanceY);
 		
-		int scrollLength = MainSurfaceView.SCREEN_W / 9;
+		int scrollLength = MainSurfaceView.SCREEN_W / 10;
 		
 		if(scrollLength < -scrollY) {
 			fling[UP] = true;
-			Log.i(this.getClass().toString(), "onScroll to up.");
+			Log.d(this.getClass().toString(), "onScroll to up.");
 		}
 		if((scrollX > scrollLength && scrollY < scrollLength / 2) || scrollY > scrollLength) {
 			fling[RIGHT] = true;
-			Log.i(this.getClass().toString(), "onScroll to right.");
+			Log.d(this.getClass().toString(), "onScroll to right.");
 		}
 		return false;
 	}
@@ -269,6 +270,11 @@ public class Businessman extends GameActor implements OnGestureListener {
 	}
 	
 	public int getHreat() {
+		return health;
+	}
+	
+	public int setHreat(int health) {
+		this.health = health;
 		return health;
 	}
 	

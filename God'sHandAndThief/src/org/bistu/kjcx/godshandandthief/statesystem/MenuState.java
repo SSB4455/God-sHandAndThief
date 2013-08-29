@@ -2,7 +2,6 @@ package org.bistu.kjcx.godshandandthief.statesystem;
 
 import org.bistu.kjcx.godshandandthief.R;
 import org.bistu.kjcx.godshandandthief.MainSurfaceView;
-import org.bistu.kjcx.godshandandthief.actor.GodLayout;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -44,7 +43,7 @@ public class MenuState implements IGameObject {
 		menuLocation[1][X] = MainSurfaceView.SCREEN_W / 2;
 		menuLocation[1][Y] = MainSurfaceView.SCREEN_H / 2;
 		menuLocation[2] = new float[2];
-		menuLocation[2][X] = MainSurfaceView.SCREEN_W - menuButton[2].getWidth();
+		menuLocation[2][X] = 0;
 		menuLocation[2][Y] = MainSurfaceView.SCREEN_H - menuButton[2].getHeight();
 		
 		paint = new Paint();
@@ -80,9 +79,7 @@ public class MenuState implements IGameObject {
 						Toast.makeText(context, "You are God...", Toast.LENGTH_SHORT).show();
 					}
 					if(i == 1) {
-						GodLayout godLayout = new GodLayout(context);
 						IGameObject thiefChooseState = new ThiefChooseState(context, stateSystem);
-						((ThiefChooseState) thiefChooseState).godLayout = godLayout;
 						stateSystem.addState("ThiefChooseState", thiefChooseState);
 						stateSystem.changeState("ThiefChooseState");
 						Toast.makeText(context, "You are thief...", Toast.LENGTH_SHORT).show();
