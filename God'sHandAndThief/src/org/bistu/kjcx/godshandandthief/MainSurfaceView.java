@@ -28,7 +28,7 @@ public class MainSurfaceView extends SurfaceView implements Callback, Runnable {
 	private long [] time;
 	private long elapsedTime, brushTime;
 	private boolean flag;
-
+	
 	private Context context;
 	Canvas canvas;
 	private Paint paint;

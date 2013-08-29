@@ -74,7 +74,9 @@ public class MenuState implements IGameObject {
 						&& menuLocation[i][Y] < event.getY() 
 						&& event.getY() < menuLocation[i][Y] + menuButton[i].getHeight()) {
 					if(i == 0) {
-						//stateSystem.changeState("GodsHandPlayerState");
+						IGameObject godChooseState = new GodChooseState(context, stateSystem);
+						stateSystem.addState("GodChooseState", godChooseState);
+						stateSystem.changeState("GodChooseState");
 						Toast.makeText(context, "You are God...", Toast.LENGTH_SHORT).show();
 					}
 					if(i == 1) {
@@ -86,7 +88,9 @@ public class MenuState implements IGameObject {
 						Toast.makeText(context, "You are thief...", Toast.LENGTH_SHORT).show();
 					}
 					if(i == 2) {
-						//stateSystem.changeState("GodsHandPlayerState");
+						IGameObject pleaseWaitState = new PleaseWaitState(context, stateSystem);
+						stateSystem.addState("PleaseWaitState", pleaseWaitState);
+						stateSystem.changeState("PleaseWaitState");
 						Toast.makeText(context, "Just kiding ^_^!", Toast.LENGTH_SHORT).show();
 					}
 				}

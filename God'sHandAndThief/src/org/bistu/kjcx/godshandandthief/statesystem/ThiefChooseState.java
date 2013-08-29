@@ -17,7 +17,6 @@ import android.view.MotionEvent;
 import android.widget.Toast;
 
 public class ThiefChooseState implements IGameObject {
-	
 	private Context context;
 	private StateSystem stateSystem;
 	
@@ -54,8 +53,6 @@ public class ThiefChooseState implements IGameObject {
 		menuLocation[3][Y] = MainSurfaceView.SCREEN_H / 4;
 		
 		paint = new Paint();
-		paint.setColor(Color.WHITE);
-		paint.setTextSize(25);
 		
 	}
 	
@@ -88,7 +85,9 @@ public class ThiefChooseState implements IGameObject {
 						Toast.makeText(context, "Comptuer pursue me...", Toast.LENGTH_SHORT).show();
 					}
 					if(i == 2) {
-						//stateSystem.changeState();
+						IGameObject pleaseWaitState = new PleaseWaitState(context, stateSystem);
+						stateSystem.addState("PleaseWaitState", pleaseWaitState);
+						stateSystem.changeState("PleaseWaitState");
 						Toast.makeText(context, "God pursue me...", Toast.LENGTH_SHORT).show();
 					}
 				}

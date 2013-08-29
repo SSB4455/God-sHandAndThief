@@ -1,56 +1,54 @@
 package org.bistu.kjcx.godshandandthief.statesystem;
 
-import org.bistu.kjcx.godshandandthief.R;
+import org.bistu.kjcx.godshandandthief.BitmapStorage;
 import org.bistu.kjcx.godshandandthief.MainSurfaceView;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.widget.Toast;
 
 public class GodChooseState implements IGameObject {
-	
 	private Context context;
-	//private StateSystem stateSystem;
+	private StateSystem stateSystem;
 	
 	private final int X = 0, Y = 1;
-	private long exitTime = 0;
 	private float [][] menuLocation;
-	
-	private Bitmap gods_hand_bitmap, beta_bitmap;
 	private Bitmap [] menuButton;
-	
 	private Paint paint;
 	
 	
 	
 	public GodChooseState(Context context, StateSystem stateSystem) {
 		this.context = context;
-		//this.stateSystem = stateSystem;
+		this.stateSystem = stateSystem;
 		
-		menuButton = new Bitmap[3];
-		menuButton[0] = gods_hand_bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.gods_hand);
-		menuButton[2] = beta_bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.beta);
+		menuButton = new Bitmap[4];
+		menuButton[0] = BitmapStorage.getImGodhand();
+		menuButton[1] = BitmapStorage.getCatchComputer();
+		menuButton[2] = BitmapStorage.getCatchThief();
+		menuButton[3] = BitmapStorage.getGodHappy();
 		
-		menuLocation = new float[3][];
+		menuLocation = new float[4][];
 		menuLocation[0] = new float[2];
-		menuLocation[0][X] = MainSurfaceView.SCREEN_W / 4;
-		menuLocation[0][Y] = MainSurfaceView.SCREEN_H / 3 - gods_hand_bitmap.getHeight();
+		menuLocation[0][X] = MainSurfaceView.SCREEN_W / 8;
+		menuLocation[0][Y] = MainSurfaceView.SCREEN_H / 8;
 		menuLocation[1] = new float[2];
-		menuLocation[1][X] = MainSurfaceView.SCREEN_W / 2;
+		menuLocation[1][X] = MainSurfaceView.SCREEN_W / 3;
 		menuLocation[1][Y] = MainSurfaceView.SCREEN_H / 2;
 		menuLocation[2] = new float[2];
-		menuLocation[2][X] = MainSurfaceView.SCREEN_W - beta_bitmap.getWidth();
-		menuLocation[2][Y] = MainSurfaceView.SCREEN_H - beta_bitmap.getHeight();
+		menuLocation[2][X] = MainSurfaceView.SCREEN_W / 3;
+		menuLocation[2][Y] = MainSurfaceView.SCREEN_H * 3 / 4;
+		menuLocation[3] = new float[2];
+		menuLocation[3][X] = 0;
+		menuLocation[3][Y] = MainSurfaceView.SCREEN_H / 4;
 		
 		paint = new Paint();
-		paint.setColor(Color.WHITE);
-		paint.setTextSize(25);
 		
 	}
 	
@@ -75,17 +73,17 @@ public class GodChooseState implements IGameObject {
 						&& event.getX() <  menuLocation[i][X] + menuButton[i].getWidth() 
 						&& menuLocation[i][Y] < event.getY() 
 						&& event.getY() < menuLocation[i][Y] + menuButton[i].getHeight()) {
-					if(i == 0) {
-						//stateSystem.changeState("GodsHandPlayerState");
-						Toast.makeText(context, "You are God...", Toast.LENGTH_SHORT).show();
-					}
 					if(i == 1) {
-						//stateSystem.changeState("GodsHandPlayerState");
-						Toast.makeText(context, "You are thief...", Toast.LENGTH_SHORT).show();
+						IGameObject godHandPlayerState = new GodHandPlayerState(context, stateSystem);
+						stateSystem.addState("GodHandPlayerState", godHandPlayerState);
+						stateSystem.changeState("GodHandPlayerState");
+						Toast.makeText(context, "catch computer...", Toast.LENGTH_SHORT).show();
 					}
 					if(i == 2) {
-						//stateSystem.changeState("GodsHandPlayerState");
-						Toast.makeText(context, "Just kiding ^_^!", Toast.LENGTH_SHORT).show();
+						IGameObject pleaseWaitState = new PleaseWaitState(context, stateSystem);
+						stateSystem.addState("PleaseWaitState", pleaseWaitState);
+						stateSystem.changeState("PleaseWaitState");
+						Toast.makeText(context, "catch thief...", Toast.LENGTH_SHORT).show();
 					}
 				}
 			}
@@ -95,15 +93,10 @@ public class GodChooseState implements IGameObject {
 	
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		if(keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_DOWN) {
-			if((System.currentTimeMillis() - exitTime) > 2000) {
-		    	Toast.makeText(context, "再按一次退出程序", Toast.LENGTH_SHORT).show();
-		        exitTime = System.currentTimeMillis();
-		    }
-		    else
-		        System.exit(0);
-			return true; //返回true表示执行结束不需继续执行父类按键响应  
+			Log.i(this.getClass().toString(), "onKeyDown ——> back");
+			stateSystem.changeState("MenuState");
 		}
-		return false;
+		return true;		//不让别人做了
 	}
 	
 	public void render() {
