@@ -23,6 +23,7 @@ public class ThiefPlayerState implements IGameObject {
 	private StateSystem stateSystem;
 	
 	private boolean isLose, isWin;
+	String type;
 	private Bitmap isLoseBitmap, isWinBitmap;
 	private GodLayout godLayout;
 	private ProgressBar progressBar;
@@ -80,10 +81,18 @@ public class ThiefPlayerState implements IGameObject {
 			canvas.drawBitmap(isLoseBitmap, MainSurfaceView.SCREEN_W / 5, MainSurfaceView.SCREEN_H - isLoseBitmap.getHeight(), paint);
 	}
 	
-	void start(String type, GodLayout godLayout) {
+	void setGodLayout(GodLayout godLayout) {
 		progressBar = new ProgressBar(BitmapFactory.decodeResource(context.getResources(), R.drawable.businessman_run));
 		this.godLayout = godLayout;
 		this.godLayout.setProgressBar(progressBar);
+	}
+	
+	boolean setType(String type) {
+		this.type = type;
+		if(this.type == type)
+			return true;
+		else
+			return false;
 	}
 	
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
