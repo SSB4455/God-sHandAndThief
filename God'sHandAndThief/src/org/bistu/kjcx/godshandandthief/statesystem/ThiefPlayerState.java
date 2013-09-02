@@ -40,6 +40,12 @@ public class ThiefPlayerState implements IGameObject {
 		this.stateSystem = stateSystem;
 		this.playerType = playerType;
 		
+		if(playerType == PlayerType.Player) {
+			businessman = new Businessman(context);
+		}
+		if(playerType == PlayerType.Auto) {
+			businessman = new Businessman(context, playerType);
+		}
 		//progressBar = new ProgressBar(BitmapFactory.decodeResource(context.getResources(), R.drawable.businessman_run));
 		background = new Background(context);
 		businessman = new Businessman(context);
@@ -83,14 +89,20 @@ public class ThiefPlayerState implements IGameObject {
 			canvas.drawBitmap(isLoseBitmap, MainSurfaceView.SCREEN_W / 5, MainSurfaceView.SCREEN_H - isLoseBitmap.getHeight(), paint);
 	}
 	
-	boolean setGodLayout(GodLayout godLayout) {
+	void setGodLayout(GodLayout godLayout) {
 		progressBar = new ProgressBar();
 		this.godLayout = godLayout;
 		this.godLayout.setProgressBar(progressBar);
-		if(this.godLayout == godLayout)
-			return true;
-		else
-			return false;
+	}
+	
+
+	
+	public void reset() {
+		isWin = false;
+		isLose = false;
+		progressBar = new ProgressBar();
+		godLayout.setProgressBar(progressBar);
+		businessman.setHreat(businessman.getHreat() + 1);
 	}
 	
 	PlayerType getType() {
@@ -109,11 +121,7 @@ public class ThiefPlayerState implements IGameObject {
 		if((isWin || isLose) && playerType == PlayerType.Player) {
 			GodHandPlayerState godHandPlayerState = new GodHandPlayerState(context, stateSystem, PlayerType.Auto);
 			godLayout = godHandPlayerState.createAutoGodLayout(9);
-			progressBar = new ProgressBar(BitmapFactory.decodeResource(context.getResources(), R.drawable.businessman_run));
-			godLayout.setProgressBar(progressBar);
-			isWin = false;
-			isLose = false;
-			businessman.setHreat(businessman.getHreat() + 1);
+			reset();
 		}
 		return businessman.onTouchEvent(event);
 	}

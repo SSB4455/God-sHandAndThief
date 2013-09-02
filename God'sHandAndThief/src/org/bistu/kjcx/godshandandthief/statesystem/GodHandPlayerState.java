@@ -6,10 +6,7 @@ import org.bistu.kjcx.godshandandthief.BitmapStorage;
 import org.bistu.kjcx.godshandandthief.MainSurfaceView;
 import org.bistu.kjcx.godshandandthief.actor.GodLayout;
 import org.bistu.kjcx.godshandandthief.actor.ProgressBar;
-import org.bistu.kjcx.godshandandthief.actor.obstacle.Hole;
-import org.bistu.kjcx.godshandandthief.actor.obstacle.Obstacle;
 import org.bistu.kjcx.godshandandthief.actor.obstacle.Obstacle.ObstacleType;
-import org.bistu.kjcx.godshandandthief.actor.obstacle.Pit;
 import org.bistu.kjcx.godshandandthief.statesystem.StateSystem.PlayerType;
 
 import android.content.Context;
@@ -37,7 +34,7 @@ public class GodHandPlayerState implements IGameObject {
 	
 	private ThiefPlayerState thiefPlayerState;
 	
-	private Bitmap waitMoment;
+	//private Bitmap waitMoment;
 	private Paint paint, brushPaint;
 	
 	
@@ -63,7 +60,6 @@ public class GodHandPlayerState implements IGameObject {
 			menuLocation[1][X] = (MainSurfaceView.SCREEN_W * 3 / 4);
 			menuLocation[1][Y] = (MainSurfaceView.SCREEN_H / 6);
 			
-			waitMoment = BitmapStorage.getWaitMoment();
 			paint = new Paint();
 			brushPaint = new Paint();
 		}
@@ -79,7 +75,6 @@ public class GodHandPlayerState implements IGameObject {
 	public void render(Canvas canvas) {
 		canvas.drawColor(Color.BLACK);
 		
-		canvas.drawBitmap(waitMoment, MainSurfaceView.SCREEN_W / 5, MainSurfaceView.SCREEN_H /5, paint);
 		
 		for(int i = 0; i < menuButton.length; i++) {
 			canvas.drawBitmap(menuButton[i], menuLocation[i][X], menuLocation[i][Y], paint);
@@ -137,6 +132,11 @@ public class GodHandPlayerState implements IGameObject {
 					Toast.makeText(context, "add a " + (i == 0 ? "hole" : "pit"), Toast.LENGTH_SHORT).show();
 				}
 			}
+		}
+		
+
+		if(!godLayout.getProgressBar().isPlay()) {
+			thiefPlayerState.reset();
 		}
 		return true;
 	}

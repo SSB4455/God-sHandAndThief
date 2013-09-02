@@ -39,7 +39,7 @@ public class MainSurfaceView extends SurfaceView implements Callback, Runnable {
 		super(context);
 		
 		this.context = context;
-		new BitmapStorage(context);
+		BitmapStorage.setResources(context.getResources());
 		DisplayMetrics dm = new DisplayMetrics();  
 		dm = getResources().getDisplayMetrics();
 		SCREEN_H = dm.heightPixels;

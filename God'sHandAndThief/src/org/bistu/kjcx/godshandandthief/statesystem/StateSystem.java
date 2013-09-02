@@ -8,7 +8,7 @@ import android.view.KeyEvent;
 import android.view.MotionEvent;
 
 public class StateSystem {
-	enum PlayerType {
+	public enum PlayerType {
 		Auto,		//自动，电脑控制
 		Player,		//手动，玩家控制
 	}

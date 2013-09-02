@@ -3,6 +3,7 @@ package org.bistu.kjcx.godshandandthief.actor;
 import org.bistu.kjcx.godshandandthief.R;
 import org.bistu.kjcx.godshandandthief.MainSurfaceView;
 import org.bistu.kjcx.godshandandthief.actor.obstacle.Obstacle;
+import org.bistu.kjcx.godshandandthief.statesystem.StateSystem.PlayerType;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -23,6 +24,7 @@ public class Businessman extends GameActor implements OnGestureListener {
 	private int upHight;
 	private int [] frameTotal;
 	private float scrollX, scrollY;
+	PlayerType playerType;
 	private final int UP = 0;
 	private final int RIGHT = 1;
 	
@@ -108,9 +110,23 @@ public class Businessman extends GameActor implements OnGestureListener {
 		paint = new Paint();
 	}
 	
+	public Businessman(Context context, PlayerType playerType) {
+		this(context);
+		
+		if(playerType == PlayerType.Auto) {
+			this.playerType = playerType;
+		}
+		
+	}
+	
 	@Override
 	public void update(long elapsedTime) {
 		brushTime += elapsedTime;
+		
+		if(playerType == PlayerType.Auto) {
+			autoMotion();
+		}
+		
 		//处理输入操作
 		if(fling[RIGHT]) {
 			if(bodyMotion == IS_RUN)
@@ -197,6 +213,10 @@ public class Businessman extends GameActor implements OnGestureListener {
 		return false;
 	}
 	
+	void autoMotion() {
+		
+	}
+	
 	public void beInjured() {
 		health--;
 		bodyMotion = IS_INJURED;
@@ -204,14 +224,13 @@ public class Businessman extends GameActor implements OnGestureListener {
 	
 	public boolean onTouchEvent(MotionEvent event) {
 		//Log.v(this.getClass().toString(), "onTouchEvent");
-		switch (event.getAction()) {
-	    case MotionEvent.ACTION_UP:
+		if(event.getAction() ==  MotionEvent.ACTION_UP) {
 	    	Log.d(this.getClass().toString(), "scrollX = " + scrollX + ", scrollY = " + scrollY);
 	    	fling[RIGHT] = false;
 	    	scrollX = 0;
 			scrollY = 0;
-	        break;
 	    }
+		
 		return mGestureDetector.onTouchEvent(event);
 	}
 	

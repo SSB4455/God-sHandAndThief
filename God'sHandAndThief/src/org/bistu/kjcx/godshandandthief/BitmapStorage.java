@@ -18,6 +18,14 @@ public class BitmapStorage {
 		resources = context.getResources();
 	}
 	
+	public static void setContext(Context context) {
+		resources = context.getResources();
+	}
+	
+	public static void setResources(Resources resources) {
+		BitmapStorage.resources = resources;
+	}
+	
 	public static Bitmap getBusinessmanRun() {
 		if(resources != null)
 			return BitmapFactory.decodeResource(resources, R.drawable.businessman_run);
