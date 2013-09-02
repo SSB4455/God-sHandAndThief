@@ -31,7 +31,7 @@ public class MenuState implements IGameObject {
 		this.stateSystem = stateSystem;
 		
 		menuButton = new Bitmap[3];
-		menuButton[0] = BitmapFactory.decodeResource(context.getResources(), R.drawable.gods_hand);
+		menuButton[0] = BitmapFactory.decodeResource(context.getResources(), R.drawable.god_hand);
 		menuButton[1] = BitmapFactory.decodeResource(context.getResources(), R.drawable.thief);
 		menuButton[2] = BitmapFactory.decodeResource(context.getResources(), R.drawable.beta);
 		

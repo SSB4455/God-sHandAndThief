@@ -32,6 +32,13 @@ public class BitmapStorage {
 			return null;
 	}
 	
+	public static Bitmap getPitMenu() {
+		if(resources != null)
+			return BitmapFactory.decodeResource(resources, R.drawable.pit_menu);
+		else
+			return null;
+	}
+	
 	public static Bitmap getCatchComputer() {
 		if(resources != null)
 			return BitmapFactory.decodeResource(resources, R.drawable.catch_computer);
@@ -66,6 +73,23 @@ public class BitmapStorage {
 		else
 			return null;
 	}
+	
+	public static Bitmap getHole() {
+		if(resources != null)
+			return BitmapFactory.decodeResource(resources, R.drawable.hole);
+		else
+			return null;
+	}
+	
+	public static Bitmap getHoleMenu() {
+		if(resources != null)
+			return BitmapFactory.decodeResource(resources, R.drawable.hole_menu);
+		else
+			return null;
+	}
+	
+	
+	
 	
 	
 	

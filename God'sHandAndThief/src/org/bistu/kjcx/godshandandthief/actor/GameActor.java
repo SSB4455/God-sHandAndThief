@@ -10,8 +10,8 @@ public abstract class GameActor {
 	public enum ActorStatus {
 		Action,		//行动
 		NoDisp,		//不显示
-		NoAction,	//无行动
 		Dead,		//死亡
+		JustShow,	//不动，只展示
 	}
 	protected ActorStatus status;
 	
@@ -45,13 +45,13 @@ public abstract class GameActor {
 	
 	public void render() {
 		for(GameActor actorChild : children)
-			if(actorChild.status == ActorStatus.Action || actorChild.status == ActorStatus.NoAction)
+			if(actorChild.status == ActorStatus.Action || actorChild.status == ActorStatus.JustShow)
 				actorChild.render();
 	}
 	
 	public void render(Canvas canvas) {
 		for(GameActor actorChild : children)
-			if(actorChild.status == ActorStatus.Action || actorChild.status == ActorStatus.NoAction)
+			if(actorChild.status == ActorStatus.Action || actorChild.status == ActorStatus.JustShow)
 				actorChild.render(canvas);
 	}
 	

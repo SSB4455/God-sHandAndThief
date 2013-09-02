@@ -14,11 +14,16 @@ public class ProgressBar extends GameActor {
 	
 	
 	
-	public ProgressBar(Bitmap actorBitmap) {
+	public ProgressBar() {
 		playTime = 0;
 		isPlay = true;
 		
 		paint = new Paint();
+	}
+	
+	public ProgressBar(Bitmap actorBitmap) {
+		this();
+		
 	}
 	
 	@Override

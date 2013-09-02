@@ -10,7 +10,7 @@ public class Obstacle extends GameActor {
 		Stone,		//Ê¯Í·
 		Pit,		//¿Ó
 	}
-	protected ObstacleType type;
+	protected ObstacleType obstacleType;
 	
 	protected int frameW, frameH, incrementWHalf, incrementHHalf;
 	protected boolean isBreak;
@@ -29,7 +29,15 @@ public class Obstacle extends GameActor {
 	}
 	
 	public ObstacleType getType() {
-		return type;
+		return obstacleType;
+	}
+	
+	public int setLeft(int left) {
+		return (int) (actorX = left + incrementWHalf);
+	}
+	
+	public int setTop(int top) {
+		return (int) (actorY = top + incrementWHalf);
 	}
 	
 	@Override

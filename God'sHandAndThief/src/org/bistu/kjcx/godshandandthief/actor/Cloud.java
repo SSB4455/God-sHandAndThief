@@ -72,16 +72,17 @@ public class Cloud extends GameActor {
 	void setActorY(float actorY) {
 		this.actorY = actorY;
 	}
-
+	
 	@Override
 	public int getLeft() {
 		// TODO Auto-generated method stub
 		return 0;
 	}
-
+	
 	@Override
 	public int getRight() {
 		// TODO Auto-generated method stub
 		return 0;
 	}
+	
 }

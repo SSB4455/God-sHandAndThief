@@ -26,16 +26,23 @@ public class Pit extends Obstacle {
 		actorX = MainSurfaceView.SCREEN_W + incrementWHalf;
 		actorY = Background.FLOOR + incrementHHalf;
 		
-		type = Obstacle.ObstacleType.Pit;
+		obstacleType = Obstacle.ObstacleType.Pit;
+	}
+	
+	public Pit(ActorStatus status) {
+		this();
+		this.status = status;
 	}
 	
 	@Override
 	public void update(long elapsedTime) {
-		if(!isBreak) {
-			actorX -= (Businessman.SPEED * elapsedTime) / 1000;
-		}
-		if(getRight() < 0) {
-			status = GameActor.ActorStatus.Dead;
+		if(status == ActorStatus.Action) {
+			if(!isBreak) {
+				actorX -= (Businessman.SPEED * elapsedTime) / 1000;
+			}
+			if(getRight() < 0) {
+				status = GameActor.ActorStatus.Dead;
+			}
 		}
 	}
 	

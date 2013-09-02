@@ -2,6 +2,7 @@ package org.bistu.kjcx.godshandandthief.statesystem;
 
 import org.bistu.kjcx.godshandandthief.BitmapStorage;
 import org.bistu.kjcx.godshandandthief.MainSurfaceView;
+import org.bistu.kjcx.godshandandthief.statesystem.StateSystem.PlayerType;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -73,13 +74,17 @@ public class GodChooseState implements IGameObject {
 						&& event.getX() <  menuLocation[i][X] + menuButton[i].getWidth() 
 						&& menuLocation[i][Y] < event.getY() 
 						&& event.getY() < menuLocation[i][Y] + menuButton[i].getHeight()) {
-					if(i == 1) {
-						IGameObject godHandPlayerState = new GodHandPlayerState(context, stateSystem);
+					if(i == 1) {		//电脑休走
+						GodHandPlayerState godHandPlayerState = new GodHandPlayerState(context, stateSystem, PlayerType.Player);
+						ThiefPlayerState thiefPlayerState = new ThiefPlayerState(context, stateSystem, PlayerType.Auto);
+						thiefPlayerState.setGodLayout(godHandPlayerState.getGodLayout());
+						godHandPlayerState.setThiefPlayerState(thiefPlayerState);
+						//stateSystem.addState("ThiefPlayerState", thiefPlayerState);
 						stateSystem.addState("GodHandPlayerState", godHandPlayerState);
 						stateSystem.changeState("GodHandPlayerState");
 						Toast.makeText(context, "catch computer...", Toast.LENGTH_SHORT).show();
 					}
-					if(i == 2) {
+					if(i == 2) {		//小偷休走
 						IGameObject pleaseWaitState = new PleaseWaitState(context, stateSystem);
 						stateSystem.addState("PleaseWaitState", pleaseWaitState);
 						stateSystem.changeState("PleaseWaitState");

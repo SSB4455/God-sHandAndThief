@@ -29,7 +29,8 @@ public class GodLayout extends GameActor {
 		
 	}
 	
-	Context context;
+	public static long INTERVAL_LONG = 1000;
+	private Context context;
 	private long screenLong;
 	
 	private ProgressBar progressBar;
@@ -99,7 +100,7 @@ public class GodLayout extends GameActor {
 		Obstacle obstacle = null;
 		switch(type) {
 		case Hole : 
-			obstacle = new Hole(BitmapFactory.decodeResource(context.getResources(), R.drawable.hole));
+			obstacle = new Hole();
 			break;
 		case Stone:
 			obstacle = new Stone(BitmapFactory.decodeResource(context.getResources(), R.drawable.stone));
@@ -123,16 +124,20 @@ public class GodLayout extends GameActor {
 		return false;
 	}
 	
+	public ProgressBar getProgressBar() {
+		return progressBar;
+	}
+	
 	public ArrayList<GameActor> getObstacles () {
 		return children;
 	}
-
+	
 	@Override
 	public int getLeft() {
 		// TODO Auto-generated method stub
 		return 0;
 	}
-
+	
 	@Override
 	public int getRight() {
 		// TODO Auto-generated method stub

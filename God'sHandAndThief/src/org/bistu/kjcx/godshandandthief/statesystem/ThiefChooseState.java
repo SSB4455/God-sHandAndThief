@@ -2,6 +2,7 @@ package org.bistu.kjcx.godshandandthief.statesystem;
 
 import org.bistu.kjcx.godshandandthief.R;
 import org.bistu.kjcx.godshandandthief.MainSurfaceView;
+import org.bistu.kjcx.godshandandthief.statesystem.StateSystem.PlayerType;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -75,9 +76,8 @@ public class ThiefChooseState implements IGameObject {
 						&& menuLocation[i][Y] < event.getY() 
 						&& event.getY() < menuLocation[i][Y] + menuButton[i].getHeight()) {
 					if(i == 1) {
-						ThiefPlayerState thiefPlayerState = new ThiefPlayerState(context, stateSystem);
-						GodHandPlayerState godHandPlayerState = new GodHandPlayerState(context, stateSystem);
-						thiefPlayerState.setType("withComputer");
+						ThiefPlayerState thiefPlayerState = new ThiefPlayerState(context, stateSystem, PlayerType.Player);
+						GodHandPlayerState godHandPlayerState = new GodHandPlayerState(context, stateSystem, PlayerType.Auto);
 						thiefPlayerState.setGodLayout(godHandPlayerState.createAutoGodLayout(9));
 						stateSystem.addState("ThiefPlayerState", thiefPlayerState);
 						stateSystem.changeState("ThiefPlayerState");

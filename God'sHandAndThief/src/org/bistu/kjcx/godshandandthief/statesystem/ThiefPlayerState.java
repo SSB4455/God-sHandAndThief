@@ -7,6 +7,7 @@ import org.bistu.kjcx.godshandandthief.actor.Businessman;
 import org.bistu.kjcx.godshandandthief.actor.GodLayout;
 import org.bistu.kjcx.godshandandthief.actor.ProgressBar;
 import org.bistu.kjcx.godshandandthief.actor.obstacle.Obstacle;
+import org.bistu.kjcx.godshandandthief.statesystem.StateSystem.PlayerType;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -23,20 +24,21 @@ public class ThiefPlayerState implements IGameObject {
 	private StateSystem stateSystem;
 	
 	private boolean isLose, isWin;
-	String type;
-	private Bitmap isLoseBitmap, isWinBitmap;
+	private PlayerType playerType;
 	private GodLayout godLayout;
 	private ProgressBar progressBar;
 	private Background background;
 	private Businessman businessman;
 	
+	private Bitmap isLoseBitmap, isWinBitmap;
 	private Paint paint;
 	
 	
 	
-	public ThiefPlayerState(Context context, StateSystem stateSystem) {
+	public ThiefPlayerState(Context context, StateSystem stateSystem, PlayerType playerType) {
 		this.context = context;
 		this.stateSystem = stateSystem;
+		this.playerType = playerType;
 		
 		//progressBar = new ProgressBar(BitmapFactory.decodeResource(context.getResources(), R.drawable.businessman_run));
 		background = new Background(context);
@@ -81,18 +83,18 @@ public class ThiefPlayerState implements IGameObject {
 			canvas.drawBitmap(isLoseBitmap, MainSurfaceView.SCREEN_W / 5, MainSurfaceView.SCREEN_H - isLoseBitmap.getHeight(), paint);
 	}
 	
-	void setGodLayout(GodLayout godLayout) {
-		progressBar = new ProgressBar(BitmapFactory.decodeResource(context.getResources(), R.drawable.businessman_run));
+	boolean setGodLayout(GodLayout godLayout) {
+		progressBar = new ProgressBar();
 		this.godLayout = godLayout;
 		this.godLayout.setProgressBar(progressBar);
-	}
-	
-	boolean setType(String type) {
-		this.type = type;
-		if(this.type == type)
+		if(this.godLayout == godLayout)
 			return true;
 		else
 			return false;
+	}
+	
+	PlayerType getType() {
+		return playerType;
 	}
 	
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
@@ -104,8 +106,8 @@ public class ThiefPlayerState implements IGameObject {
 	}
 	
 	public boolean onTouchEvent(MotionEvent event) {
-		if((isWin || isLose) && type == "withComputer") {
-			GodHandPlayerState godHandPlayerState = new GodHandPlayerState(context, stateSystem);
+		if((isWin || isLose) && playerType == PlayerType.Player) {
+			GodHandPlayerState godHandPlayerState = new GodHandPlayerState(context, stateSystem, PlayerType.Auto);
 			godLayout = godHandPlayerState.createAutoGodLayout(9);
 			progressBar = new ProgressBar(BitmapFactory.decodeResource(context.getResources(), R.drawable.businessman_run));
 			godLayout.setProgressBar(progressBar);
