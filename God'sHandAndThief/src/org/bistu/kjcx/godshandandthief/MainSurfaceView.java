@@ -93,7 +93,7 @@ public class MainSurfaceView extends SurfaceView implements Callback, Runnable {
 	}
 	
 	public void run() {		//Runnable
-		try {
+		//try {
 			while(flag) {
 				canvas = sfh.lockCanvas();
 				time[0] = System.currentTimeMillis();
@@ -105,9 +105,9 @@ public class MainSurfaceView extends SurfaceView implements Callback, Runnable {
 				time[2] = System.currentTimeMillis();
 				sfh.unlockCanvasAndPost(canvas);
 			}
-		} catch(Exception e) {
-			System.out.println(e);
-		}
+		//} catch(Exception e) {
+			//System.out.println(e);
+		//}
 	}
 	
 	@Override

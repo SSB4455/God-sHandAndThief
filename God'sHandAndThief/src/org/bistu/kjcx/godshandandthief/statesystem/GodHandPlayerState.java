@@ -104,40 +104,23 @@ public class GodHandPlayerState implements IGameObject {
 			return false;
 	}
 	
-	GodLayout createAutoGodLayout(int level) {
-		Random random = new Random();
-		godLayout = godLayout == null ? new GodLayout(context) : godLayout;
-		level = level % 10;
-		long interval = GodLayout.INTERVAL_LONG;		//至少间隔1秒
-		long partLong = (ProgressBar.TOTAL_Long - 4000 - interval * level) / level;		//多减4s是为了给第一个障碍的间隔预留2s为最后一个障碍预留2s
-		for(int i = 0; i < level; i++) {
-			long position = 2000 + i * (partLong + interval) + random.nextInt((int) partLong);
-			//第一个障碍多添加2s的准备时间
-			godLayout.addObstacle(position, i % 2 == 0 ? ObstacleType.Pit : ObstacleType.Hole);
-			Log.v(this.getClass().toString(), "create a obstacle, position = " + position + " type = " + (i % 2 == 0 ? ObstacleType.Pit + "" : ObstacleType.Hole + ""));
-		}
-		
-		return godLayout;
-	}
-	
 	public boolean onTouchEvent(MotionEvent event) {
-		if(event.getAction() == MotionEvent.ACTION_DOWN && intervalBrush >= GodLayout.INTERVAL_LONG) {
+		
+		if(!godLayout.getProgressBar().isPlay()) {
+			thiefPlayerState.reset();
+		} else if(event.getAction() == MotionEvent.ACTION_DOWN && intervalBrush >= GodLayout.INTERVAL_LONG) {
 			for(int i = 0; i < menuButton.length; i++) {
 				if(menuLocation[i][X] < event.getX() 
 						&& event.getX() <  menuLocation[i][X] + menuButton[i].getWidth() 
 						&& menuLocation[i][Y] < event.getY() 
 						&& event.getY() < menuLocation[i][Y] + menuButton[i].getHeight()) {
 					intervalBrush = 0;
-					godLayout.addObstacle(3000, i == 0 ? ObstacleType.Hole : ObstacleType.Pit);
-					Toast.makeText(context, "add a " + (i == 0 ? "hole" : "pit"), Toast.LENGTH_SHORT).show();
+					godLayout.addObstacle(4000, i == 0 ? ObstacleType.Hole : ObstacleType.Pit);
+					//Toast.makeText(context, "add a " + (i == 0 ? "hole" : "pit"), Toast.LENGTH_SHORT).show();
 				}
 			}
 		}
 		
-
-		if(!godLayout.getProgressBar().isPlay()) {
-			thiefPlayerState.reset();
-		}
 		return true;
 	}
 	
@@ -149,12 +132,28 @@ public class GodHandPlayerState implements IGameObject {
 		return true;		//不让别人做了
 	}
 	
-	PlayerType getType() {
-		return playerType;
+	GodLayout createAutoGodLayout(int level) {
+		Random random = new Random();
+		godLayout = new GodLayout(context);
+		//godLayout.setProgressBar(new ProgressBar());
+		level = level % 10;
+		long interval = GodLayout.INTERVAL_LONG;		//至少间隔1秒
+		long partLong = (ProgressBar.TOTAL_Long - 4000 - interval * level) / level;		//多减4s是为了给第一个障碍的间隔预留2s为最后一个障碍预留2s
+		for(int i = 0; i < level; i++) {
+			long position = 2000 + i * (partLong + interval) + random.nextInt((int) partLong);
+			//第一个障碍多添加2s的准备时间
+			godLayout.addObstacle(position, i % 2 == 0 ? ObstacleType.Pit : ObstacleType.Hole);
+			Log.v(this.getClass().toString(), "create a obstacle, position = " + position + " type = " + (i % 2 == 0 ? ObstacleType.Pit + "" : ObstacleType.Hole + ""));
+		}
+		return godLayout;
 	}
 	
 	GodLayout getGodLayout() {
 		return godLayout;
+	}
+	
+	PlayerType getType() {
+		return playerType;
 	}
 	
 	public void render() {

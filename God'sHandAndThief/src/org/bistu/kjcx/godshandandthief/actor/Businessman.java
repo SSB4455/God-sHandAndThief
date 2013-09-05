@@ -26,7 +26,7 @@ public class Businessman extends GameActor implements OnGestureListener {
 	private float scrollX, scrollY;
 	PlayerType playerType;
 	private final int UP = 0;
-	private final int RIGHT = 1;
+	private final int DOWN = 1;
 	
 	private final int IS_RUN = 0;
 	private final int IS_UP = 1;
@@ -34,7 +34,9 @@ public class Businessman extends GameActor implements OnGestureListener {
 	private final int IS_INJURED = 3;
 	private long brushTime, upTime, downTime, injuredTime;
 	
-	boolean [] fling;
+	private boolean [] fling;
+	
+	GodLayout godLayout;
 	
 	private Bitmap [][] frame;
 	private Bitmap heart;
@@ -113,9 +115,11 @@ public class Businessman extends GameActor implements OnGestureListener {
 	public Businessman(Context context, PlayerType playerType) {
 		this(context);
 		
+		this.playerType = playerType;
 		if(playerType == PlayerType.Auto) {
-			this.playerType = playerType;
+			
 		}
+		
 		
 	}
 	
@@ -123,19 +127,21 @@ public class Businessman extends GameActor implements OnGestureListener {
 	public void update(long elapsedTime) {
 		brushTime += elapsedTime;
 		
-		if(playerType == PlayerType.Auto) {
+		if(godLayout != null) {
 			autoMotion();
 		}
 		
 		//处理输入操作
-		if(fling[RIGHT]) {
+		if(fling[DOWN]) {
 			if(bodyMotion == IS_RUN)
 				bodyMotion = IS_DOWN;
+			if(godLayout != null)
+				fling[DOWN] = false;
 		}
 		if(fling[UP]) {
 			if(bodyMotion == IS_RUN || bodyMotion == IS_DOWN)
 				bodyMotion = IS_UP;
-			fling[RIGHT] = false;
+			fling[DOWN] = false;
 			fling[UP] = false;
 		}
 		
@@ -151,7 +157,7 @@ public class Businessman extends GameActor implements OnGestureListener {
 			}
 		}
 		if(bodyMotion == IS_DOWN)
-			if(downTime < 800 || fling[RIGHT])
+			if(downTime < 800 || fling[DOWN])
 				downTime += elapsedTime;
 			else {
 				downTime = 0;
@@ -214,19 +220,32 @@ public class Businessman extends GameActor implements OnGestureListener {
 	}
 	
 	void autoMotion() {
-		
+		for(int i = 0; i < godLayout.getObstacleSize(); i++) {
+			Obstacle obstacle = (Obstacle) godLayout.getObstacle(i);
+			if(obstacle.getLeft() - 10 <= getRight() && obstacle.getRight() > getRight()) {
+				switch(obstacle.getType()) {
+				case Hole :
+					fling[DOWN] = true;
+					break;
+				case Stone :
+				case Pit :
+					fling[UP] = true;
+				}
+			}
+		}
 	}
 	
 	public void beInjured() {
 		health--;
 		bodyMotion = IS_INJURED;
+		Log.i(this.getClass().toString(), "businessman is injured.");
 	}
 	
 	public boolean onTouchEvent(MotionEvent event) {
 		//Log.v(this.getClass().toString(), "onTouchEvent");
 		if(event.getAction() ==  MotionEvent.ACTION_UP) {
 	    	Log.d(this.getClass().toString(), "scrollX = " + scrollX + ", scrollY = " + scrollY);
-	    	fling[RIGHT] = false;
+	    	fling[DOWN] = false;
 	    	scrollX = 0;
 			scrollY = 0;
 	    }
@@ -268,7 +287,7 @@ public class Businessman extends GameActor implements OnGestureListener {
 			Log.d(this.getClass().toString(), "onScroll to up.");
 		}
 		if((scrollX > scrollLength && scrollY < scrollLength / 2) || scrollY > scrollLength) {
-			fling[RIGHT] = true;
+			fling[DOWN] = true;
 			Log.d(this.getClass().toString(), "onScroll to right.");
 		}
 		return false;
@@ -286,6 +305,13 @@ public class Businessman extends GameActor implements OnGestureListener {
 		//Log.v(this.getClass().toString(), "onSingleTapUp");
 		// TODO Auto-generated method stub
 		return true;
+	}
+	
+	public boolean setGodLayout(GodLayout godLayout) {
+		this.godLayout = godLayout;
+		if(this.godLayout == godLayout)
+			return true;
+		return false;
 	}
 	
 	public int getHreat() {

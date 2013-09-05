@@ -49,8 +49,19 @@ public class ProgressBar extends GameActor {
 		return isPlay;
 	}
 	
+	public boolean isOver() {
+		if(playTime >= TOTAL_Long)
+			return true;
+		return false;
+	}
+	
 	public void stop() {
 		isPlay = false;
+	}
+	
+	void zreo() {
+		playTime = 0;
+		isPlay = true;
 	}
 	
 	public long getProgressL() {

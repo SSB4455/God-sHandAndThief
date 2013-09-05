@@ -75,7 +75,8 @@ public abstract class GameActor {
 				actorChild.status = ActorStatus.Dead;
 		for(GameActor actorChild : children)
 			actorChild.cleanUpDead();
-		children.remove(children);
+		if(this.status == ActorStatus.Dead)
+			children.clear();
 	}
 	
 	boolean checkStatus(GameActor actor) {

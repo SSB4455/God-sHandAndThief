@@ -6,9 +6,11 @@ import java.util.HashMap;
 import org.bistu.kjcx.godshandandthief.MainSurfaceView;
 import org.bistu.kjcx.godshandandthief.R;
 import org.bistu.kjcx.godshandandthief.actor.GameActor;
+import org.bistu.kjcx.godshandandthief.actor.GameActor.ActorStatus;
 import org.bistu.kjcx.godshandandthief.actor.obstacle.*;
 import org.bistu.kjcx.godshandandthief.actor.obstacle.Obstacle.ObstacleType;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -29,6 +31,7 @@ public class GodLayout extends GameActor {
 		
 	}
 	
+	public static int READ;
 	public static long INTERVAL_LONG = 1000;
 	private Context context;
 	private long screenLong;
@@ -42,6 +45,9 @@ public class GodLayout extends GameActor {
 	public GodLayout(Context context) {
 		super("God Layout");
 		this.context = context;
+		
+		READ = 1;
+		progressBar = new ProgressBar();
 		
 		/*
 		screenLong = (long) (MainSurfaceView.SCREEN_W / (float) Businessman.SPEED * 1000);
@@ -59,9 +65,33 @@ public class GodLayout extends GameActor {
 		*/
 	}
 	
+	public boolean p() {
+		READ--;
+		if(READ >= 0)
+			return true;
+		Log.d(this.getClass().toString(), "READ = " + READ);
+		return false;
+	}
+	
+	public void v() {
+		READ++;
+	}
+	
 	@Override
 	public void update(long elapsedTime) {
-		super.update(elapsedTime);
+		//while(!p())
+		//	v();
+		//p();
+		//int size = children.size();
+		for(int i = 0; i < getObstacleSize(); i++)
+			children.get(i).update(elapsedTime);
+		//super.update(elapsedTime);
+		//v();
+		
+		progressBar.update(elapsedTime);
+		
+		//cleanUpDead();
+		
 		
 		/*
 		long progressL = progressBar.getProgressL();
@@ -76,12 +106,22 @@ public class GodLayout extends GameActor {
 			}
 		}
 		*/
-		
 	}
 	
 	@Override
 	public void render(Canvas canvas) {
-		super.render(canvas);
+		//while(!p())
+		//	v();
+		//p();
+		//int size = children.size();
+		for(int i = 0; i < getObstacleSize(); i++)
+			children.get(i).render(canvas);
+		//super.render(canvas);
+		//v();
+		
+		progressBar.render(canvas);
+		
+		
 		/*
 		for(RecordObstacle obstacleRecord: obstacleLayout) {
 			if(obstacleRecord.inScreen) {
@@ -113,8 +153,45 @@ public class GodLayout extends GameActor {
 			break;
 		}
 		obstacle.actorX = position / 1000 * Businessman.SPEED;
-		children.add(obstacle);
 		
+		//while(!p())
+		//	v();
+		Log.d(this.getClass().toString(), "add obstacle before READ = " + READ);
+		p();
+		Log.d(this.getClass().toString(), "add obstacle in READ = " + READ);
+		children.add(obstacle);
+		Log.d(this.getClass().toString(), "add obstacle end READ = " + READ);
+		v();
+		Log.d(this.getClass().toString(), "add obstacle edd READ = " + READ);
+	}
+	
+	@Override
+	public void cleanUpDead() {
+		// TODO Auto-generated method stub
+		//super.cleanUpDead();
+		
+		//while(!p())
+		//	v();
+		p();
+		ArrayList<GameActor> deadList = new ArrayList<GameActor>();
+		for(GameActor actorChild : children)
+			if(actorChild.status == ActorStatus.Dead)
+				deadList.add(actorChild);
+		for(GameActor actorChild : deadList)
+			children.remove(actorChild);
+		v();
+		
+		//Log.d(this.getClass().toString(), "children.size = " + children.size());
+	}
+	
+	public void clear() {
+		cleanUpDead();
+		
+		//while(!p())
+		//	v();
+		p();
+		children.clear();
+		v();
 	}
 	
 	public boolean setProgressBar(ProgressBar progressBar) {
@@ -124,12 +201,35 @@ public class GodLayout extends GameActor {
 		return false;
 	}
 	
+	public ProgressBar zeroProgressBar() {
+		progressBar.zreo();
+		return progressBar;
+	}
+	
 	public ProgressBar getProgressBar() {
 		return progressBar;
 	}
 	
-	public ArrayList<GameActor> getObstacles () {
-		return children;
+	public int getObstacleSize() {
+		//while(!p())
+		//	v();
+		p();
+		int size = children.size();
+		v();
+		return size;
+	}
+	
+	public Obstacle getObstacle(int i) {
+		Obstacle obstacle;
+		//while(!p())
+		//	v();
+		p();
+		if(0 < i && i < children.size())
+			obstacle = (Obstacle) children.get(i);
+		else
+			obstacle = (Obstacle) children.get(0);
+		v();
+		return obstacle;
 	}
 	
 	@Override
