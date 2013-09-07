@@ -2,7 +2,6 @@ package org.bistu.kjcx.godshandandthief.statesystem;
 
 import org.bistu.kjcx.godshandandthief.MainSurfaceView;
 
-import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -20,7 +19,7 @@ public class SplashState implements IGameObject {
 	
 	
 	
-	public SplashState(Context context, StateSystem stateSystem) {
+	public SplashState(StateSystem stateSystem) {
 		this.stateSystem = stateSystem;
 		
 		splashTime = 0;

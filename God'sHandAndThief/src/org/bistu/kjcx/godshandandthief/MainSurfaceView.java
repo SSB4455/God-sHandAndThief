@@ -39,7 +39,6 @@ public class MainSurfaceView extends SurfaceView implements Callback, Runnable {
 		super(context);
 		
 		this.context = context;
-		BitmapStorage.setResources(context.getResources());
 		DisplayMetrics dm = new DisplayMetrics();  
 		dm = getResources().getDisplayMetrics();
 		SCREEN_H = dm.heightPixels;
@@ -66,8 +65,8 @@ public class MainSurfaceView extends SurfaceView implements Callback, Runnable {
 	}	
 
 	public void surfaceCreated(SurfaceHolder holder) {		//Callback
-		stateSystem.addState("SplashState", new SplashState(context, stateSystem));
-		stateSystem.addState("MenuState", new MenuState(context, stateSystem));
+		stateSystem.addState("SplashState", new SplashState(stateSystem));
+		stateSystem.addState("MenuState", new MenuState(stateSystem));
 		stateSystem.changeState("SplashState");
 		
 		flag = true;

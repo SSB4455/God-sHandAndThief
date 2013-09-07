@@ -1,5 +1,6 @@
 package org.bistu.kjcx.godshandandthief.statesystem;
 
+import org.bistu.kjcx.godshandandthief.MainActivity;
 import org.bistu.kjcx.godshandandthief.R;
 import org.bistu.kjcx.godshandandthief.MainSurfaceView;
 import org.bistu.kjcx.godshandandthief.statesystem.StateSystem.PlayerType;
@@ -26,8 +27,8 @@ public class ThiefChooseState implements IGameObject {
 	
 	
 	
-	public ThiefChooseState(Context context, StateSystem stateSystem) {
-		this.context = context;
+	public ThiefChooseState(StateSystem stateSystem) {
+		this.context = MainActivity.CONTEXT;
 		this.stateSystem = stateSystem;
 		
 		menuButton = new Bitmap[4];
@@ -76,15 +77,15 @@ public class ThiefChooseState implements IGameObject {
 						&& menuLocation[i][Y] < event.getY() 
 						&& event.getY() < menuLocation[i][Y] + menuButton[i].getHeight()) {
 					if(i == 1) {
-						ThiefPlayerState thiefPlayerState = new ThiefPlayerState(context, stateSystem, PlayerType.Player);
-						GodHandPlayerState godHandPlayerState = new GodHandPlayerState(context, stateSystem, PlayerType.Auto);
+						ThiefPlayerState thiefPlayerState = new ThiefPlayerState(stateSystem, PlayerType.Player);
+						GodHandPlayerState godHandPlayerState = new GodHandPlayerState(stateSystem, PlayerType.Auto);
 						thiefPlayerState.setGodLayout(godHandPlayerState.createAutoGodLayout(9));
 						stateSystem.addState("ThiefPlayerState", thiefPlayerState);
 						stateSystem.changeState("ThiefPlayerState");
 						Toast.makeText(context, "Comptuer pursue me...", Toast.LENGTH_SHORT).show();
 					}
 					if(i == 2) {
-						IGameObject pleaseWaitState = new PleaseWaitState(context, stateSystem);
+						IGameObject pleaseWaitState = new PleaseWaitState(stateSystem);
 						stateSystem.addState("PleaseWaitState", pleaseWaitState);
 						stateSystem.changeState("PleaseWaitState");
 						Toast.makeText(context, "God pursue me...", Toast.LENGTH_SHORT).show();

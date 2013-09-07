@@ -3,7 +3,6 @@ package org.bistu.kjcx.godshandandthief.statesystem;
 import org.bistu.kjcx.godshandandthief.BitmapStorage;
 import org.bistu.kjcx.godshandandthief.MainSurfaceView;
 
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -22,8 +21,8 @@ public class PleaseWaitState implements IGameObject {
 	
 	
 	
-	public PleaseWaitState(Context context, StateSystem stateSystem) {
-		//this.context = context;
+	public PleaseWaitState(StateSystem stateSystem) {
+		//this.context = MainActivity.CONTEXT;
 		this.stateSystem = stateSystem;
 		
 		waitMoment = BitmapStorage.getWaitMoment();

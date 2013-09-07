@@ -3,6 +3,7 @@ package org.bistu.kjcx.godshandandthief.statesystem;
 import java.util.Random;
 
 import org.bistu.kjcx.godshandandthief.BitmapStorage;
+import org.bistu.kjcx.godshandandthief.MainActivity;
 import org.bistu.kjcx.godshandandthief.MainSurfaceView;
 import org.bistu.kjcx.godshandandthief.actor.GodLayout;
 import org.bistu.kjcx.godshandandthief.actor.ProgressBar;
@@ -39,14 +40,14 @@ public class GodHandPlayerState implements IGameObject {
 	
 	
 	
-	public GodHandPlayerState(Context context, StateSystem stateSystem, PlayerType playerType) {
-		this.context = context;
+	public GodHandPlayerState(StateSystem stateSystem, PlayerType playerType) {
+		this.context = MainActivity.CONTEXT;
 		this.stateSystem = stateSystem;
 		this.playerType = playerType;
 		
 		if(playerType == PlayerType.Player) {
 			intervalBrush = 0;
-			godLayout = new GodLayout(context);
+			godLayout = new GodLayout();
 			
 			menuButton = new Bitmap[2];
 			menuButton[0] = BitmapStorage.getHoleMenu();
@@ -134,7 +135,7 @@ public class GodHandPlayerState implements IGameObject {
 	
 	GodLayout createAutoGodLayout(int level) {
 		Random random = new Random();
-		godLayout = new GodLayout(context);
+		godLayout = new GodLayout();
 		//godLayout.setProgressBar(new ProgressBar());
 		level = level % 10;
 		long interval = GodLayout.INTERVAL_LONG;		//÷¡…Ÿº‰∏Ù1√Î

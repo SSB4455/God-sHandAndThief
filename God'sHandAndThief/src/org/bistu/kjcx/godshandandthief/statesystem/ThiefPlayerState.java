@@ -1,5 +1,6 @@
 package org.bistu.kjcx.godshandandthief.statesystem;
 
+import org.bistu.kjcx.godshandandthief.MainActivity;
 import org.bistu.kjcx.godshandandthief.MainSurfaceView;
 import org.bistu.kjcx.godshandandthief.R;
 import org.bistu.kjcx.godshandandthief.actor.Background;
@@ -22,7 +23,7 @@ public class ThiefPlayerState implements IGameObject {
 	private Context context;
 	private StateSystem stateSystem;
 	
-	private boolean isLose, isWin;
+	private boolean isLose, isWin, reStart;
 	private PlayerType playerType;
 	private GodLayout godLayout;
 	private Background background;
@@ -33,8 +34,8 @@ public class ThiefPlayerState implements IGameObject {
 	
 	
 	
-	public ThiefPlayerState(Context context, StateSystem stateSystem, PlayerType playerType) {
-		this.context = context;
+	public ThiefPlayerState(StateSystem stateSystem, PlayerType playerType) {
+		this.context = MainActivity.CONTEXT;
 		this.stateSystem = stateSystem;
 		this.playerType = playerType;
 		
@@ -75,6 +76,9 @@ public class ThiefPlayerState implements IGameObject {
 			isWin = true;
 			godLayout.getProgressBar().stop();
 		}
+		
+		if(reStart)
+			reset();
 	}
 	
 	public void render(Canvas canvas) {
@@ -96,12 +100,13 @@ public class ThiefPlayerState implements IGameObject {
 	}
 	
 	public void reset() {
+		reStart = false;
 		isLose = false;
 		isWin = false;
 		businessman.setHreat(businessman.getHreat() + 1);
 		
 		if(playerType == PlayerType.Player) {
-			GodHandPlayerState godHandPlayerState = new GodHandPlayerState(context, stateSystem, PlayerType.Auto);
+			GodHandPlayerState godHandPlayerState = new GodHandPlayerState(stateSystem, PlayerType.Auto);
 			godLayout = godHandPlayerState.createAutoGodLayout(9);
 		}else {
 			godLayout.clear();
@@ -110,9 +115,11 @@ public class ThiefPlayerState implements IGameObject {
 	}
 	
 	public boolean onTouchEvent(MotionEvent event) {
-		if((isWin || isLose) && playerType == PlayerType.Player) {
-			Log.i(this.getClass().toString(), "touch to reset");
-			reset();
+		if(event.getAction() == MotionEvent.ACTION_UP) {
+			if((isWin || isLose) && playerType == PlayerType.Player) {
+				Log.i(this.getClass().toString(), "touch to reset");
+				reStart = true;
+			}
 		}
 		return businessman.onTouchEvent(event);
 	}

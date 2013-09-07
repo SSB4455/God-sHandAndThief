@@ -1,21 +1,12 @@
 package org.bistu.kjcx.godshandandthief.actor;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
-import org.bistu.kjcx.godshandandthief.MainSurfaceView;
-import org.bistu.kjcx.godshandandthief.R;
 import org.bistu.kjcx.godshandandthief.actor.GameActor;
-import org.bistu.kjcx.godshandandthief.actor.GameActor.ActorStatus;
 import org.bistu.kjcx.godshandandthief.actor.obstacle.*;
 import org.bistu.kjcx.godshandandthief.actor.obstacle.Obstacle.ObstacleType;
 
-import android.annotation.SuppressLint;
-import android.content.Context;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.Paint;
-import android.util.Log;
 
 public class GodLayout extends GameActor {
 	class RecordObstacle {
@@ -31,22 +22,21 @@ public class GodLayout extends GameActor {
 		
 	}
 	
-	public static int READ;
+	//public static int READ = 1;
 	public static long INTERVAL_LONG = 1000;
-	private Context context;
-	private long screenLong;
+	//private Context context;
+	//private long screenLong;
 	
 	private ProgressBar progressBar;
-	private HashMap<ObstacleType, Obstacle> obstacleStorage;
-	private ArrayList<RecordObstacle> obstacleLayout;		//obstacleSupervisor
+	//private HashMap<ObstacleType, Obstacle> obstacleStorage;
+	//private ArrayList<RecordObstacle> obstacleLayout;		//obstacleSupervisor
 	
 	
 	
-	public GodLayout(Context context) {
+	public GodLayout() {
 		super("God Layout");
-		this.context = context;
+		//this.context = MainActivity.CONTEXT;
 		
-		READ = 1;
 		progressBar = new ProgressBar();
 		
 		/*
@@ -65,7 +55,7 @@ public class GodLayout extends GameActor {
 		*/
 	}
 	
-	public boolean p() {
+	/*public boolean p() {
 		READ--;
 		if(READ >= 0)
 			return true;
@@ -75,18 +65,14 @@ public class GodLayout extends GameActor {
 	
 	public void v() {
 		READ++;
-	}
+	}*/
 	
 	@Override
 	public void update(long elapsedTime) {
-		//while(!p())
-		//	v();
-		//p();
-		//int size = children.size();
+		
 		for(int i = 0; i < getObstacleSize(); i++)
 			children.get(i).update(elapsedTime);
 		//super.update(elapsedTime);
-		//v();
 		
 		progressBar.update(elapsedTime);
 		
@@ -110,14 +96,11 @@ public class GodLayout extends GameActor {
 	
 	@Override
 	public void render(Canvas canvas) {
-		//while(!p())
-		//	v();
-		//p();
+		
 		//int size = children.size();
 		for(int i = 0; i < getObstacleSize(); i++)
 			children.get(i).render(canvas);
 		//super.render(canvas);
-		//v();
 		
 		progressBar.render(canvas);
 		
@@ -143,7 +126,7 @@ public class GodLayout extends GameActor {
 			obstacle = new Hole();
 			break;
 		case Stone:
-			obstacle = new Stone(BitmapFactory.decodeResource(context.getResources(), R.drawable.stone));
+			//obstacle = new Stone(BitmapFactory.decodeResource(context.getResources(), R.drawable.stone));
 			break;
 		case Pit:
 			obstacle = new Pit();
@@ -154,15 +137,7 @@ public class GodLayout extends GameActor {
 		}
 		obstacle.actorX = position / 1000 * Businessman.SPEED;
 		
-		//while(!p())
-		//	v();
-		Log.d(this.getClass().toString(), "add obstacle before READ = " + READ);
-		p();
-		Log.d(this.getClass().toString(), "add obstacle in READ = " + READ);
 		children.add(obstacle);
-		Log.d(this.getClass().toString(), "add obstacle end READ = " + READ);
-		v();
-		Log.d(this.getClass().toString(), "add obstacle edd READ = " + READ);
 	}
 	
 	@Override
@@ -170,16 +145,13 @@ public class GodLayout extends GameActor {
 		// TODO Auto-generated method stub
 		//super.cleanUpDead();
 		
-		//while(!p())
-		//	v();
-		p();
+		
 		ArrayList<GameActor> deadList = new ArrayList<GameActor>();
 		for(GameActor actorChild : children)
 			if(actorChild.status == ActorStatus.Dead)
 				deadList.add(actorChild);
 		for(GameActor actorChild : deadList)
 			children.remove(actorChild);
-		v();
 		
 		//Log.d(this.getClass().toString(), "children.size = " + children.size());
 	}
@@ -187,11 +159,7 @@ public class GodLayout extends GameActor {
 	public void clear() {
 		cleanUpDead();
 		
-		//while(!p())
-		//	v();
-		p();
 		children.clear();
-		v();
 	}
 	
 	public boolean setProgressBar(ProgressBar progressBar) {
@@ -211,24 +179,16 @@ public class GodLayout extends GameActor {
 	}
 	
 	public int getObstacleSize() {
-		//while(!p())
-		//	v();
-		p();
 		int size = children.size();
-		v();
 		return size;
 	}
 	
 	public Obstacle getObstacle(int i) {
 		Obstacle obstacle;
-		//while(!p())
-		//	v();
-		p();
 		if(0 < i && i < children.size())
 			obstacle = (Obstacle) children.get(i);
 		else
 			obstacle = (Obstacle) children.get(0);
-		v();
 		return obstacle;
 	}
 	
