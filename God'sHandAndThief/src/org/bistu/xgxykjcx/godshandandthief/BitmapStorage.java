@@ -1,4 +1,4 @@
-package org.bistu.kjcx.godshandandthief;
+package org.bistu.xgxykjcx.godshandandthief;
 
 import android.content.Context;
 import android.content.res.Resources;

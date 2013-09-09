@@ -1,9 +1,9 @@
-package org.bistu.kjcx.godshandandthief.statesystem;
+package org.bistu.xgxykjcx.godshandandthief.statesystem;
 
-import org.bistu.kjcx.godshandandthief.BitmapStorage;
-import org.bistu.kjcx.godshandandthief.MainActivity;
-import org.bistu.kjcx.godshandandthief.MainSurfaceView;
-import org.bistu.kjcx.godshandandthief.statesystem.StateSystem.PlayerType;
+import org.bistu.xgxykjcx.godshandandthief.BitmapStorage;
+import org.bistu.xgxykjcx.godshandandthief.MainActivity;
+import org.bistu.xgxykjcx.godshandandthief.MainSurfaceView;
+import org.bistu.xgxykjcx.godshandandthief.statesystem.StateSystem.PlayerType;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -86,10 +86,10 @@ public class GodChooseState implements IGameObject {
 						Toast.makeText(context, "catch computer...", Toast.LENGTH_SHORT).show();
 					}
 					if(i == 2) {		//Ð¡ÍµÐÝ×ß
-						IGameObject pleaseWaitState = new PleaseWaitState(stateSystem);
-						stateSystem.addState("PleaseWaitState", pleaseWaitState);
-						stateSystem.changeState("PleaseWaitState");
-						Toast.makeText(context, "catch thief...", Toast.LENGTH_SHORT).show();
+						IGameObject bluetoothChooseState = new BluetoothChooseState(stateSystem, BluetoothChooseState.GODSHAND);
+						stateSystem.addState("BluetoothChooseState", bluetoothChooseState);
+						stateSystem.changeState("BluetoothChooseState");
+						Toast.makeText(context, "Bluetooth Choose State", Toast.LENGTH_SHORT).show();
 					}
 				}
 			}

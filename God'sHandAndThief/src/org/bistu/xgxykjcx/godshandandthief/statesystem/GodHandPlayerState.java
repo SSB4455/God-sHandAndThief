@@ -1,14 +1,14 @@
-package org.bistu.kjcx.godshandandthief.statesystem;
+package org.bistu.xgxykjcx.godshandandthief.statesystem;
 
 import java.util.Random;
 
-import org.bistu.kjcx.godshandandthief.BitmapStorage;
-import org.bistu.kjcx.godshandandthief.MainActivity;
-import org.bistu.kjcx.godshandandthief.MainSurfaceView;
-import org.bistu.kjcx.godshandandthief.actor.GodLayout;
-import org.bistu.kjcx.godshandandthief.actor.ProgressBar;
-import org.bistu.kjcx.godshandandthief.actor.obstacle.Obstacle.ObstacleType;
-import org.bistu.kjcx.godshandandthief.statesystem.StateSystem.PlayerType;
+import org.bistu.xgxykjcx.godshandandthief.BitmapStorage;
+import org.bistu.xgxykjcx.godshandandthief.MainActivity;
+import org.bistu.xgxykjcx.godshandandthief.MainSurfaceView;
+import org.bistu.xgxykjcx.godshandandthief.actor.GodLayout;
+import org.bistu.xgxykjcx.godshandandthief.actor.ProgressBar;
+import org.bistu.xgxykjcx.godshandandthief.actor.obstacle.Obstacle.ObstacleType;
+import org.bistu.xgxykjcx.godshandandthief.statesystem.StateSystem.PlayerType;
 
 import android.content.Context;
 import android.graphics.Bitmap;

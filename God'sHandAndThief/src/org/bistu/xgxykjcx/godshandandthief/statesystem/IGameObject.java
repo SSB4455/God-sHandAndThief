@@ -1,4 +1,4 @@
-package org.bistu.kjcx.godshandandthief.statesystem;
+package org.bistu.xgxykjcx.godshandandthief.statesystem;
 
 import android.graphics.Canvas;
 import android.view.KeyEvent;
@@ -7,8 +7,6 @@ import android.view.MotionEvent;
 public abstract interface IGameObject{
 	
 	abstract void update(long elapsedTime);
-	
-	abstract void render();
 	
 	abstract void render(Canvas canvas);
 	

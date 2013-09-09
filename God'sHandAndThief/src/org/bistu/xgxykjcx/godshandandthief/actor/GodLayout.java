@@ -1,10 +1,10 @@
-package org.bistu.kjcx.godshandandthief.actor;
+package org.bistu.xgxykjcx.godshandandthief.actor;
 
 import java.util.ArrayList;
 
-import org.bistu.kjcx.godshandandthief.actor.GameActor;
-import org.bistu.kjcx.godshandandthief.actor.obstacle.*;
-import org.bistu.kjcx.godshandandthief.actor.obstacle.Obstacle.ObstacleType;
+import org.bistu.xgxykjcx.godshandandthief.actor.GameActor;
+import org.bistu.xgxykjcx.godshandandthief.actor.obstacle.*;
+import org.bistu.xgxykjcx.godshandandthief.actor.obstacle.Obstacle.ObstacleType;
 
 import android.graphics.Canvas;
 

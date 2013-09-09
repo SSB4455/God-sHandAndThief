@@ -1,8 +1,8 @@
-package org.bistu.kjcx.godshandandthief.statesystem;
+package org.bistu.xgxykjcx.godshandandthief.statesystem;
 
-import org.bistu.kjcx.godshandandthief.MainActivity;
-import org.bistu.kjcx.godshandandthief.R;
-import org.bistu.kjcx.godshandandthief.MainSurfaceView;
+import org.bistu.xgxykjcx.godshandandthief.MainActivity;
+import org.bistu.xgxykjcx.godshandandthief.MainSurfaceView;
+import org.bistu.xgxykjcx.godshandandthief.R;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -108,10 +108,6 @@ public class MenuState implements IGameObject {
 			return true; //返回true表示执行结束不需继续执行父类按键响应  
 		}
 		return false;
-	}
-	
-	public void render() {
-		// TODO Auto-generated method stub
 	}
 	
 }

@@ -1,4 +1,4 @@
-package org.bistu.kjcx.godshandandthief.statesystem;
+package org.bistu.xgxykjcx.godshandandthief.statesystem;
 
 import java.util.Hashtable;
 
@@ -35,11 +35,6 @@ public class StateSystem {
 	public void update(long elapsedTime) {
 		//Log.v(this.getClass().toString(), "start update");
 		currentState.update(elapsedTime);
-	}
-	
-	public void render() {
-		//Log.v(this.getClass().toString(), "start render no canvas");
-		currentState.render();
 	}
 	
 	public void render(Canvas canvas) {

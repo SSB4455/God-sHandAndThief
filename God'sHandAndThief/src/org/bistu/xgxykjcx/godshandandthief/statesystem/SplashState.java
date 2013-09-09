@@ -1,6 +1,6 @@
-package org.bistu.kjcx.godshandandthief.statesystem;
+package org.bistu.xgxykjcx.godshandandthief.statesystem;
 
-import org.bistu.kjcx.godshandandthief.MainSurfaceView;
+import org.bistu.xgxykjcx.godshandandthief.MainSurfaceView;
 
 import android.graphics.Canvas;
 import android.graphics.Color;

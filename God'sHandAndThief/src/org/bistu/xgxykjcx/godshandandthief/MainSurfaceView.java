@@ -1,6 +1,6 @@
-package org.bistu.kjcx.godshandandthief;
+package org.bistu.xgxykjcx.godshandandthief;
 
-import org.bistu.kjcx.godshandandthief.statesystem.*;
+import org.bistu.xgxykjcx.godshandandthief.statesystem.*;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -22,7 +22,7 @@ public class MainSurfaceView extends SurfaceView implements Callback, Runnable {
 	private static int BRUSH_FRAME_FREQUENCY;
 	private static long BRUSH_FRAME_LONG;
 	
-	private SurfaceHolder sfh;		//创建一个SurfaceHolder 控制SurfaceView的
+	private SurfaceHolder sfh;		// 创建一个SurfaceHolder 控制SurfaceView的
 	private StateSystem stateSystem;
 	
 	private long [] time;
@@ -39,7 +39,7 @@ public class MainSurfaceView extends SurfaceView implements Callback, Runnable {
 		super(context);
 		
 		this.context = context;
-		DisplayMetrics dm = new DisplayMetrics();  
+		DisplayMetrics dm = new DisplayMetrics();
 		dm = getResources().getDisplayMetrics();
 		SCREEN_H = dm.heightPixels;
 		SCREEN_W = dm.widthPixels;
@@ -60,10 +60,10 @@ public class MainSurfaceView extends SurfaceView implements Callback, Runnable {
 		this.setLongClickable(true);
 		//Log.d(this.getClass().toString(), "structure ——> isFocused = " + isFocused());
 		
-		sfh = this.getHolder();		//获取当前SurfaceView的SurfaceHolder
-		sfh.addCallback(this);		//设置当前SurfaceView的回调
-	}	
-
+		sfh = this.getHolder();		// 获取当前SurfaceView的SurfaceHolder
+		sfh.addCallback(this);		// 设置当前SurfaceView的回调
+	}
+	
 	public void surfaceCreated(SurfaceHolder holder) {		//Callback
 		stateSystem.addState("SplashState", new SplashState(stateSystem));
 		stateSystem.addState("MenuState", new MenuState(stateSystem));
@@ -80,9 +80,9 @@ public class MainSurfaceView extends SurfaceView implements Callback, Runnable {
 		//flag = false;
 	}
 	
-	public void surfaceDestroyed(SurfaceHolder holder) {		//Callback
+	public void surfaceDestroyed(SurfaceHolder holder) {		// Callback
 		flag = false;
-		//第三种方法防止退出时异常. 当surfaceView销毁时让线程暂停300ms . 醒来再执行run()方法时,isThreadRunning就是false了. 
+		// 第三种方法防止退出时异常. 当surfaceView销毁时让线程暂停300ms . 醒来再执行run()方法时,isThreadRunning就是false了. 
         try {
             Thread.sleep(300);
         } catch(InterruptedException e) {
@@ -91,7 +91,7 @@ public class MainSurfaceView extends SurfaceView implements Callback, Runnable {
         
 	}
 	
-	public void run() {		//Runnable
+	public void run() {		// Runnable
 		//try {
 			while(flag) {
 				canvas = sfh.lockCanvas();
@@ -131,7 +131,7 @@ public class MainSurfaceView extends SurfaceView implements Callback, Runnable {
 			Log.d(this.getClass().toString(), "onKeyDown ——> back");
 		}
 		
-		//return false;		//false是继续做
+		//return false;		// false是继续做
 		//return super.onKeyDown(keyCode, event);
 		return stateSystem.onKeyDown(keyCode, event);
 	}
@@ -143,7 +143,7 @@ public class MainSurfaceView extends SurfaceView implements Callback, Runnable {
 		//return super.onTouchEvent(event);
 		return stateSystem.onTouchEvent(event);
 	}
-
+	
 	double calculateProcessTime() {
 		canvas.drawText("updateTime  = " + (time[1] - time[0]), 0, 10, paint);
 		canvas.drawText("renderTime  = " + (System.currentTimeMillis() - time[1]), 0, 21, paint);

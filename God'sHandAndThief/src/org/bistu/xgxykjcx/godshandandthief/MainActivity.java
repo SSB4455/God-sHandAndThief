@@ -1,11 +1,13 @@
-package org.bistu.kjcx.godshandandthief;
+package org.bistu.xgxykjcx.godshandandthief;
 
 import android.os.Bundle;
+import android.widget.RelativeLayout;
 import android.app.Activity;
 import android.content.Context;
 
 public class MainActivity extends Activity {
 	public static Context CONTEXT;
+	public RelativeLayout relativeLayout;
 	
 	
 	
@@ -15,8 +17,10 @@ public class MainActivity extends Activity {
 		CONTEXT = this;
 		BitmapStorage.setResources(this.getResources());
 		
+		relativeLayout = new RelativeLayout(this);
 		MainSurfaceView mainSurfaceView = new MainSurfaceView(this);
-		setContentView(mainSurfaceView);
+		setContentView(relativeLayout);
+		relativeLayout.addView(mainSurfaceView);
 		
 	}
 	

@@ -1,9 +1,9 @@
-package org.bistu.kjcx.godshandandthief.actor;
+package org.bistu.xgxykjcx.godshandandthief.actor;
 
-import org.bistu.kjcx.godshandandthief.R;
-import org.bistu.kjcx.godshandandthief.MainSurfaceView;
-import org.bistu.kjcx.godshandandthief.actor.obstacle.Obstacle;
-import org.bistu.kjcx.godshandandthief.statesystem.StateSystem.PlayerType;
+import org.bistu.xgxykjcx.godshandandthief.MainSurfaceView;
+import org.bistu.xgxykjcx.godshandandthief.R;
+import org.bistu.xgxykjcx.godshandandthief.actor.obstacle.Obstacle;
+import org.bistu.xgxykjcx.godshandandthief.statesystem.StateSystem.PlayerType;
 
 import android.content.Context;
 import android.graphics.Bitmap;

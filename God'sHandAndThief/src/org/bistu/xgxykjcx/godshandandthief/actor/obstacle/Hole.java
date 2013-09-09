@@ -1,11 +1,11 @@
-package org.bistu.kjcx.godshandandthief.actor.obstacle;
+package org.bistu.xgxykjcx.godshandandthief.actor.obstacle;
 
-import org.bistu.kjcx.godshandandthief.BitmapStorage;
-import org.bistu.kjcx.godshandandthief.MainSurfaceView;
-import org.bistu.kjcx.godshandandthief.actor.Background;
-import org.bistu.kjcx.godshandandthief.actor.Businessman;
-import org.bistu.kjcx.godshandandthief.actor.GameActor;
-import org.bistu.kjcx.godshandandthief.actor.GameActor.ActorStatus;
+import org.bistu.xgxykjcx.godshandandthief.BitmapStorage;
+import org.bistu.xgxykjcx.godshandandthief.MainSurfaceView;
+import org.bistu.xgxykjcx.godshandandthief.actor.Background;
+import org.bistu.xgxykjcx.godshandandthief.actor.Businessman;
+import org.bistu.xgxykjcx.godshandandthief.actor.GameActor;
+import org.bistu.xgxykjcx.godshandandthief.actor.GameActor.ActorStatus;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;

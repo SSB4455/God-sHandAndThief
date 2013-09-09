@@ -1,7 +1,7 @@
-package org.bistu.kjcx.godshandandthief.actor;
+package org.bistu.xgxykjcx.godshandandthief.actor;
 
-import org.bistu.kjcx.godshandandthief.R;
-import org.bistu.kjcx.godshandandthief.MainSurfaceView;
+import org.bistu.xgxykjcx.godshandandthief.MainSurfaceView;
+import org.bistu.xgxykjcx.godshandandthief.R;
 
 import android.content.Context;
 import android.graphics.BitmapFactory;

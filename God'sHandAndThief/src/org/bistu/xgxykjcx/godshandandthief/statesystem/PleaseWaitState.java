@@ -1,7 +1,7 @@
-package org.bistu.kjcx.godshandandthief.statesystem;
+package org.bistu.xgxykjcx.godshandandthief.statesystem;
 
-import org.bistu.kjcx.godshandandthief.BitmapStorage;
-import org.bistu.kjcx.godshandandthief.MainSurfaceView;
+import org.bistu.xgxykjcx.godshandandthief.BitmapStorage;
+import org.bistu.xgxykjcx.godshandandthief.MainSurfaceView;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
