@@ -1,24 +1,16 @@
 package org.bistu.xgxykjcx.godshandandthief.statesystem;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Set;
-import java.util.UUID;
 
 import org.bistu.xgxykjcx.godshandandthief.BitmapStorage;
 import org.bistu.xgxykjcx.godshandandthief.BluetoothChatService;
 import org.bistu.xgxykjcx.godshandandthief.MainActivity;
-import org.bistu.xgxykjcx.godshandandthief.MainSurfaceView;
-import org.bistu.xgxykjcx.godshandandthief.R;
 
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
-import android.bluetooth.BluetoothSocket;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -27,46 +19,36 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 public class BluetoothChooseState implements IGameObject {
 	// Debugging
-    private final String Tag = "BluetoothChooseState";
-    
+	private final String Tag = "BluetoothChooseState";
+	
 	// Message types sent from the BluetoothChatService Handler
-    public static final int MESSAGE_STATE_CHANGE = 1;
-    public static final int MESSAGE_READ = 2;
-    public static final int MESSAGE_WRITE = 3;
-    public static final int MESSAGE_DEVICE_NAME = 4;
-    public static final int MESSAGE_TOAST = 5;
+	public static final int MESSAGE_STATE_CHANGE = 1;
+	public static final int MESSAGE_READ = 2;
+	public static final int MESSAGE_WRITE = 3;
+	public static final int MESSAGE_DEVICE_NAME = 4;
+	public static final int MESSAGE_TOAST = 5;
 	
 	// Intent request codes
-    private static int REQUEST_CONNECT_DEVICE = 1;
+	private static int REQUEST_CONNECT_DEVICE = 1;
 	private static int REQUEST_ENABLE_BT = 2;
 	
 	// Key names received from the BluetoothChatService Handler
-    public static final String DEVICE_NAME = "device_name";
-    public static final String TOAST = "toast";
-    
-    public static final int THTIF = 0;
-    public static final int GODSHAND = 1;
-    public static final String THITF_TYPE = "_Thief";
-    public static final String GODSHAND_TYPE = "_GodsHand";
-    
+	public static final String DEVICE_NAME = "device_name";
+	public static final String TOAST = "toast";
 	
+	public static final int THTIF = 0;
+	public static final int GODSHAND = 1;
+	public static final String THITF_TYPE = "_Thief";
+	public static final String GODSHAND_TYPE = "_GodsHand";
 	
 	
 	private long brushTime;
@@ -87,17 +69,16 @@ public class BluetoothChooseState implements IGameObject {
 	// 创建一个接收ACTION_FOUND广播的BroadcastReceiver
 	private final BroadcastReceiver mReceiver;
 	// Name of the connected device
-    private String mConnectedDeviceName = null;
-    // Array adapter for the conversation thread
-    private ArrayAdapter<String> mConversationArrayAdapter;
-    private ArrayList<String> devicesName, oneMessages, twoMessages;
+	private String mConnectedDeviceName = null;
+	
+	private ArrayList<String> devicesName, oneMessages, twoMessages;
 	private HashMap<String, String> devicesAddress;
-    // String buffer for outgoing messages
-    private StringBuffer mOutStringBuffer;
-    // Local Bluetooth adapter
-    BluetoothAdapter mBluetoothAdapter;
+	// String buffer for outgoing messages
+	private StringBuffer mOutStringBuffer;
+	// Local Bluetooth adapter
+	BluetoothAdapter mBluetoothAdapter;
 	// Member object for the chat services
-    private BluetoothChatService mChatService = null;
+	private BluetoothChatService mChatService = null;
 	
 	
 	public BluetoothChooseState(StateSystem stateSystem, int type) {
@@ -137,16 +118,23 @@ public class BluetoothChooseState implements IGameObject {
 		
 		
 		
-		if(mChatService == null)
-			setupChat();
+		if(mChatService == null) {
+			Log.d(Tag, "setupChat()");
+			
+			// Initialize the BluetoothChatService to perform bluetooth connections
+			mChatService = new BluetoothChatService(context, mHandler);
+			
+			// Initialize the buffer for outgoing messages
+			mOutStringBuffer = new StringBuffer("");
+		}
 		
 		if(mChatService != null) {
-            // Only if the state is STATE_NONE, do we know that we haven't started already
-            if(mChatService.getState() == BluetoothChatService.STATE_NONE) {
-              // Start the Bluetooth chat services
-              mChatService.start();
-            }
-        }
+			// Only if the state is STATE_NONE, do we know that we haven't started already
+			if(mChatService.getState() == BluetoothChatService.STATE_NONE) {
+				// Start the Bluetooth chat services
+				mChatService.start();
+			}
+		}
 		
 		
 		
@@ -175,7 +163,6 @@ public class BluetoothChooseState implements IGameObject {
 		
 		
 		
-		//mBluetoothAdapter.discoverability();
 		
 		// If BT is not on, request that it be enabled.
 		if (!mBluetoothAdapter.isEnabled()) {
@@ -193,19 +180,16 @@ public class BluetoothChooseState implements IGameObject {
         mReceiver = new BroadcastReceiver() {
         	public void onReceive(Context context, Intent intent) {
         		String action = intent.getAction();
-        		// 发现设备
                 if(BluetoothDevice.ACTION_FOUND.equals(action)) {
                     // 从Intent中获取设备对象
                     BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
-                    // 将设备名称和地址放入array adapter，以便在ListView中显示
                     String deviceName = device.getName();
-                    if(!devicesName.contains(deviceName))	// 如果不重复就加进去
-                    	if(deviceName.endsWith(findName)) {		// 查找对应的玩家
-                    		devicesName.add(deviceName);
-                    		devicesAddress.put(deviceName, device.getAddress());
-                    		brushFlag = false;
-                    	}
-                    
+                    // 如果不重复就并且是对应的玩家才加进去
+                    if(!devicesName.contains(deviceName) && deviceName.endsWith(findName)) {
+                		devicesName.add(deviceName);
+                		devicesAddress.put(deviceName, device.getAddress());
+                		brushFlag = false;
+                	}
                 }
             }
         };
@@ -216,22 +200,10 @@ public class BluetoothChooseState implements IGameObject {
 		
 		
 		
-		//打开本机的蓝牙发现功能（默认打开120秒，可以将时间最多延长至300秒）
+		// 使本机可以被发现（默认打开120秒，可以将时间最多延长至300秒）
 		Intent discoverableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);  
 		discoverableIntent.putExtra(BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, 120);//设置持续时间（最多300秒）
 		((Activity) context).startActivity(discoverableIntent);
-		
-		
-		
-		/*Set<BluetoothDevice> pairedDevices = mBluetoothAdapter.getBondedDevices();
-		// If there are paired devices
-		if (pairedDevices.size() > 0) {
-		// Loop through paired devices
-		for (BluetoothDevice device : pairedDevices) {
-				// Add the name and address to an array adapter to show in a ListView
-				//mArrayAdapter.add(device.getName() + "n" + device.getAddress());
-			}
-		}*/
 		
 		
 		
@@ -241,28 +213,17 @@ public class BluetoothChooseState implements IGameObject {
 		paint.setColor(Color.WHITE);
 	}
 	
-	private void setupChat() {
-        Log.d(Tag, "setupChat()");
-        
-        // Initialize the BluetoothChatService to perform bluetooth connections
-        mChatService = new BluetoothChatService(context, mHandler);
-
-        // Initialize the buffer for outgoing messages
-        mOutStringBuffer = new StringBuffer("");
-    }
+	
 	
 	public void update(long elapsedTime) {
-		//if(!canConnect) {
-			//Toast.makeText(context, "You're drive cannot connect.", Toast.LENGTH_SHORT).show();
-			//stateSystem.changeState("MenuState");
-		//}
+		
 		
 		if (!mBluetoothAdapter.isEnabled()) {
 			Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-            ((Activity) context).startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
-        } else {
-        	canConnect = true;
-        }
+			((Activity) context).startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
+		} else {
+			canConnect = true;
+		}
 		
 		
 		if(brushFlag) {
@@ -290,10 +251,7 @@ public class BluetoothChooseState implements IGameObject {
 				
 			}
 			
-			//mBluetoothAdapter.cancelDiscovery();
 		}
-		
-
 		
 	}
 	
@@ -301,6 +259,9 @@ public class BluetoothChooseState implements IGameObject {
 		canvas.drawColor(Color.BLACK);
 		
 		//canvas.drawBitmap(waitMoment, MainSurfaceView.SCREEN_W / 5, MainSurfaceView.SCREEN_H /5, paint);
+		
+		// 
+		canvas.drawText(mConnectedDeviceName, 50, 70, paint);
 		
 		// 对应玩家的可用设备列表
 		canvas.drawText("devicesName", 50, 90, paint);
@@ -326,13 +287,13 @@ public class BluetoothChooseState implements IGameObject {
             Toast.makeText(context, "not_connected", Toast.LENGTH_SHORT).show();
             return;
         }
-
+        
         // Check that there's actually something to send
         if (message.length() > 0) {
             // Get the message bytes and tell the BluetoothChatService to write
             byte[] send = message.getBytes();
             mChatService.write(send);
-
+            
             // Reset out string buffer to zero and clear the edit text field
             mOutStringBuffer.setLength(0);
         }
@@ -373,7 +334,6 @@ public class BluetoothChooseState implements IGameObject {
                 // construct a string from the buffer
                 String writeMessage = new String(writeBuf);
                 Log.i(Tag, "writeMessage：" + writeMessage);
-                //mConversationArrayAdapter.add("Me:  " + writeMessage);
                 oneMessages.add("Me:  " + writeMessage);
                 break;
             case MESSAGE_READ:
@@ -381,7 +341,6 @@ public class BluetoothChooseState implements IGameObject {
                 // construct a string from the valid bytes in the buffer
                 String readMessage = new String(readBuf, 0, msg.arg1);
                 Log.i(Tag, "readMessage：" + readMessage);
-                //mConversationArrayAdapter.add(mConnectedDeviceName+":  " + readMessage);
                 twoMessages.add(mConnectedDeviceName + ":  " + readMessage);
                 break;
             case MESSAGE_DEVICE_NAME:
@@ -395,33 +354,6 @@ public class BluetoothChooseState implements IGameObject {
             }
         }
     };
-    
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {  
-        Log.d(Tag, "onActivityResult " + resultCode);  
-        switch (requestCode) {
-        case 1:  
-            // When DeviceListActivity returns with a device to connect  
-            if (resultCode == Activity.RESULT_OK) {  
-                // Get the device MAC address  
-                String address = devicesAddress.get(devicesName.get(0));  
-                // Get the BLuetoothDevice object  
-                BluetoothDevice device = mBluetoothAdapter.getRemoteDevice(address);  
-                // Attempt to connect to the device  
-                mChatService.connect(device);  
-            }
-            break;
-        case 2:
-            // When the request to enable Bluetooth returns
-            if (resultCode == Activity.RESULT_OK) {
-                // Bluetooth is now enabled, so set up a chat session  
-                setupChat();
-            } else {  
-                // User did not enable Bluetooth or an error occured  
-                Log.d(Tag, "BT not enabled");  
-                //Toast.makeText(this, "R.string.bt_not_enabled_leaving", Toast.LENGTH_SHORT).show(); 
-            }
-        }
-    }
 	
 	public boolean onTouchEvent(MotionEvent event) {
 		sendMessage("touch");

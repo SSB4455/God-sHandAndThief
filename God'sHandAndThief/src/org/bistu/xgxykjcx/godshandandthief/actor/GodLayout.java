@@ -1,136 +1,84 @@
 package org.bistu.xgxykjcx.godshandandthief.actor;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 import org.bistu.xgxykjcx.godshandandthief.actor.GameActor;
 import org.bistu.xgxykjcx.godshandandthief.actor.obstacle.*;
 import org.bistu.xgxykjcx.godshandandthief.actor.obstacle.Obstacle.ObstacleType;
 
 import android.graphics.Canvas;
+import android.util.Log;
 
 public class GodLayout extends GameActor {
-	class RecordObstacle {
-		boolean inScreen;
-		long position;
-		float actorX;
-		ObstacleType type;
-		
-		RecordObstacle(long position, ObstacleType type) {
-			this.position = position;
-			this.type = type;
-		}
-		
-	}
 	
-	//public static int READ = 1;
+	// 间隔的时间长度
 	public static long INTERVAL_LONG = 1000;
-	//private Context context;
+	
+	private boolean isLink;
 	//private long screenLong;
 	
 	private ProgressBar progressBar;
-	//private HashMap<ObstacleType, Obstacle> obstacleStorage;
-	//private ArrayList<RecordObstacle> obstacleLayout;		//obstacleSupervisor
 	
 	
 	
 	public GodLayout() {
 		super("God Layout");
-		//this.context = MainActivity.CONTEXT;
 		
 		progressBar = new ProgressBar();
 		
-		/*
-		screenLong = (long) (MainSurfaceView.SCREEN_W / (float) Businessman.SPEED * 1000);
-		Log.i(this.getClass().toString(), "screenLong = " + screenLong);
-		
-		obstacleStorage = new HashMap<ObstacleType, Obstacle>();
-		obstacleLayout = new ArrayList<RecordObstacle>();
-		
-		Obstacle hole = new Hole(BitmapFactory.decodeResource(context.getResources(), R.drawable.hole));
-		Obstacle stone = new Stone(BitmapFactory.decodeResource(context.getResources(), R.drawable.stone));
-		obstacleStorage.put(ObstacleType.Hole, hole);
-		obstacleStorage.put(ObstacleType.Stone, stone);
-		
-		paint = new Paint();
-		*/
 	}
-	
-	/*public boolean p() {
-		READ--;
-		if(READ >= 0)
-			return true;
-		Log.d(this.getClass().toString(), "READ = " + READ);
-		return false;
-	}
-	
-	public void v() {
-		READ++;
-	}*/
 	
 	@Override
 	public void update(long elapsedTime) {
-		
+		// update all obstacle
 		for(int i = 0; i < getObstacleSize(); i++)
 			children.get(i).update(elapsedTime);
-		//super.update(elapsedTime);
 		
 		progressBar.update(elapsedTime);
 		
 		//cleanUpDead();
 		
-		
-		/*
-		long progressL = progressBar.getProgressL();
-		for(RecordObstacle obstacleRecord: obstacleLayout) {
-			if(obstacleRecord.position < progressL 
-					&& progressL < obstacleRecord.position + screenLong) {
-				obstacleRecord.inScreen = true;
-				obstacleRecord.actorX = MainSurfaceView.SCREEN_W - (progressL - obstacleRecord.position) / 1000 * Businessman.SPEED;
-				//Log.i(this.getClass().toString(), "a obstacle position = " + obstacleRecord.position + " type = " + obstacleRecord.type);
-			} else {
-				obstacleRecord.inScreen = false;
-			}
-		}
-		*/
 	}
 	
 	@Override
 	public void render(Canvas canvas) {
-		
-		//int size = children.size();
+		// render all obstacle
 		for(int i = 0; i < getObstacleSize(); i++)
 			children.get(i).render(canvas);
-		//super.render(canvas);
 		
 		progressBar.render(canvas);
 		
-		
-		/*
-		for(RecordObstacle obstacleRecord: obstacleLayout) {
-			if(obstacleRecord.inScreen) {
-				Obstacle obstacle = obstacleStone.get(obstacleRecord.type);
-				obstacle.actorX = obstacleRecord.actorX;
-				obstacle.render(canvas);
-			}
-		}
-		*/
 	}
 	
+	public static GodLayout createAutoGodLayout(int level) {
+		Random random = new Random();
+		GodLayout godLayout = new GodLayout();
+		level = level % 10;
+		long interval = GodLayout.INTERVAL_LONG;		// 间隔时间
+		long partLong = (ProgressBar.TOTAL_Long - 4000 - interval * level) / level;		//多减4s是为了给第一个障碍的间隔预留2s为最后一个障碍预留2s
+		for(int i = 0; i < level; i++) {
+			long position = 2000 + i * (partLong + interval) + random.nextInt((int) partLong);
+			//第一个障碍多添加2s的准备时间
+			godLayout.addObstacle(position, i % 2 == 0 ? ObstacleType.Pit : ObstacleType.Hole);
+			Log.d("GodLayout", "create a obstacle, position = " + position + " type = " + (i % 2 == 0 ? ObstacleType.Pit + "" : ObstacleType.Hole + ""));
+		}
+		return godLayout;
+	}
+	
+	/**
+	 * 添加一个障碍
+	 * @param position 位置
+	 * @param type 障碍的种类
+	 */
 	public void addObstacle(long position, ObstacleType type) {
-		//obstacleLayout.add(new RecordObstacle(position, type));
-		
 		
 		Obstacle obstacle = null;
 		switch(type) {
 		case Hole : 
 			obstacle = new Hole();
 			break;
-		case Stone:
-			//obstacle = new Stone(BitmapFactory.decodeResource(context.getResources(), R.drawable.stone));
-			break;
 		case Pit:
-			obstacle = new Pit();
-			break;
 		default:
 			obstacle = new Pit();
 			break;
@@ -142,9 +90,6 @@ public class GodLayout extends GameActor {
 	
 	@Override
 	public void cleanUpDead() {
-		// TODO Auto-generated method stub
-		//super.cleanUpDead();
-		
 		
 		ArrayList<GameActor> deadList = new ArrayList<GameActor>();
 		for(GameActor actorChild : children)
@@ -153,7 +98,7 @@ public class GodLayout extends GameActor {
 		for(GameActor actorChild : deadList)
 			children.remove(actorChild);
 		
-		//Log.d(this.getClass().toString(), "children.size = " + children.size());
+		//Log.d(this.getClass().toString(), "cleanUpDead() and children.size = " + children.size());
 	}
 	
 	public void clear() {
@@ -184,12 +129,11 @@ public class GodLayout extends GameActor {
 	}
 	
 	public Obstacle getObstacle(int i) {
-		Obstacle obstacle;
-		if(0 < i && i < children.size())
-			obstacle = (Obstacle) children.get(i);
-		else
-			obstacle = (Obstacle) children.get(0);
-		return obstacle;
+		return (Obstacle) children.get((0 <= i && i < children.size()) ? i : 0);
+	}
+	
+	public boolean isLink() {
+		return isLink;
 	}
 	
 	@Override
@@ -202,6 +146,18 @@ public class GodLayout extends GameActor {
 	public int getRight() {
 		// TODO Auto-generated method stub
 		return 0;
+	}
+	
+	class RecordObstacle {
+		boolean inScreen;
+		long position;
+		float actorX;
+		ObstacleType type;
+		
+		RecordObstacle(long position, ObstacleType type) {
+			this.position = position;
+			this.type = type;
+		}
 	}
 	
 }

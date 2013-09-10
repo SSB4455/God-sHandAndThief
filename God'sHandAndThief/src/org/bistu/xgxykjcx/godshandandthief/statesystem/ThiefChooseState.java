@@ -3,6 +3,7 @@ package org.bistu.xgxykjcx.godshandandthief.statesystem;
 import org.bistu.xgxykjcx.godshandandthief.MainActivity;
 import org.bistu.xgxykjcx.godshandandthief.MainSurfaceView;
 import org.bistu.xgxykjcx.godshandandthief.R;
+import org.bistu.xgxykjcx.godshandandthief.actor.GodLayout;
 import org.bistu.xgxykjcx.godshandandthief.statesystem.StateSystem.PlayerType;
 
 import android.content.Context;
@@ -78,8 +79,7 @@ public class ThiefChooseState implements IGameObject {
 						&& event.getY() < menuLocation[i][Y] + menuButton[i].getHeight()) {
 					if(i == 1) {
 						ThiefPlayerState thiefPlayerState = new ThiefPlayerState(stateSystem, PlayerType.Player);
-						GodHandPlayerState godHandPlayerState = new GodHandPlayerState(stateSystem, PlayerType.Auto);
-						thiefPlayerState.setGodLayout(godHandPlayerState.createAutoGodLayout(9));
+						thiefPlayerState.setGodLayout(GodLayout.createAutoGodLayout(9));
 						stateSystem.addState("ThiefPlayerState", thiefPlayerState);
 						stateSystem.changeState("ThiefPlayerState");
 						Toast.makeText(context, "Comptuer pursue me...", Toast.LENGTH_SHORT).show();
@@ -102,11 +102,6 @@ public class ThiefChooseState implements IGameObject {
 			stateSystem.changeState("MenuState");
 		}
 		return true;		//不让别人做了
-	}
-	
-	public void render() {
-		// TODO Auto-generated method stub
-		
 	}
 	
 }

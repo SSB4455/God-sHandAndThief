@@ -1,5 +1,6 @@
 package org.bistu.xgxykjcx.godshandandthief.actor;
 
+import org.bistu.xgxykjcx.godshandandthief.MainActivity;
 import org.bistu.xgxykjcx.godshandandthief.MainSurfaceView;
 import org.bistu.xgxykjcx.godshandandthief.R;
 import org.bistu.xgxykjcx.godshandandthief.actor.obstacle.Obstacle;
@@ -16,8 +17,12 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 
 public class Businessman extends GameActor implements OnGestureListener {
-	
 	public static int SPEED = MainSurfaceView.SCREEN_W / 2;
+	// 标志Fling的方向
+	public static final int UP = 0;
+	public static final int DOWN = 1;
+	
+	private Context context;
 	
 	private int health, frameW, frameH, incrementWHalf, incrementHHalf, currentFrame, bodyMotion;
 	private int heartStartX, heartY, heartInterval;
@@ -25,8 +30,6 @@ public class Businessman extends GameActor implements OnGestureListener {
 	private int [] frameTotal;
 	private float scrollX, scrollY;
 	PlayerType playerType;
-	private final int UP = 0;
-	private final int DOWN = 1;
 	
 	private final int IS_RUN = 0;
 	private final int IS_UP = 1;
@@ -36,15 +39,14 @@ public class Businessman extends GameActor implements OnGestureListener {
 	
 	private boolean [] fling;
 	
-	GodLayout godLayout;
-	
 	private Bitmap [][] frame;
 	private Bitmap heart;
 	private GestureDetector mGestureDetector;
 	
 	
 	
-	public Businessman(Context context) {
+	public Businessman() {
+		this.context = MainActivity.CONTEXT;
 		
 		frameTotal = new int[4];
 		frame = new Bitmap[4][];
@@ -112,14 +114,12 @@ public class Businessman extends GameActor implements OnGestureListener {
 		paint = new Paint();
 	}
 	
-	public Businessman(Context context, PlayerType playerType) {
-		this(context);
+	public Businessman(PlayerType playerType) {
+		this();
 		
 		this.playerType = playerType;
 		if(playerType == PlayerType.Auto) {
-			
 		}
-		
 		
 	}
 	
@@ -127,23 +127,17 @@ public class Businessman extends GameActor implements OnGestureListener {
 	public void update(long elapsedTime) {
 		brushTime += elapsedTime;
 		
-		if(godLayout != null) {
-			autoMotion();
-		}
-		
 		//处理输入操作
 		if(fling[DOWN]) {
 			if(bodyMotion == IS_RUN)
 				bodyMotion = IS_DOWN;
-			if(godLayout != null)
-				fling[DOWN] = false;
 		}
 		if(fling[UP]) {
 			if(bodyMotion == IS_RUN || bodyMotion == IS_DOWN)
 				bodyMotion = IS_UP;
-			fling[DOWN] = false;
-			fling[UP] = false;
 		}
+		fling[DOWN] = false;
+		fling[UP] = false;
 		
 		//处理身体姿势
 		if(bodyMotion == IS_UP) {
@@ -219,20 +213,16 @@ public class Businessman extends GameActor implements OnGestureListener {
 		return false;
 	}
 	
-	void autoMotion() {
-		for(int i = 0; i < godLayout.getObstacleSize(); i++) {
-			Obstacle obstacle = (Obstacle) godLayout.getObstacle(i);
-			if(obstacle.getLeft() - 10 <= getRight() && obstacle.getRight() > getRight()) {
-				switch(obstacle.getType()) {
-				case Hole :
-					fling[DOWN] = true;
-					break;
-				case Stone :
-				case Pit :
-					fling[UP] = true;
-				}
-			}
+	public int setFling(int direction) {
+		if(direction == UP) {
+			fling[UP] = true;
+			return UP;
 		}
+		if(direction == DOWN) {
+			fling[DOWN] = true;
+			return DOWN;
+		}
+		return -1;
 	}
 	
 	public void beInjured() {
@@ -255,7 +245,7 @@ public class Businessman extends GameActor implements OnGestureListener {
 	
 	@Override
 	public boolean onDown(MotionEvent arg0) {
-		//一次点击只唤醒一次
+		// 一次点击只唤醒一次
 		//Log.v(this.getClass().toString(), "onDonw");
 		return true;
 	}
@@ -269,9 +259,8 @@ public class Businessman extends GameActor implements OnGestureListener {
 	
 	@Override
 	public void onLongPress(MotionEvent e) {
-		//一旦点击稍有移动就进入scroll再进入filing 不走长按这条线了 只有按住不动才能唤醒这个方法（只唤醒一次）
+		// 一旦点击稍有移动就进入scroll再进入filing 不走长按这条线了 只有按住不动才能唤醒这个方法（只唤醒一次）
 		//Log.v(this.getClass().toString(), "onLongPress");
-		
 	}
 	
 	@Override
@@ -305,13 +294,6 @@ public class Businessman extends GameActor implements OnGestureListener {
 		//Log.v(this.getClass().toString(), "onSingleTapUp");
 		// TODO Auto-generated method stub
 		return true;
-	}
-	
-	public boolean setGodLayout(GodLayout godLayout) {
-		this.godLayout = godLayout;
-		if(this.godLayout == godLayout)
-			return true;
-		return false;
 	}
 	
 	public int getHreat() {

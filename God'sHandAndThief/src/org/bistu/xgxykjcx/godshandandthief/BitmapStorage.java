@@ -72,6 +72,20 @@ public class BitmapStorage {
 			return null;
 	}
 	
+	public static Bitmap getLose() {
+		if(RESOURCES != null)
+			return BitmapFactory.decodeResource(RESOURCES, R.drawable.lose);
+		else
+			return null;
+	}
+	
+	public static Bitmap getWin() {
+		if(RESOURCES != null)
+			return BitmapFactory.decodeResource(RESOURCES, R.drawable.win);
+		else
+			return null;
+	}
+	
 	public static Bitmap getWaitMoment() {
 		if(RESOURCES != null)
 			return BitmapFactory.decodeResource(RESOURCES, R.drawable.wait_a_moment);

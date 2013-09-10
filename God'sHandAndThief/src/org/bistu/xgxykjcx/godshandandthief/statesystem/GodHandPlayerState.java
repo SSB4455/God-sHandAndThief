@@ -1,12 +1,11 @@
 package org.bistu.xgxykjcx.godshandandthief.statesystem;
 
-import java.util.Random;
-
 import org.bistu.xgxykjcx.godshandandthief.BitmapStorage;
 import org.bistu.xgxykjcx.godshandandthief.MainActivity;
 import org.bistu.xgxykjcx.godshandandthief.MainSurfaceView;
+import org.bistu.xgxykjcx.godshandandthief.actor.Businessman;
 import org.bistu.xgxykjcx.godshandandthief.actor.GodLayout;
-import org.bistu.xgxykjcx.godshandandthief.actor.ProgressBar;
+import org.bistu.xgxykjcx.godshandandthief.actor.obstacle.Obstacle;
 import org.bistu.xgxykjcx.godshandandthief.actor.obstacle.Obstacle.ObstacleType;
 import org.bistu.xgxykjcx.godshandandthief.statesystem.StateSystem.PlayerType;
 
@@ -18,7 +17,6 @@ import android.graphics.Paint;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
-import android.widget.Toast;
 
 public class GodHandPlayerState implements IGameObject {
 	private Context context;
@@ -31,11 +29,11 @@ public class GodHandPlayerState implements IGameObject {
 	private Bitmap [] menuButton;
 	
 	private PlayerType playerType;
-	GodLayout godLayout;
+	private Businessman businessman;
+	private GodLayout godLayout;
 	
 	private ThiefPlayerState thiefPlayerState;
 	
-	//private Bitmap waitMoment;
 	private Paint paint, brushPaint;
 	
 	
@@ -48,6 +46,9 @@ public class GodHandPlayerState implements IGameObject {
 		if(playerType == PlayerType.Player) {
 			intervalBrush = 0;
 			godLayout = new GodLayout();
+			thiefPlayerState = new ThiefPlayerState(stateSystem, PlayerType.Auto);
+			thiefPlayerState.setGodLayout(godLayout);
+			businessman = thiefPlayerState.getThief();
 			
 			menuButton = new Bitmap[2];
 			menuButton[0] = BitmapStorage.getHoleMenu();
@@ -69,6 +70,11 @@ public class GodHandPlayerState implements IGameObject {
 	public void update(long elapsedTime) {
 		thiefPlayerState.update(elapsedTime);
 		
+		// 如果是单机 由上帝来给小偷操作指令
+		if(playerType == PlayerType.Player) {
+			autoMotion();
+		}
+		
 		if(intervalBrush < GodLayout.INTERVAL_LONG)
 			intervalBrush += elapsedTime;
 	}
@@ -76,10 +82,17 @@ public class GodHandPlayerState implements IGameObject {
 	public void render(Canvas canvas) {
 		canvas.drawColor(Color.BLACK);
 		
+		canvas.save();		// 开始渲染小偷的画面
+		canvas.clipRect(0, MainSurfaceView.SCREEN_H / 2, MainSurfaceView.SCREEN_W, MainSurfaceView.SCREEN_H);
+		canvas.scale(0.5f, 0.5f, 0, MainSurfaceView.SCREEN_H);
+		thiefPlayerState.render(canvas);
+		canvas.restore();
 		
+		// 开始渲染障碍按钮
 		for(int i = 0; i < menuButton.length; i++) {
 			canvas.drawBitmap(menuButton[i], menuLocation[i][X], menuLocation[i][Y], paint);
 		}
+		// 开始渲染加载时间
 		int brushAlpha = (int) (255 - 255*(intervalBrush/(float)GodLayout.INTERVAL_LONG));
 		brushPaint.setAlpha(brushAlpha > 0 ? brushAlpha : 0);
 		paint.setColor(Color.GREEN);
@@ -90,24 +103,28 @@ public class GodHandPlayerState implements IGameObject {
 			canvas.drawLine(menuLocation[i][X], brushY, menuLocation[i][X] + menuButton[i].getWidth(), brushY, paint);
 		}
 		
-		canvas.save();		//渲染小偷的画面
-		canvas.clipRect(0, MainSurfaceView.SCREEN_H / 2, MainSurfaceView.SCREEN_W, MainSurfaceView.SCREEN_H);
-		canvas.scale(0.5f, 0.5f, 0, MainSurfaceView.SCREEN_H);
-		thiefPlayerState.render(canvas);
-		canvas.restore();
 	}
 	
-	boolean setThiefPlayerState(ThiefPlayerState thiefPlayerState) {
-		this.thiefPlayerState = thiefPlayerState;
-		if(this.thiefPlayerState == thiefPlayerState)
-			return true;
-		else
-			return false;
+	void autoMotion() {
+		for(int i = 0; i < godLayout.getObstacleSize(); i++) {
+			Obstacle obstacle = (Obstacle) godLayout.getObstacle(i);
+			if(obstacle.getLeft() - 10 <= businessman.getRight() && obstacle.getRight() > businessman.getRight()) {
+				switch(obstacle.getType()) {
+				case Hole :
+					businessman.setFling(Businessman.DOWN);
+					break;
+				case Stone :
+				case Pit :
+					businessman.setFling(Businessman.UP);
+				}
+			}
+		}
 	}
 	
 	public boolean onTouchEvent(MotionEvent event) {
 		
 		if(!godLayout.getProgressBar().isPlay()) {
+			// godLayout应清理一下
 			thiefPlayerState.reset();
 		} else if(event.getAction() == MotionEvent.ACTION_DOWN && intervalBrush >= GodLayout.INTERVAL_LONG) {
 			for(int i = 0; i < menuButton.length; i++) {
@@ -133,33 +150,12 @@ public class GodHandPlayerState implements IGameObject {
 		return true;		//不让别人做了
 	}
 	
-	GodLayout createAutoGodLayout(int level) {
-		Random random = new Random();
-		godLayout = new GodLayout();
-		//godLayout.setProgressBar(new ProgressBar());
-		level = level % 10;
-		long interval = GodLayout.INTERVAL_LONG;		//至少间隔1秒
-		long partLong = (ProgressBar.TOTAL_Long - 4000 - interval * level) / level;		//多减4s是为了给第一个障碍的间隔预留2s为最后一个障碍预留2s
-		for(int i = 0; i < level; i++) {
-			long position = 2000 + i * (partLong + interval) + random.nextInt((int) partLong);
-			//第一个障碍多添加2s的准备时间
-			godLayout.addObstacle(position, i % 2 == 0 ? ObstacleType.Pit : ObstacleType.Hole);
-			Log.v(this.getClass().toString(), "create a obstacle, position = " + position + " type = " + (i % 2 == 0 ? ObstacleType.Pit + "" : ObstacleType.Hole + ""));
-		}
-		return godLayout;
-	}
-	
 	GodLayout getGodLayout() {
 		return godLayout;
 	}
 	
 	PlayerType getType() {
 		return playerType;
-	}
-	
-	public void render() {
-		// TODO Auto-generated method stub
-		
 	}
 	
 }

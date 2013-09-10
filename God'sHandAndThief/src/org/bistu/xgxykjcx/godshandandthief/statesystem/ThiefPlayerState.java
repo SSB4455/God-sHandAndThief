@@ -39,14 +39,14 @@ public class ThiefPlayerState implements IGameObject {
 		this.playerType = playerType;
 		
 		if(playerType == PlayerType.Player) {
-			businessman = new Businessman(context);
+			businessman = new Businessman();
 		}
 		if(playerType == PlayerType.Auto) {
-			businessman = new Businessman(context, playerType);
+			businessman = new Businessman(playerType);
 		}
 		
 		background = new Background(context);
-		businessman = new Businessman(context);
+		businessman = new Businessman();
 		
 		isLoseBitmap = BitmapStorage.getLose();
 		isWinBitmap = BitmapStorage.getWin();
@@ -76,14 +76,6 @@ public class ThiefPlayerState implements IGameObject {
 			godLayout.getProgressBar().stop();
 		}
 		
-		/*
-		if(touchAction == MotionEvent.ACTION_UP) {
-			if((isWin || isLose) && playerType == PlayerType.Player) {
-				Log.i(this.getClass().toString(), "touched and in update to reset");
-				reset();
-			}
-		}*/
-		
 	}
 	
 	public void render(Canvas canvas) {
@@ -97,11 +89,7 @@ public class ThiefPlayerState implements IGameObject {
 	}
 	
 	void setGodLayout(GodLayout godLayout) {
-		
 		this.godLayout = godLayout;
-		if(playerType == PlayerType.Auto) {
-			businessman.setGodLayout(godLayout);
-		}
 	}
 	
 	public void reset() {
@@ -136,8 +124,8 @@ public class ThiefPlayerState implements IGameObject {
 		return true;		//不让别人做了
 	}
 
-	public void render() {
-		// TODO Auto-generated method stub
+	Businessman getThief() {
+		return businessman;
 	}
 	
 }

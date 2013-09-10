@@ -77,10 +77,6 @@ public class GodChooseState implements IGameObject {
 						&& event.getY() < menuLocation[i][Y] + menuButton[i].getHeight()) {
 					if(i == 1) {		//电脑休走
 						GodHandPlayerState godHandPlayerState = new GodHandPlayerState(stateSystem, PlayerType.Player);
-						ThiefPlayerState thiefPlayerState = new ThiefPlayerState(stateSystem, PlayerType.Auto);
-						thiefPlayerState.setGodLayout(godHandPlayerState.getGodLayout());
-						godHandPlayerState.setThiefPlayerState(thiefPlayerState);
-						//stateSystem.addState("ThiefPlayerState", thiefPlayerState);
 						stateSystem.addState("GodHandPlayerState", godHandPlayerState);
 						stateSystem.changeState("GodHandPlayerState");
 						Toast.makeText(context, "catch computer...", Toast.LENGTH_SHORT).show();
@@ -103,11 +99,6 @@ public class GodChooseState implements IGameObject {
 			stateSystem.changeState("MenuState");
 		}
 		return true;		//不让别人做了
-	}
-	
-	public void render() {
-		// TODO Auto-generated method stub
-		
 	}
 	
 }
