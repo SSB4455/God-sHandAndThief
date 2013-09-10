@@ -1,8 +1,8 @@
 package org.bistu.xgxykjcx.godshandandthief.statesystem;
 
+import org.bistu.xgxykjcx.godshandandthief.BitmapStorage;
 import org.bistu.xgxykjcx.godshandandthief.MainActivity;
 import org.bistu.xgxykjcx.godshandandthief.MainSurfaceView;
-import org.bistu.xgxykjcx.godshandandthief.R;
 import org.bistu.xgxykjcx.godshandandthief.actor.Background;
 import org.bistu.xgxykjcx.godshandandthief.actor.Businessman;
 import org.bistu.xgxykjcx.godshandandthief.actor.GodLayout;
@@ -11,7 +11,6 @@ import org.bistu.xgxykjcx.godshandandthief.statesystem.StateSystem.PlayerType;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -23,8 +22,8 @@ public class ThiefPlayerState implements IGameObject {
 	private Context context;
 	private StateSystem stateSystem;
 	
-	private boolean isLose, isWin, reStart;
 	private PlayerType playerType;
+	private boolean isLose, isWin;
 	private GodLayout godLayout;
 	private Background background;
 	private Businessman businessman;
@@ -49,8 +48,8 @@ public class ThiefPlayerState implements IGameObject {
 		background = new Background(context);
 		businessman = new Businessman(context);
 		
-		isLoseBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.lose);
-		isWinBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.win);
+		isLoseBitmap = BitmapStorage.getLose();
+		isWinBitmap = BitmapStorage.getWin();
 		
 		paint = new Paint();
 		paint.setColor(Color.WHITE);
@@ -77,8 +76,14 @@ public class ThiefPlayerState implements IGameObject {
 			godLayout.getProgressBar().stop();
 		}
 		
-		if(reStart)
-			reset();
+		/*
+		if(touchAction == MotionEvent.ACTION_UP) {
+			if((isWin || isLose) && playerType == PlayerType.Player) {
+				Log.i(this.getClass().toString(), "touched and in update to reset");
+				reset();
+			}
+		}*/
+		
 	}
 	
 	public void render(Canvas canvas) {
@@ -100,27 +105,26 @@ public class ThiefPlayerState implements IGameObject {
 	}
 	
 	public void reset() {
-		reStart = false;
-		isLose = false;
-		isWin = false;
-		businessman.setHreat(businessman.getHreat() + 1);
-		
+		// 先将进度条归零 再给小偷加命，防止加了命有马上判断失败导致最终加多条命
 		if(playerType == PlayerType.Player) {
-			GodHandPlayerState godHandPlayerState = new GodHandPlayerState(stateSystem, PlayerType.Auto);
-			godLayout = godHandPlayerState.createAutoGodLayout(9);
+			godLayout = GodLayout.createAutoGodLayout(9);
 		}else {
 			godLayout.clear();
 			godLayout.zeroProgressBar();
 		}
+		isLose = false;
+		isWin = false;
+		businessman.setHreat(businessman.getHreat() + 1);
 	}
 	
 	public boolean onTouchEvent(MotionEvent event) {
 		if(event.getAction() == MotionEvent.ACTION_UP) {
 			if((isWin || isLose) && playerType == PlayerType.Player) {
-				Log.i(this.getClass().toString(), "touch to reset");
-				reStart = true;
+				Log.i(this.getClass().toString(), "touched and in update to reset");
+				reset();
 			}
 		}
+		
 		return businessman.onTouchEvent(event);
 	}
 	
