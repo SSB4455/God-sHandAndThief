@@ -235,7 +235,6 @@ public class Businessman extends GameActor implements OnGestureListener {
 		//Log.v(this.getClass().toString(), "onTouchEvent");
 		if(event.getAction() ==  MotionEvent.ACTION_UP) {
 	    	Log.d(this.getClass().toString(), "scrollX = " + scrollX + ", scrollY = " + scrollY);
-	    	fling[DOWN] = false;
 	    	scrollX = 0;
 			scrollY = 0;
 	    }

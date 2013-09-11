@@ -21,11 +21,6 @@ public class ProgressBar extends GameActor {
 		paint = new Paint();
 	}
 	
-	public ProgressBar(Bitmap actorBitmap) {
-		this();
-		
-	}
-	
 	@Override
 	public void update(long elapsedTime) {
 		if(isPlay)
@@ -53,6 +48,10 @@ public class ProgressBar extends GameActor {
 		if(playTime >= TOTAL_Long)
 			return true;
 		return false;
+	}
+	
+	public void start() {
+		isPlay = true;
 	}
 	
 	public void stop() {

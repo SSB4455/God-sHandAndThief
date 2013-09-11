@@ -78,17 +78,19 @@ public class ThiefChooseState implements IGameObject {
 						&& menuLocation[i][Y] < event.getY() 
 						&& event.getY() < menuLocation[i][Y] + menuButton[i].getHeight()) {
 					if(i == 1) {
-						ThiefPlayerState thiefPlayerState = new ThiefPlayerState(stateSystem, PlayerType.Player);
-						thiefPlayerState.setGodLayout(GodLayout.createAutoGodLayout(9));
+						ThiefPlayerState thiefPlayerState = new ThiefPlayerState(stateSystem, GodLayout.createAutoGodLayout(9), PlayerType.Player);
 						stateSystem.addState("ThiefPlayerState", thiefPlayerState);
 						stateSystem.changeState("ThiefPlayerState");
 						Toast.makeText(context, "Comptuer pursue me...", Toast.LENGTH_SHORT).show();
 					}
 					if(i == 2) {
-						IGameObject bluetoothChooseState = new BluetoothChooseState(stateSystem, BluetoothChooseState.THTIF);
-						stateSystem.addState("BluetoothChooseState", bluetoothChooseState);
-						stateSystem.changeState("BluetoothChooseState");
-						Toast.makeText(context, "Bluetooth Choose State", Toast.LENGTH_SHORT).show();
+						// start bluetooth
+						((MainActivity) MainActivity.CONTEXT).startBluetooth(MainActivity.THIEF);
+						// 启动用蓝牙连接的小偷状态
+						ThiefPlayerState thiefPlayerState = new ThiefPlayerState(stateSystem, new GodLayout(), PlayerType.PlayerWithBlueTooth);
+						stateSystem.addState("ThiefPlayerState", thiefPlayerState);
+						stateSystem.changeState("ThiefPlayerState");
+						Toast.makeText(context, "Bluetooth pursue me...", Toast.LENGTH_SHORT).show();
 					}
 				}
 			}

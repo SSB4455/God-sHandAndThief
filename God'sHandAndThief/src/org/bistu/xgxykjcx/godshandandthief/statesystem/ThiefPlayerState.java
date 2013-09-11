@@ -1,6 +1,7 @@
 package org.bistu.xgxykjcx.godshandandthief.statesystem;
 
 import org.bistu.xgxykjcx.godshandandthief.BitmapStorage;
+import org.bistu.xgxykjcx.godshandandthief.BluetoothChatService;
 import org.bistu.xgxykjcx.godshandandthief.MainActivity;
 import org.bistu.xgxykjcx.godshandandthief.MainSurfaceView;
 import org.bistu.xgxykjcx.godshandandthief.actor.Background;
@@ -33,29 +34,39 @@ public class ThiefPlayerState implements IGameObject {
 	
 	
 	
-	public ThiefPlayerState(StateSystem stateSystem, PlayerType playerType) {
+	public ThiefPlayerState(StateSystem stateSystem, GodLayout godLayout, PlayerType playerType) {
 		this.context = MainActivity.CONTEXT;
 		this.stateSystem = stateSystem;
 		this.playerType = playerType;
 		
-		if(playerType == PlayerType.Player) {
-			businessman = new Businessman();
-		}
-		if(playerType == PlayerType.Auto) {
-			businessman = new Businessman(playerType);
-		}
-		
+		this.godLayout = godLayout;
 		background = new Background(context);
-		businessman = new Businessman();
 		
 		isLoseBitmap = BitmapStorage.getLose();
 		isWinBitmap = BitmapStorage.getWin();
+		
+		if(playerType == PlayerType.Player 
+				|| playerType == PlayerType.Auto) {
+			businessman = new Businessman();
+		}
+		if(playerType == PlayerType.PlayerWithBlueTooth) {
+			businessman = new Businessman();
+			godLayout.getProgressBar().stop();
+		}
+		if(playerType == PlayerType.AutoWithBlueTooth) {
+			businessman = new Businessman(PlayerType.AutoWithBlueTooth);
+		}
 		
 		paint = new Paint();
 		paint.setColor(Color.WHITE);
 	}
 	
 	public void update(long elapsedTime) {
+		
+		if(((MainActivity) MainActivity.CONTEXT).getBluetoothState() != BluetoothChatService.STATE_CONNECTED)
+			godLayout.getProgressBar().stop();
+		else
+			godLayout.getProgressBar().start();
 		
 		if(godLayout.getProgressBar().isPlay()) {
 			background.update(elapsedTime);
@@ -86,10 +97,12 @@ public class ThiefPlayerState implements IGameObject {
 			canvas.drawBitmap(isWinBitmap, MainSurfaceView.SCREEN_W / 5, MainSurfaceView.SCREEN_H - isWinBitmap.getHeight(), paint);
 		if(isLose)
 			canvas.drawBitmap(isLoseBitmap, MainSurfaceView.SCREEN_W / 5, MainSurfaceView.SCREEN_H - isLoseBitmap.getHeight(), paint);
-	}
-	
-	void setGodLayout(GodLayout godLayout) {
-		this.godLayout = godLayout;
+		
+		if(playerType == PlayerType.PlayerWithBlueTooth) {
+			canvas.drawText("对方设备：", 50, MainSurfaceView.SCREEN_H - 50, paint);
+			canvas.drawText(((MainActivity) MainActivity.CONTEXT).getConnectedDeviceName(), 110, MainSurfaceView.SCREEN_H - 50, paint);
+			
+		}
 	}
 	
 	public void reset() {

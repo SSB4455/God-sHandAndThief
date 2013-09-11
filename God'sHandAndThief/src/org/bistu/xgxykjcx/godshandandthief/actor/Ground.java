@@ -40,8 +40,8 @@ public class Ground extends GameActor {
 		else
 			actorX += (Businessman.SPEED * elapsedTime) / 1000;
 		
-		//超出屏幕转回
-		//两倍屏幕是为了帮助上帝那边
+		// 超出屏幕转回
+		// 两倍屏幕是为了帮助上帝那边
 		if(actorX < MainSurfaceView.SCREEN_W * 2 - frameW * (shrink + 1) / 2) {
 			actorX = frameW * (shrink - 1) / 2;
 		}

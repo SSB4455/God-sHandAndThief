@@ -245,7 +245,7 @@ public class BluetoothChatService {
                     Log.e(TAG, "accept() failed", e);
                     break;
                 }
-
+                
                 // If a connection was accepted
                 if (socket != null) {
                 	synchronized (BluetoothChatService.this) {
@@ -406,8 +406,7 @@ public class BluetoothChatService {
                 mmOutStream.write(buffer);
 
                 // Share the sent message back to the UI Activity
-                mHandler.obtainMessage(BluetoothChooseState.MESSAGE_WRITE, -1, -1, buffer)
-                        .sendToTarget();
+                mHandler.obtainMessage(BluetoothChooseState.MESSAGE_WRITE, -1, -1, buffer).sendToTarget();
             } catch (IOException e) {
                 Log.e(TAG, "Exception during write", e);
             }

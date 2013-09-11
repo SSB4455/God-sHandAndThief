@@ -69,22 +69,25 @@ public class GodChooseState implements IGameObject {
 	}
 	
 	public boolean onTouchEvent(MotionEvent event) {
-		if(event.getAction() == MotionEvent.ACTION_UP) {		//防止到另一个State中产生Fling的崩溃
+		if(event.getAction() == MotionEvent.ACTION_UP) {		// 防止到另一个State中产生Fling的崩溃
 			for(int i = 0; i < menuLocation.length; i++) {
 				if(menuLocation[i][X] < event.getX() 
 						&& event.getX() <  menuLocation[i][X] + menuButton[i].getWidth() 
 						&& menuLocation[i][Y] < event.getY() 
 						&& event.getY() < menuLocation[i][Y] + menuButton[i].getHeight()) {
-					if(i == 1) {		//电脑休走
+					if(i == 1) {		// 电脑休走
 						GodHandPlayerState godHandPlayerState = new GodHandPlayerState(stateSystem, PlayerType.Player);
 						stateSystem.addState("GodHandPlayerState", godHandPlayerState);
 						stateSystem.changeState("GodHandPlayerState");
 						Toast.makeText(context, "catch computer...", Toast.LENGTH_SHORT).show();
 					}
-					if(i == 2) {		//小偷休走
-						IGameObject bluetoothChooseState = new BluetoothChooseState(stateSystem, BluetoothChooseState.GODSHAND);
-						stateSystem.addState("BluetoothChooseState", bluetoothChooseState);
-						stateSystem.changeState("BluetoothChooseState");
+					if(i == 2) {		// 小偷休走
+						// start bluetooth
+						((MainActivity) MainActivity.CONTEXT).startBluetooth(MainActivity.GODSHAND);
+						// 启动用蓝牙连接的上帝之手状态
+						GodHandPlayerState godHandPlayerState = new GodHandPlayerState(stateSystem, PlayerType.PlayerWithBlueTooth);
+						stateSystem.addState("GodHandPlayerState", godHandPlayerState);
+						stateSystem.changeState("GodHandPlayerState");
 						Toast.makeText(context, "Bluetooth Choose State", Toast.LENGTH_SHORT).show();
 					}
 				}

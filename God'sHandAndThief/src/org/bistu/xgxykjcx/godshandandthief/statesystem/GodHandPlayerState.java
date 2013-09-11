@@ -43,11 +43,10 @@ public class GodHandPlayerState implements IGameObject {
 		this.stateSystem = stateSystem;
 		this.playerType = playerType;
 		
-		if(playerType == PlayerType.Player) {
+		if(playerType == PlayerType.Player || playerType == PlayerType.PlayerWithBlueTooth) {
 			intervalBrush = 0;
 			godLayout = new GodLayout();
-			thiefPlayerState = new ThiefPlayerState(stateSystem, PlayerType.Auto);
-			thiefPlayerState.setGodLayout(godLayout);
+			thiefPlayerState = new ThiefPlayerState(stateSystem, godLayout, PlayerType.Auto);
 			businessman = thiefPlayerState.getThief();
 			
 			menuButton = new Bitmap[2];
@@ -73,6 +72,10 @@ public class GodHandPlayerState implements IGameObject {
 		// 如果是单机 由上帝来给小偷操作指令
 		if(playerType == PlayerType.Player) {
 			autoMotion();
+		}
+		
+		if(playerType == PlayerType.PlayerWithBlueTooth) {
+			
 		}
 		
 		if(intervalBrush < GodLayout.INTERVAL_LONG)
@@ -101,6 +104,12 @@ public class GodHandPlayerState implements IGameObject {
 			canvas.drawRect(menuLocation[i][X], menuLocation[i][Y], menuLocation[i][X] + menuButton[i].getWidth(), brushY, brushPaint);
 			
 			canvas.drawLine(menuLocation[i][X], brushY, menuLocation[i][X] + menuButton[i].getWidth(), brushY, paint);
+		}
+		
+		if(playerType == PlayerType.PlayerWithBlueTooth) {
+			canvas.drawText("对方设备：", 50, MainSurfaceView.SCREEN_H - 50, paint);
+			canvas.drawText(((MainActivity) MainActivity.CONTEXT).getConnectedDeviceName(), 110, MainSurfaceView.SCREEN_H - 50, paint);
+			
 		}
 		
 	}
@@ -139,7 +148,7 @@ public class GodHandPlayerState implements IGameObject {
 			}
 		}
 		
-		return true;
+		return false;
 	}
 	
 	public boolean onKeyDown(int keyCode, KeyEvent event) {

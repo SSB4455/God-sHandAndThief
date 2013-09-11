@@ -9,8 +9,10 @@ import android.view.MotionEvent;
 
 public class StateSystem {
 	public enum PlayerType {
-		Auto,		//自动，电脑控制
-		Player,		//手动，玩家控制
+		Player,		// 手动，玩家控制
+		Auto,		// 自动，电脑控制
+		PlayerWithBlueTooth,	// 通过蓝牙联机，玩家控制
+		AutoWithBlueTooth,		// 通过蓝牙联机，自动控制
 	}
 	
 	protected Hashtable<String, IGameObject> stateStore;

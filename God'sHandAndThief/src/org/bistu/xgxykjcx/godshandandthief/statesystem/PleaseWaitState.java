@@ -54,9 +54,4 @@ public class PleaseWaitState implements IGameObject {
 		return false;
 	}
 	
-	public void render() {
-		// TODO Auto-generated method stub
-		
-	}
-	
 }
