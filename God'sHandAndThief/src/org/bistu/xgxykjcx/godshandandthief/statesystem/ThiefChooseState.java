@@ -84,13 +84,13 @@ public class ThiefChooseState implements IGameObject {
 						Toast.makeText(context, "Comptuer pursue me...", Toast.LENGTH_SHORT).show();
 					}
 					if(i == 2) {
-						// start bluetooth
-						((MainActivity) MainActivity.CONTEXT).startBluetooth(MainActivity.THIEF);
 						// 启动用蓝牙连接的小偷状态
 						ThiefPlayerState thiefPlayerState = new ThiefPlayerState(stateSystem, new GodLayout(), PlayerType.PlayerWithBlueTooth);
+						// start bluetooth
+						((MainActivity) MainActivity.CONTEXT).startBluetooth(MainActivity.THIEF, thiefPlayerState);
 						stateSystem.addState("ThiefPlayerState", thiefPlayerState);
 						stateSystem.changeState("ThiefPlayerState");
-						Toast.makeText(context, "Bluetooth pursue me...", Toast.LENGTH_SHORT).show();
+						Toast.makeText(context, "请允许开启蓝牙to链接上帝之手...", Toast.LENGTH_LONG).show();
 					}
 				}
 			}

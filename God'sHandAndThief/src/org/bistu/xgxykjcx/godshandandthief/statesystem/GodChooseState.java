@@ -82,13 +82,13 @@ public class GodChooseState implements IGameObject {
 						Toast.makeText(context, "catch computer...", Toast.LENGTH_SHORT).show();
 					}
 					if(i == 2) {		// 小偷休走
-						// start bluetooth
-						((MainActivity) MainActivity.CONTEXT).startBluetooth(MainActivity.GODSHAND);
 						// 启动用蓝牙连接的上帝之手状态
 						GodHandPlayerState godHandPlayerState = new GodHandPlayerState(stateSystem, PlayerType.PlayerWithBlueTooth);
+						// start bluetooth
+						((MainActivity) MainActivity.CONTEXT).startBluetooth(MainActivity.GODSHAND, godHandPlayerState);
 						stateSystem.addState("GodHandPlayerState", godHandPlayerState);
 						stateSystem.changeState("GodHandPlayerState");
-						Toast.makeText(context, "Bluetooth Choose State", Toast.LENGTH_SHORT).show();
+						Toast.makeText(context, "点击屏幕to扫描小偷...", Toast.LENGTH_LONG).show();
 					}
 				}
 			}

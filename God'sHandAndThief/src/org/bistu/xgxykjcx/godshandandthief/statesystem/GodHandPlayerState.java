@@ -1,6 +1,7 @@
 package org.bistu.xgxykjcx.godshandandthief.statesystem;
 
 import org.bistu.xgxykjcx.godshandandthief.BitmapStorage;
+import org.bistu.xgxykjcx.godshandandthief.BluetoothChatService;
 import org.bistu.xgxykjcx.godshandandthief.MainActivity;
 import org.bistu.xgxykjcx.godshandandthief.MainSurfaceView;
 import org.bistu.xgxykjcx.godshandandthief.actor.Businessman;
@@ -9,7 +10,6 @@ import org.bistu.xgxykjcx.godshandandthief.actor.obstacle.Obstacle;
 import org.bistu.xgxykjcx.godshandandthief.actor.obstacle.Obstacle.ObstacleType;
 import org.bistu.xgxykjcx.godshandandthief.statesystem.StateSystem.PlayerType;
 
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -19,7 +19,7 @@ import android.view.KeyEvent;
 import android.view.MotionEvent;
 
 public class GodHandPlayerState implements IGameObject {
-	private Context context;
+	//private Context context;
 	private StateSystem stateSystem;
 	
 	private final int X = 0, Y = 1;
@@ -39,31 +39,36 @@ public class GodHandPlayerState implements IGameObject {
 	
 	
 	public GodHandPlayerState(StateSystem stateSystem, PlayerType playerType) {
-		this.context = MainActivity.CONTEXT;
+		//this.context = MainActivity.CONTEXT;
 		this.stateSystem = stateSystem;
 		this.playerType = playerType;
 		
-		if(playerType == PlayerType.Player || playerType == PlayerType.PlayerWithBlueTooth) {
-			intervalBrush = 0;
-			godLayout = new GodLayout();
-			thiefPlayerState = new ThiefPlayerState(stateSystem, godLayout, PlayerType.Auto);
-			businessman = thiefPlayerState.getThief();
-			
-			menuButton = new Bitmap[2];
-			menuButton[0] = BitmapStorage.getHoleMenu();
-			menuButton[1] = BitmapStorage.getPitMenu();
-			
-			menuLocation = new float[2][];
-			menuLocation[0] = new float[2];
-			menuLocation[0][X] = (MainSurfaceView.SCREEN_W * 5 / 8);
-			menuLocation[0][Y] = (MainSurfaceView.SCREEN_H / 8);
-			menuLocation[1] = new float[2];
-			menuLocation[1][X] = (MainSurfaceView.SCREEN_W * 3 / 4);
-			menuLocation[1][Y] = (MainSurfaceView.SCREEN_H / 6);
-			
-			paint = new Paint();
-			brushPaint = new Paint();
+		
+		intervalBrush = 0;
+		godLayout = new GodLayout();
+		if(playerType == PlayerType.Player) {
+		thiefPlayerState = new ThiefPlayerState(stateSystem, godLayout, PlayerType.Auto);
 		}
+		if(playerType == PlayerType.PlayerWithBlueTooth) {
+			thiefPlayerState = new ThiefPlayerState(stateSystem, godLayout, PlayerType.AutoWithBlueTooth);
+		}
+		businessman = thiefPlayerState.getThief();
+		
+		menuButton = new Bitmap[2];
+		menuButton[0] = BitmapStorage.getHoleMenu();
+		menuButton[1] = BitmapStorage.getPitMenu();
+		
+		menuLocation = new float[2][];
+		menuLocation[0] = new float[2];
+		menuLocation[0][X] = (MainSurfaceView.SCREEN_W * 5 / 8);
+		menuLocation[0][Y] = (MainSurfaceView.SCREEN_H / 8);
+		menuLocation[1] = new float[2];
+		menuLocation[1][X] = (MainSurfaceView.SCREEN_W * 3 / 4);
+		menuLocation[1][Y] = (MainSurfaceView.SCREEN_H / 6);
+		
+		paint = new Paint();
+		brushPaint = new Paint();
+		
 	}
 	
 	public void update(long elapsedTime) {
@@ -71,7 +76,7 @@ public class GodHandPlayerState implements IGameObject {
 		
 		// 如果是单机 由上帝来给小偷操作指令
 		if(playerType == PlayerType.Player) {
-			autoMotion();
+			autoFling();
 		}
 		
 		if(playerType == PlayerType.PlayerWithBlueTooth) {
@@ -114,7 +119,7 @@ public class GodHandPlayerState implements IGameObject {
 		
 	}
 	
-	void autoMotion() {
+	void autoFling() {
 		for(int i = 0; i < godLayout.getObstacleSize(); i++) {
 			Obstacle obstacle = (Obstacle) godLayout.getObstacle(i);
 			if(obstacle.getLeft() - 10 <= businessman.getRight() && obstacle.getRight() > businessman.getRight()) {
@@ -130,11 +135,20 @@ public class GodHandPlayerState implements IGameObject {
 		}
 	}
 	
+	public void setFling(int direction) {
+		businessman.setFling(direction);
+	}
+	
 	public boolean onTouchEvent(MotionEvent event) {
-		
-		if(!godLayout.getProgressBar().isPlay()) {
-			// godLayout应清理一下
-			thiefPlayerState.reset();
+		if(thiefPlayerState.isOver()) {
+			if(playerType == PlayerType.Player) {
+				// godLayout应清理一下
+				thiefPlayerState.reset(ThiefPlayerState.MODEL_NORMAL);
+			}
+			if(playerType == PlayerType.PlayerWithBlueTooth) {
+				stateSystem.changeState("MenuState");
+				((MainActivity) MainActivity.CONTEXT).stopBluetooth();
+			}
 		} else if(event.getAction() == MotionEvent.ACTION_DOWN && intervalBrush >= GodLayout.INTERVAL_LONG) {
 			for(int i = 0; i < menuButton.length; i++) {
 				if(menuLocation[i][X] < event.getX() 
@@ -143,6 +157,9 @@ public class GodHandPlayerState implements IGameObject {
 						&& event.getY() < menuLocation[i][Y] + menuButton[i].getHeight()) {
 					intervalBrush = 0;
 					godLayout.addObstacle(4000, i == 0 ? ObstacleType.Hole : ObstacleType.Pit);
+					if(playerType == PlayerType.PlayerWithBlueTooth && 
+							((MainActivity) MainActivity.CONTEXT).getChatServiceState() == BluetoothChatService.STATE_CONNECTED)
+						((MainActivity) MainActivity.CONTEXT).sendMessage("" + i);
 					//Toast.makeText(context, "add a " + (i == 0 ? "hole" : "pit"), Toast.LENGTH_SHORT).show();
 				}
 			}
@@ -155,6 +172,7 @@ public class GodHandPlayerState implements IGameObject {
 		if(keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_DOWN) {
 			Log.d(this.getClass().toString(), "onKeyDown ——> back");
 			stateSystem.changeState("MenuState");
+			((MainActivity) MainActivity.CONTEXT).stopBluetooth();
 		}
 		return true;		//不让别人做了
 	}
@@ -165,6 +183,11 @@ public class GodHandPlayerState implements IGameObject {
 	
 	PlayerType getType() {
 		return playerType;
+	}
+
+	public void reset(int model) {
+		thiefPlayerState.reset(model);
+		
 	}
 	
 }

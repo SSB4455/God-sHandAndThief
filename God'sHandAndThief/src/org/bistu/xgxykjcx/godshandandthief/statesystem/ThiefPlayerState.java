@@ -8,6 +8,7 @@ import org.bistu.xgxykjcx.godshandandthief.actor.Background;
 import org.bistu.xgxykjcx.godshandandthief.actor.Businessman;
 import org.bistu.xgxykjcx.godshandandthief.actor.GodLayout;
 import org.bistu.xgxykjcx.godshandandthief.actor.obstacle.Obstacle;
+import org.bistu.xgxykjcx.godshandandthief.actor.obstacle.Obstacle.ObstacleType;
 import org.bistu.xgxykjcx.godshandandthief.statesystem.StateSystem.PlayerType;
 
 import android.content.Context;
@@ -20,6 +21,9 @@ import android.view.KeyEvent;
 import android.view.MotionEvent;
 
 public class ThiefPlayerState implements IGameObject {
+	public final static int MODEL_BRAND_NEW = 0;
+	public final static int MODEL_NORMAL = 1;
+	
 	private Context context;
 	private StateSystem stateSystem;
 	
@@ -45,17 +49,10 @@ public class ThiefPlayerState implements IGameObject {
 		isLoseBitmap = BitmapStorage.getLose();
 		isWinBitmap = BitmapStorage.getWin();
 		
-		if(playerType == PlayerType.Player 
-				|| playerType == PlayerType.Auto) {
+		if(playerType == PlayerType.PlayerWithBlueTooth)
+			businessman = new Businessman(PlayerType.PlayerWithBlueTooth);
+		else
 			businessman = new Businessman();
-		}
-		if(playerType == PlayerType.PlayerWithBlueTooth) {
-			businessman = new Businessman();
-			godLayout.getProgressBar().stop();
-		}
-		if(playerType == PlayerType.AutoWithBlueTooth) {
-			businessman = new Businessman(PlayerType.AutoWithBlueTooth);
-		}
 		
 		paint = new Paint();
 		paint.setColor(Color.WHITE);
@@ -63,10 +60,14 @@ public class ThiefPlayerState implements IGameObject {
 	
 	public void update(long elapsedTime) {
 		
-		if(((MainActivity) MainActivity.CONTEXT).getBluetoothState() != BluetoothChatService.STATE_CONNECTED)
-			godLayout.getProgressBar().stop();
-		else
-			godLayout.getProgressBar().start();
+		if(playerType == PlayerType.PlayerWithBlueTooth || playerType == PlayerType.AutoWithBlueTooth) {
+			if(((MainActivity) MainActivity.CONTEXT).getChatServiceState() != BluetoothChatService.STATE_CONNECTED)
+				godLayout.getProgressBar().stop();
+
+			if(((MainActivity) MainActivity.CONTEXT).getChatServiceState() == BluetoothChatService.STATE_CONNECTED 
+					&& !isOver() && !godLayout.getProgressBar().isOver())
+				godLayout.getProgressBar().start();
+		}
 		
 		if(godLayout.getProgressBar().isPlay()) {
 			background.update(elapsedTime);
@@ -105,7 +106,7 @@ public class ThiefPlayerState implements IGameObject {
 		}
 	}
 	
-	public void reset() {
+	public void reset(int model) {
 		// 先将进度条归零 再给小偷加命，防止加了命有马上判断失败导致最终加多条命
 		if(playerType == PlayerType.Player) {
 			godLayout = GodLayout.createAutoGodLayout(9);
@@ -115,14 +116,23 @@ public class ThiefPlayerState implements IGameObject {
 		}
 		isLose = false;
 		isWin = false;
-		businessman.setHreat(businessman.getHreat() + 1);
+		if(model == MODEL_BRAND_NEW)
+			businessman.setHreat(3);
+		if(model == MODEL_NORMAL)
+			businessman.setHreat(businessman.getHreat() + 1);
 	}
 	
 	public boolean onTouchEvent(MotionEvent event) {
 		if(event.getAction() == MotionEvent.ACTION_UP) {
-			if((isWin || isLose) && playerType == PlayerType.Player) {
-				Log.i(this.getClass().toString(), "touched and in update to reset");
-				reset();
+			if(isWin || isLose) {
+				if(playerType == PlayerType.Player) {
+					Log.i(this.getClass().toString(), "touched and in update to reset");
+					reset(MODEL_NORMAL);
+				}
+				if(playerType == PlayerType.PlayerWithBlueTooth) {
+					stateSystem.changeState("MenuState");
+					((MainActivity) MainActivity.CONTEXT).stopBluetooth();
+				}
 			}
 		}
 		
@@ -133,10 +143,21 @@ public class ThiefPlayerState implements IGameObject {
 		if(keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_DOWN) {
 			Log.i(this.getClass().toString(), "onKeyDown ——> back");
 			stateSystem.changeState("MenuState");
+			((MainActivity) MainActivity.CONTEXT).stopBluetooth();
 		}
 		return true;		//不让别人做了
 	}
-
+	
+	public void addObstacleByBluetooth(int obstacleType) {
+		godLayout.addObstacle(4000, obstacleType == 0 ? ObstacleType.Hole : ObstacleType.Pit);
+	}
+	
+	boolean isOver() {
+		if(isWin || isLose)
+			return true;
+		return false;
+	}
+	
 	Businessman getThief() {
 		return businessman;
 	}

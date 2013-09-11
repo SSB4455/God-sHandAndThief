@@ -1,5 +1,6 @@
 package org.bistu.xgxykjcx.godshandandthief.actor;
 
+import org.bistu.xgxykjcx.godshandandthief.BluetoothChatService;
 import org.bistu.xgxykjcx.godshandandthief.MainActivity;
 import org.bistu.xgxykjcx.godshandandthief.MainSurfaceView;
 import org.bistu.xgxykjcx.godshandandthief.R;
@@ -22,22 +23,21 @@ public class Businessman extends GameActor implements OnGestureListener {
 	public static final int UP = 0;
 	public static final int DOWN = 1;
 	
-	private Context context;
-	
-	private int health, frameW, frameH, incrementWHalf, incrementHHalf, currentFrame, bodyMotion;
-	private int heartStartX, heartY, heartInterval;
-	private int upHight;
-	private int [] frameTotal;
-	private float scrollX, scrollY;
-	PlayerType playerType;
-	
 	private final int IS_RUN = 0;
 	private final int IS_UP = 1;
 	private final int IS_DOWN = 2;
 	private final int IS_INJURED = 3;
-	private long brushTime, upTime, downTime, injuredTime;
 	
+	private Context context;
+	
+	private int health, frameW, frameH, incrementWHalf, incrementHHalf, currentFrame, bodyMotion;
+	private int heartStartX, heartY, heartInterval;
+	//private int upHight;		// 跳跃高度 默认是一个身高
+	private int [] frameTotal;
+	private long brushTime, upTime, downTime, injuredTime;
+	private float scrollX, scrollY;
 	private boolean [] fling;
+	private PlayerType playerType;
 	
 	private Bitmap [][] frame;
 	private Bitmap heart;
@@ -47,6 +47,7 @@ public class Businessman extends GameActor implements OnGestureListener {
 	
 	public Businessman() {
 		this.context = MainActivity.CONTEXT;
+		playerType = null;
 		
 		frameTotal = new int[4];
 		frame = new Bitmap[4][];
@@ -54,8 +55,8 @@ public class Businessman extends GameActor implements OnGestureListener {
 		bodyMotion = IS_RUN;
 		frameTotal[bodyMotion] = 5;
 		actorBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.businessman_run);
-		frameW = actorBitmap.getWidth();			//100
-		frameH = actorBitmap.getHeight() / 5;		//120
+		frameW = actorBitmap.getWidth();			// 100
+		frameH = actorBitmap.getHeight() / 5;		// 120
 		frame[bodyMotion] = new Bitmap[frameTotal[bodyMotion]];
 		for(int i = 0; i < frameTotal[bodyMotion]; i++) {
 			frame[bodyMotion][i] = Bitmap.createBitmap(actorBitmap, 0, frameH * i, frameW, frameH);
@@ -92,13 +93,13 @@ public class Businessman extends GameActor implements OnGestureListener {
 		
 		brushTime = 0;
 		
-		hight = MainSurfaceView.SCREEN_H / 4;		//高度是屏幕高度1/4
+		hight = MainSurfaceView.SCREEN_H / 4;		// 高度是屏幕高度1/4
 		shrink = hight / (float) frameH;
 		width = (int) (frameW * shrink);
 		incrementWHalf = (int) (frameW * (shrink - 1) / 2);
 		incrementHHalf = (int) (frameH * (shrink - 1) / 2);
 		
-		actorX = MainSurfaceView.SCREEN_W / 5 + incrementWHalf;		//定位
+		actorX = MainSurfaceView.SCREEN_W / 5 + incrementWHalf;		// 定位
 		actorY = Background.FLOOR - frameH - incrementHHalf;
 		Log.d(this.getClass().toString(), "actorX = " + actorX + ", frameW = " + frameW + ", frameH = " + frameH);
 		Log.d(this.getClass().toString(), "incrementWHalf = " + incrementWHalf + ", incrementHHalf = " + incrementHHalf);
@@ -116,11 +117,7 @@ public class Businessman extends GameActor implements OnGestureListener {
 	
 	public Businessman(PlayerType playerType) {
 		this();
-		
 		this.playerType = playerType;
-		if(playerType == PlayerType.Auto) {
-		}
-		
 	}
 	
 	@Override
@@ -139,7 +136,7 @@ public class Businessman extends GameActor implements OnGestureListener {
 		fling[DOWN] = false;
 		fling[UP] = false;
 		
-		//处理身体姿势
+		// 处理身体姿势
 		if(bodyMotion == IS_UP) {
 			actorY = Background.FLOOR - frameH - incrementHHalf - hight;
 			if(upTime < 800 || fling[UP])
@@ -272,10 +269,16 @@ public class Businessman extends GameActor implements OnGestureListener {
 		
 		if(scrollLength < -scrollY) {
 			fling[UP] = true;
+			if(playerType == PlayerType.PlayerWithBlueTooth && 
+					((MainActivity) MainActivity.CONTEXT).getChatServiceState() == BluetoothChatService.STATE_CONNECTED)
+				((MainActivity) MainActivity.CONTEXT).sendMessage("" + UP);
 			Log.d(this.getClass().toString(), "onScroll to up.");
 		}
 		if((scrollX > scrollLength && scrollY < scrollLength / 2) || scrollY > scrollLength) {
 			fling[DOWN] = true;
+			if(playerType == PlayerType.PlayerWithBlueTooth && 
+					((MainActivity) MainActivity.CONTEXT).getChatServiceState() == BluetoothChatService.STATE_CONNECTED)
+				((MainActivity) MainActivity.CONTEXT).sendMessage("" + DOWN);
 			Log.d(this.getClass().toString(), "onScroll to right.");
 		}
 		return false;

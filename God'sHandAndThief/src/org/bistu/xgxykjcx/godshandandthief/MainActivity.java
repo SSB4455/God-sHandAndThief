@@ -1,7 +1,11 @@
 package org.bistu.xgxykjcx.godshandandthief;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+
+import org.bistu.xgxykjcx.godshandandthief.actor.Businessman;
+import org.bistu.xgxykjcx.godshandandthief.statesystem.GodHandPlayerState;
+import org.bistu.xgxykjcx.godshandandthief.statesystem.IGameObject;
+import org.bistu.xgxykjcx.godshandandthief.statesystem.ThiefPlayerState;
 
 import android.os.Bundle;
 import android.os.Handler;
@@ -37,17 +41,18 @@ public class MainActivity extends Activity {
 	//public static final String GODSHAND_TAIL = "_GodsHand";
 	
 	// Intent request codes
-    private static final int REQUEST_CONNECT_DEVICE = 1;
-    //private static final int REQUEST_CONNECT_DEVICE_INSECURE = 2;
-    private static final int REQUEST_ENABLE_BT = 3;
+	//private static final int REQUEST_CONNECT_DEVICE = 1;
+	//private static final int REQUEST_CONNECT_DEVICE_INSECURE = 2;
+	private static final int REQUEST_ENABLE_BT = 3;
 	
 	public static Context CONTEXT;
 	
-	private int mType;
+	private int mtype;
+	private IGameObject playerState;
 	// Name of the connected device
 	private String mConnectedDeviceName = null;
-	private ArrayList<String> devicesName, oneMessages, twoMessages;
-	private HashMap<String, String> devicesAddress;
+	private ArrayList<String> devicesName;
+	//private HashMap<String, String> devicesAddress;
 	// Local Bluetooth adapter
 	BluetoothAdapter mBluetoothAdapter;
 	// Member object for the chat services
@@ -68,10 +73,9 @@ public class MainActivity extends Activity {
 		setContentView(new MainSurfaceView(this));
 	}
 	
-	/*
 	@Override
 	public synchronized void onPause() {
-		//super.onPause();
+		super.onPause();
 		Log.e(this.getClass().toString(), "- ON PAUSE -");
 	}
 	
@@ -80,7 +84,6 @@ public class MainActivity extends Activity {
 		super.onStop();
 		Log.e(this.getClass().toString(), "-- ON STOP --");
 	}
-	*/
 	
 	@Override
 	protected void onDestroy() {
@@ -92,12 +95,15 @@ public class MainActivity extends Activity {
 			mBluetoothAdapter.cancelDiscovery();
 		}
 		
-		// Unregister broadcast listeners
-		this.unregisterReceiver(mReceiver);
+		if(mtype == GODSHAND) {
+			// Unregister broadcast listeners
+			this.unregisterReceiver(mReceiver);
+		}
 	}
 
-	public void startBluetooth(int type) {
-		mType = type;
+	public void startBluetooth(int type, IGameObject playerState) {
+		mtype = type;
+		this.playerState = playerState;
 		
 		mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 		if (mBluetoothAdapter == null) {
@@ -107,16 +113,12 @@ public class MainActivity extends Activity {
 		}
 		
 		devicesName = new ArrayList<String>();
-		oneMessages = new ArrayList<String>();
-		twoMessages = new ArrayList<String>();
 		
 		if(type == THIEF) {
 			// 小偷 直接请求能够被搜索
-			if (mBluetoothAdapter.getScanMode() != BluetoothAdapter.SCAN_MODE_CONNECTABLE_DISCOVERABLE) {
-	            Intent discoverableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
-	            discoverableIntent.putExtra(BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, 120);
-	            startActivityForResult(discoverableIntent, REQUEST_ENABLE_BT);
-	        }
+            Intent discoverableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
+            discoverableIntent.putExtra(BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, 120);
+            startActivityForResult(discoverableIntent, REQUEST_ENABLE_BT);
 		}
 		
 		if(type == GODSHAND) {
@@ -124,14 +126,22 @@ public class MainActivity extends Activity {
 			if (!mBluetoothAdapter.isEnabled()) {
 	            Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
 	            startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
-	        // Otherwise, setup the chat session
-	        } else {
+	        } else {		// Otherwise, setup the chat session
 	            setupChat();
 	        }
 			
 			// 注册BroadcastReceiver
 			IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
 			this.registerReceiver(mReceiver, filter);		// 不要忘了之后解除绑定
+		}
+	}
+	
+	public void stopBluetooth() {
+		if (mChatService != null) {
+			Log.d(BluetoothTag, "stopBluetooth()");
+			mChatService.stop();
+			mChatService = null;
+			
 		}
 	}
 	
@@ -156,7 +166,7 @@ public class MainActivity extends Activity {
 		}
 		
 		// 小偷要加上小偷的尾巴来让上帝之手找到
-		if(mType == THIEF) {
+		if(mtype == THIEF) {
 			// 要先确定蓝牙已经打开
 			String name = mBluetoothAdapter.getName();
 			if(!name.endsWith(THIEF_TAIL)) {
@@ -166,7 +176,7 @@ public class MainActivity extends Activity {
 		}
 		
 		// 上帝之手开始搜索小偷尾巴来连接小偷
-		if(mType == GODSHAND) {
+		if(mtype == GODSHAND) {
 			mBluetoothAdapter.startDiscovery();
 		}
 		
@@ -176,7 +186,7 @@ public class MainActivity extends Activity {
      * Sends a message.
      * @param message  A string of text to send.
      */
-    void sendMessage(String message) {
+    public void sendMessage(String message) {
         // Check that we're actually connected before trying anything
         if (mChatService.getState() != BluetoothChatService.STATE_CONNECTED) {
             Toast.makeText(this, "not_connected", Toast.LENGTH_SHORT).show();
@@ -196,11 +206,22 @@ public class MainActivity extends Activity {
 	
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
+		
 		if (mChatService != null) {
-			sendMessage("touch");
+			if(mtype == GODSHAND && mChatService.getState() != BluetoothChatService.STATE_CONNECTED) {
+				mBluetoothAdapter.startDiscovery();
+			}
+			
+			//sendMessage("touch");
 		}
 		
 		return super.onTouchEvent(event);
+	}
+	
+	public int getChatServiceState() {
+		if(mChatService != null)
+			return mChatService.getState();
+		return -1;
 	}
 	
 	// ACTION_DISCOVERY_START：开始搜索
@@ -237,13 +258,23 @@ public class MainActivity extends Activity {
                 case BluetoothChatService.STATE_NONE:
                 	mConnectedDeviceName = null;
                 	Log.i(BluetoothTag, "STATE_NONE");
-                    //Toast.makeText(CONTEXT, /*R.string.title_not_connected*/"not_connected", Toast.LENGTH_SHORT).show();
                     break;
                 case BluetoothChatService.STATE_LISTEN:
+                	mConnectedDeviceName = null;
                 	Log.i(BluetoothTag, "STATE_LISTEN");
+                	if(mtype == GODSHAND) {}
+                	if(mtype == THIEF) {}
                 	break;
                 case BluetoothChatService.STATE_CONNECTING:
                 	Log.i(BluetoothTag, "STATE_CONNECTING");
+                	if(mtype == GODSHAND) {
+                		((GodHandPlayerState) playerState).reset(ThiefPlayerState.MODEL_BRAND_NEW);
+                	}
+                	if(mtype == THIEF) {
+                		((ThiefPlayerState) playerState).reset(ThiefPlayerState.MODEL_BRAND_NEW);
+                	}
+                	// 清空可连接设备名
+                	devicesName.clear();
                     break;
                 case BluetoothChatService.STATE_CONNECTED:
                 	Log.i(BluetoothTag, "STATE_CONNECTED");
@@ -252,7 +283,8 @@ public class MainActivity extends Activity {
                 	while(name.endsWith(THIEF_TAIL))
             			name = name.substring(0, name.lastIndexOf(THIEF_TAIL));
                 	mBluetoothAdapter.setName(name);
-                	onResume();
+                	// 取消扫描蓝牙
+                	mBluetoothAdapter.cancelDiscovery();
                     break;
                 }
                 break;
@@ -263,20 +295,27 @@ public class MainActivity extends Activity {
                 String writeMessage2 = "Me writeMessage：" + writeMessage;
                 Log.i(BluetoothTag, writeMessage2);
                 Toast.makeText(CONTEXT, writeMessage2, Toast.LENGTH_SHORT).show();
-                //oneMessages.add(message);
                 break;
             case MESSAGE_READ:
                 byte[] readBuf = (byte[]) msg.obj;
                 // construct a string from the valid bytes in the buffer
                 String readMessage = new String(readBuf, 0, msg.arg1);
+                if(mtype == GODSHAND) {
+                	//Businessman.UP
+            		((GodHandPlayerState) playerState).setFling(Integer.parseInt(readMessage));
+            	}
+            	if(mtype == THIEF) {
+            		((ThiefPlayerState) playerState).addObstacleByBluetooth(Integer.parseInt(readMessage));
+            	}
                 String readMessage2 = "readMessage from " + mConnectedDeviceName + "：" + readMessage;
                 Log.i(BluetoothTag, readMessage2);
                 Toast.makeText(CONTEXT, readMessage2, Toast.LENGTH_SHORT).show();
-                //twoMessages.add(mConnectedDeviceName + ":  " + readMessage);
                 break;
             case MESSAGE_DEVICE_NAME:
                 // save the connected device's name
                 mConnectedDeviceName = msg.getData().getString(DEVICE_NAME);
+                while(mConnectedDeviceName.endsWith(THIEF_TAIL))
+                	mConnectedDeviceName = mConnectedDeviceName.substring(0, mConnectedDeviceName.lastIndexOf(THIEF_TAIL));
                 Toast.makeText(CONTEXT, "Connected to " + mConnectedDeviceName, Toast.LENGTH_SHORT).show();
                 break;
             case MESSAGE_TOAST:
@@ -289,18 +328,6 @@ public class MainActivity extends Activity {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
     	Log.d(BluetoothTag, "onActivityResult " + resultCode);
     	switch (requestCode) {
-        case REQUEST_CONNECT_DEVICE:
-        	// When DeviceListActivity returns with a device to connect
-			if (resultCode == Activity.RESULT_OK) {
-			    // Get the device MAC address  
-				String address = null;
-				//String address = data.getExtras().getString(DeviceListActivity.EXTRA_DEVICE_ADDRESS);
-				// Get the BLuetoothDevice object
-				BluetoothDevice device = mBluetoothAdapter.getRemoteDevice(address);
-				// Attempt to connect to the device
-				mChatService.connect(device);
-			}
-		    break;
 		case REQUEST_ENABLE_BT:
 		    // When the request to enable Bluetooth returns
 			if (resultCode == Activity.RESULT_OK || resultCode == 120) {
@@ -315,17 +342,11 @@ public class MainActivity extends Activity {
 			break;
     	}
     }
-
-	public int getBluetoothState() {
-		if (mChatService != null)
-			return mChatService.getState();
-		return -1;
-	}
 	
 	public String getConnectedDeviceName() {
 		if (mConnectedDeviceName != null)
 			return mConnectedDeviceName;
-		return "无";
+		return "无设备，等待连接……";
 	}
     
     /*
