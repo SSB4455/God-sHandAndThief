@@ -26,7 +26,7 @@ public class Stone extends Obstacle {
 		actorX = MainSurfaceView.SCREEN_W + incrementWHalf;
 		actorY = Background.FLOOR - frameH - incrementHHalf;
 		
-		obstacleType = Obstacle.ObstacleType.Stone;
+		obstacleType = Obstacle.STONE;
 	}
 	
 	@Override

@@ -18,7 +18,8 @@ import android.widget.Toast;
 
 public class MainSurfaceView extends SurfaceView implements Callback, Runnable {
 	
-	public static int SCREEN_H, SCREEN_W;
+	public static int SCREEN_H, SCREEN_W, DENSITY_DPI;
+	public static float DENSITY;
 	private static int BRUSH_FRAME_FREQUENCY;
 	private static long BRUSH_FRAME_LONG;
 	
@@ -39,10 +40,12 @@ public class MainSurfaceView extends SurfaceView implements Callback, Runnable {
 		super(context);
 		
 		this.context = context;
-		DisplayMetrics dm = new DisplayMetrics();
-		dm = getResources().getDisplayMetrics();
-		SCREEN_H = dm.heightPixels;
-		SCREEN_W = dm.widthPixels;
+		DisplayMetrics metric = new DisplayMetrics();
+		metric = getResources().getDisplayMetrics();
+		DENSITY = metric.density;  // ÆÁÄ»ÃÜ¶È£¨0.75 / 1.0 / 1.5£©
+		DENSITY_DPI = metric.densityDpi;  // ÆÁÄ»ÃÜ¶ÈDPI£¨120 / 160 / 240£©
+		SCREEN_H = metric.heightPixels;
+		SCREEN_W = metric.widthPixels;
 		Log.d(this.getClass().toString(), "SCREEN_H = " + SCREEN_H + ", SCREEN_W = " + SCREEN_W);
 		
 		setBrushFrameFrequency(100);

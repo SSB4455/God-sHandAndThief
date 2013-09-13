@@ -5,7 +5,6 @@ import java.util.Random;
 
 import org.bistu.xgxykjcx.godshandandthief.actor.GameActor;
 import org.bistu.xgxykjcx.godshandandthief.actor.obstacle.*;
-import org.bistu.xgxykjcx.godshandandthief.actor.obstacle.Obstacle.ObstacleType;
 
 import android.graphics.Canvas;
 import android.util.Log;
@@ -58,10 +57,15 @@ public class GodLayout extends GameActor {
 		long interval = GodLayout.INTERVAL_LONG;		// 间隔时间
 		long partLong = (ProgressBar.TOTAL_Long - 4000 - interval * level) / level;		//多减4s是为了给第一个障碍的间隔预留2s为最后一个障碍预留2s
 		for(int i = 0; i < level; i++) {
+			// 第一个障碍多添加2s的准备时间
 			long position = 2000 + i * (partLong + interval) + random.nextInt((int) partLong);
-			//第一个障碍多添加2s的准备时间
-			godLayout.addObstacle(position, i % 2 == 0 ? ObstacleType.Pit : ObstacleType.Hole);
-			Log.d("GodLayout", "create a obstacle, position = " + position + " type = " + (i % 2 == 0 ? ObstacleType.Pit + "" : ObstacleType.Hole + ""));
+			
+			if(i == 0)
+				godLayout.addObstacle(position, Obstacle.HOLE);
+			if(i == 1)
+				godLayout.addObstacle(position, Obstacle.PIT);
+			
+			Log.d("GodLayout", "create a obstacle, position = " + position + " type = " + (i % 2 == 0 ? "pit" : "Hole"));
 		}
 		return godLayout;
 	}
@@ -71,14 +75,14 @@ public class GodLayout extends GameActor {
 	 * @param position 位置
 	 * @param type 障碍的种类
 	 */
-	public void addObstacle(long position, ObstacleType type) {
+	public void addObstacle(long position, int type) {
 		
 		Obstacle obstacle = null;
 		switch(type) {
-		case Hole : 
+		case Obstacle.HOLE : 
 			obstacle = new Hole();
 			break;
-		case Pit:
+		case Obstacle.PIT:
 		default:
 			obstacle = new Pit();
 			break;
@@ -148,16 +152,17 @@ public class GodLayout extends GameActor {
 		return 0;
 	}
 	
+	/*
 	class RecordObstacle {
 		boolean inScreen;
 		long position;
 		float actorX;
-		ObstacleType type;
+		int type;
 		
-		RecordObstacle(long position, ObstacleType type) {
+		RecordObstacle(long position, int type) {
 			this.position = position;
 			this.type = type;
 		}
-	}
+	}*/
 	
 }

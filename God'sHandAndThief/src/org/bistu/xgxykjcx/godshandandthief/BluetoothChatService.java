@@ -5,8 +5,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.UUID;
 
-import org.bistu.xgxykjcx.godshandandthief.statesystem.BluetoothChooseState;
-
 import android.annotation.SuppressLint;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -70,7 +68,7 @@ public class BluetoothChatService {
         mState = state;
 
         // Give the new state to the Handler so the UI Activity can update
-        mHandler.obtainMessage(BluetoothChooseState.MESSAGE_STATE_CHANGE, state, -1).sendToTarget();
+        mHandler.obtainMessage(MainActivity.MESSAGE_STATE_CHANGE, state, -1).sendToTarget();
     }
 
     /**
@@ -142,9 +140,9 @@ public class BluetoothChatService {
         mConnectedThread.start();
 
         // Send the name of the connected device back to the UI Activity
-        Message msg = mHandler.obtainMessage(BluetoothChooseState.MESSAGE_DEVICE_NAME);
+        Message msg = mHandler.obtainMessage(MainActivity.MESSAGE_DEVICE_NAME);
         Bundle bundle = new Bundle();
-        bundle.putString(BluetoothChooseState.DEVICE_NAME, device.getName());
+        bundle.putString(MainActivity.DEVICE_NAME, device.getName());
         msg.setData(bundle);
         mHandler.sendMessage(msg);
 
@@ -178,6 +176,18 @@ public class BluetoothChatService {
         // Perform the write unsynchronized
         r.write(out);
     }
+    
+    public void writeOneByte(int oneByte) {
+    	// Create temporary object
+        ConnectedThread r;
+        // Synchronize a copy of the ConnectedThread
+        synchronized (this) {
+            if (mState != STATE_CONNECTED) return;
+            r = mConnectedThread;
+        }
+        // Perform the write unsynchronized
+        r.writeOneByte(oneByte);
+	}
 
     /**
      * Indicate that the connection attempt failed and notify the UI Activity.
@@ -186,9 +196,9 @@ public class BluetoothChatService {
         setState(STATE_LISTEN);
 
         // Send a failure message back to the Activity
-        Message msg = mHandler.obtainMessage(BluetoothChooseState.MESSAGE_TOAST);
+        Message msg = mHandler.obtainMessage(MainActivity.MESSAGE_TOAST);
         Bundle bundle = new Bundle();
-        bundle.putString(BluetoothChooseState.TOAST, "Unable to connect device");
+        bundle.putString(MainActivity.TOAST, "Unable to connect device");
         msg.setData(bundle);
         mHandler.sendMessage(msg);
     }
@@ -200,9 +210,9 @@ public class BluetoothChatService {
         setState(STATE_LISTEN);
 
         // Send a failure message back to the Activity
-        Message msg = mHandler.obtainMessage(BluetoothChooseState.MESSAGE_TOAST);
+        Message msg = mHandler.obtainMessage(MainActivity.MESSAGE_TOAST);
         Bundle bundle = new Bundle();
-        bundle.putString(BluetoothChooseState.TOAST, "Device connection was lost");
+        bundle.putString(MainActivity.TOAST, "Device connection was lost");
         msg.setData(bundle);
         mHandler.sendMessage(msg);
     }
@@ -387,7 +397,7 @@ public class BluetoothChatService {
                     bytes = mmInStream.read(buffer);
 
                     // Send the obtained bytes to the UI Activity
-                    mHandler.obtainMessage(BluetoothChooseState.MESSAGE_READ, bytes, -1, buffer)
+                    mHandler.obtainMessage(MainActivity.MESSAGE_READ, bytes, -1, buffer)
                             .sendToTarget();
                 } catch (IOException e) {
                     Log.e(TAG, "disconnected", e);
@@ -404,9 +414,20 @@ public class BluetoothChatService {
         public void write(byte[] buffer) {
             try {
                 mmOutStream.write(buffer);
+                
+                // Share the sent message back to the UI Activity
+                mHandler.obtainMessage(MainActivity.MESSAGE_WRITE, -1, -1, buffer).sendToTarget();
+            } catch (IOException e) {
+                Log.e(TAG, "Exception during write", e);
+            }
+        }
+        
+        public void writeOneByte(int oneByte) {
+            try {
+                mmOutStream.write(oneByte);
 
                 // Share the sent message back to the UI Activity
-                mHandler.obtainMessage(BluetoothChooseState.MESSAGE_WRITE, -1, -1, buffer).sendToTarget();
+                mHandler.obtainMessage(MainActivity.MESSAGE_WRITE, -1, -1, oneByte).sendToTarget();
             } catch (IOException e) {
                 Log.e(TAG, "Exception during write", e);
             }
@@ -420,4 +441,5 @@ public class BluetoothChatService {
             }
         }
     }
+    
 }

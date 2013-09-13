@@ -5,7 +5,6 @@ import org.bistu.xgxykjcx.godshandandthief.MainSurfaceView;
 import org.bistu.xgxykjcx.godshandandthief.actor.Background;
 import org.bistu.xgxykjcx.godshandandthief.actor.Businessman;
 import org.bistu.xgxykjcx.godshandandthief.actor.GameActor;
-import org.bistu.xgxykjcx.godshandandthief.actor.GameActor.ActorStatus;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -35,8 +34,7 @@ public class Hole extends Obstacle {
 		interval = MainSurfaceView.SCREEN_W / 9;
 		actorY = Background.FLOOR - interval - frameH - incrementHHalf;
 		
-		obstacleType = Obstacle.ObstacleType.Hole;
-		//Log.i(this.getClass().toString(), "shrink = " + shrink);
+		obstacleType = Obstacle.HOLE;
 	}
 	
 	public Hole(ActorStatus status) {

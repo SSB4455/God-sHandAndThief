@@ -5,14 +5,13 @@ import org.bistu.xgxykjcx.godshandandthief.actor.GameActor;
 import android.graphics.Paint;
 
 public class Obstacle extends GameActor {
-	public enum ObstacleType {
-		Hole,		//洞
-		Stone,		//石头
-		Pit,		//坑
-	}
-	protected ObstacleType obstacleType;
+	// 障碍种类的代码
+	public static final int HOLE = 0;
+	public static final int STONE = 1;
+	public static final int PIT = 2;
 	
 	protected int frameW, frameH, incrementWHalf, incrementHHalf;
+	protected int obstacleType;
 	protected boolean isBreak;
 	
 	
@@ -28,7 +27,7 @@ public class Obstacle extends GameActor {
 		
 	}
 	
-	public ObstacleType getType() {
+	public int getType() {
 		return obstacleType;
 	}
 	

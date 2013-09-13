@@ -2,7 +2,6 @@ package org.bistu.xgxykjcx.godshandandthief.actor;
 
 import org.bistu.xgxykjcx.godshandandthief.MainSurfaceView;
 
-import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 

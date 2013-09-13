@@ -18,7 +18,7 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 
 public class Businessman extends GameActor implements OnGestureListener {
-	public static int SPEED = MainSurfaceView.SCREEN_W / 2;
+	public static int SPEED = (MainSurfaceView.SCREEN_W / 2);
 	// 标志Fling的方向
 	public static final int UP = 0;
 	public static final int DOWN = 1;
@@ -192,13 +192,13 @@ public class Businessman extends GameActor implements OnGestureListener {
 			//Log.d(this.getClass().toString(), "businessman left = " + getLeft() + ", right = " + getRight());
 			//Log.d(this.getClass().toString(), "obstacle left = " + obstacle.getLeft() + ", right = " + obstacle.getRight());
 			switch(obstacle.getType()) {
-			case Hole :
+			case Obstacle.HOLE :
 				if(bodyMotion == IS_DOWN || bodyMotion == IS_INJURED)
 					return false;
 				else
 					return true;
-			case Stone :
-			case Pit :
+			case Obstacle.STONE :
+			case Obstacle.PIT :
 				if(bodyMotion == IS_UP || bodyMotion == IS_INJURED)
 					return false;
 				else
@@ -268,17 +268,17 @@ public class Businessman extends GameActor implements OnGestureListener {
 		int scrollLength = MainSurfaceView.SCREEN_W / 10;
 		
 		if(scrollLength < -scrollY) {
-			fling[UP] = true;
 			if(playerType == PlayerType.PlayerWithBlueTooth && 
 					((MainActivity) MainActivity.CONTEXT).getChatServiceState() == BluetoothChatService.STATE_CONNECTED)
-				((MainActivity) MainActivity.CONTEXT).sendMessage("" + UP);
+				((MainActivity) MainActivity.CONTEXT).sendMessage(UP + "");
+			fling[UP] = true;
 			Log.d(this.getClass().toString(), "onScroll to up.");
 		}
 		if((scrollX > scrollLength && scrollY < scrollLength / 2) || scrollY > scrollLength) {
-			fling[DOWN] = true;
 			if(playerType == PlayerType.PlayerWithBlueTooth && 
 					((MainActivity) MainActivity.CONTEXT).getChatServiceState() == BluetoothChatService.STATE_CONNECTED)
-				((MainActivity) MainActivity.CONTEXT).sendMessage("" + DOWN);
+				((MainActivity) MainActivity.CONTEXT).sendMessage(DOWN + "");
+			fling[DOWN] = true;
 			Log.d(this.getClass().toString(), "onScroll to right.");
 		}
 		return false;

@@ -8,7 +8,6 @@ import org.bistu.xgxykjcx.godshandandthief.actor.Background;
 import org.bistu.xgxykjcx.godshandandthief.actor.Businessman;
 import org.bistu.xgxykjcx.godshandandthief.actor.GodLayout;
 import org.bistu.xgxykjcx.godshandandthief.actor.obstacle.Obstacle;
-import org.bistu.xgxykjcx.godshandandthief.actor.obstacle.Obstacle.ObstacleType;
 import org.bistu.xgxykjcx.godshandandthief.statesystem.StateSystem.PlayerType;
 
 import android.content.Context;
@@ -149,7 +148,7 @@ public class ThiefPlayerState implements IGameObject {
 	}
 	
 	public void addObstacleByBluetooth(int obstacleType) {
-		godLayout.addObstacle(4000, obstacleType == 0 ? ObstacleType.Hole : ObstacleType.Pit);
+		godLayout.addObstacle(4000, obstacleType);
 	}
 	
 	boolean isOver() {

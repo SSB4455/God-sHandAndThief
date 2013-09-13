@@ -2,7 +2,7 @@ package org.bistu.xgxykjcx.godshandandthief;
 
 import java.util.ArrayList;
 
-import org.bistu.xgxykjcx.godshandandthief.actor.Businessman;
+import org.bistu.xgxykjcx.godshandandthief.actor.obstacle.Obstacle;
 import org.bistu.xgxykjcx.godshandandthief.statesystem.GodHandPlayerState;
 import org.bistu.xgxykjcx.godshandandthief.statesystem.IGameObject;
 import org.bistu.xgxykjcx.godshandandthief.statesystem.ThiefPlayerState;
@@ -48,13 +48,14 @@ public class MainActivity extends Activity {
 	public static Context CONTEXT;
 	
 	private int mtype;
-	private IGameObject playerState;
+	private ThiefPlayerState thiefPlayerState;
+	private GodHandPlayerState godHandPlayerState;
 	// Name of the connected device
 	private String mConnectedDeviceName = null;
 	private ArrayList<String> devicesName;
 	//private HashMap<String, String> devicesAddress;
 	// Local Bluetooth adapter
-	BluetoothAdapter mBluetoothAdapter;
+	private BluetoothAdapter mBluetoothAdapter;
 	// Member object for the chat services
 	private BluetoothChatService mChatService = null;
 	// String buffer for outgoing messages
@@ -67,6 +68,7 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		Log.d(this.getClass().toString(), "- ON CREATR -");
 		CONTEXT = this;
+		
 		BitmapStorage.setResources(this.getResources());
 		
 		// 启动游戏界面
@@ -103,7 +105,6 @@ public class MainActivity extends Activity {
 
 	public void startBluetooth(int type, IGameObject playerState) {
 		mtype = type;
-		this.playerState = playerState;
 		
 		mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 		if (mBluetoothAdapter == null) {
@@ -115,6 +116,7 @@ public class MainActivity extends Activity {
 		devicesName = new ArrayList<String>();
 		
 		if(type == THIEF) {
+			thiefPlayerState = (ThiefPlayerState) playerState;
 			// 小偷 直接请求能够被搜索
             Intent discoverableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
             discoverableIntent.putExtra(BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, 120);
@@ -122,6 +124,7 @@ public class MainActivity extends Activity {
 		}
 		
 		if(type == GODSHAND) {
+			godHandPlayerState = (GodHandPlayerState) playerState;
 			// 上帝之手 启动蓝牙 注册广播接收器
 			if (!mBluetoothAdapter.isEnabled()) {
 	            Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
@@ -141,7 +144,7 @@ public class MainActivity extends Activity {
 			Log.d(BluetoothTag, "stopBluetooth()");
 			mChatService.stop();
 			mChatService = null;
-			
+			devicesName.clear();
 		}
 	}
 	
@@ -202,6 +205,16 @@ public class MainActivity extends Activity {
             // Reset out string buffer to zero and clear the edit text field
             mOutStringBuffer.setLength(0);
         }
+    }
+    
+    public void sendOneByte(int oneByte) {
+        // Check that we're actually connected before trying anything
+        if (mChatService.getState() != BluetoothChatService.STATE_CONNECTED) {
+            Toast.makeText(this, "not_connected", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        
+        mChatService.writeOneByte(oneByte);
     }
 	
 	@Override
@@ -268,10 +281,10 @@ public class MainActivity extends Activity {
                 case BluetoothChatService.STATE_CONNECTING:
                 	Log.i(BluetoothTag, "STATE_CONNECTING");
                 	if(mtype == GODSHAND) {
-                		((GodHandPlayerState) playerState).reset(ThiefPlayerState.MODEL_BRAND_NEW);
+                		godHandPlayerState.reset(ThiefPlayerState.MODEL_BRAND_NEW);
                 	}
                 	if(mtype == THIEF) {
-                		((ThiefPlayerState) playerState).reset(ThiefPlayerState.MODEL_BRAND_NEW);
+                		thiefPlayerState.reset(ThiefPlayerState.MODEL_BRAND_NEW);
                 	}
                 	// 清空可连接设备名
                 	devicesName.clear();
@@ -302,10 +315,15 @@ public class MainActivity extends Activity {
                 String readMessage = new String(readBuf, 0, msg.arg1);
                 if(mtype == GODSHAND) {
                 	//Businessman.UP
-            		((GodHandPlayerState) playerState).setFling(Integer.parseInt(readMessage));
+                	godHandPlayerState.setFling(Integer.parseInt(readMessage));
             	}
             	if(mtype == THIEF) {
-            		((ThiefPlayerState) playerState).addObstacleByBluetooth(Integer.parseInt(readMessage));
+            		int obstacleType = -1;
+            		if(readMessage.contains("0"))
+            			obstacleType = Obstacle.HOLE;
+            		if(readMessage.contains("2"))
+            			obstacleType = Obstacle.PIT;
+            		thiefPlayerState.addObstacleByBluetooth(obstacleType);
             	}
                 String readMessage2 = "readMessage from " + mConnectedDeviceName + "：" + readMessage;
                 Log.i(BluetoothTag, readMessage2);

@@ -7,7 +7,6 @@ import org.bistu.xgxykjcx.godshandandthief.MainSurfaceView;
 import org.bistu.xgxykjcx.godshandandthief.actor.Businessman;
 import org.bistu.xgxykjcx.godshandandthief.actor.GodLayout;
 import org.bistu.xgxykjcx.godshandandthief.actor.obstacle.Obstacle;
-import org.bistu.xgxykjcx.godshandandthief.actor.obstacle.Obstacle.ObstacleType;
 import org.bistu.xgxykjcx.godshandandthief.statesystem.StateSystem.PlayerType;
 
 import android.graphics.Bitmap;
@@ -25,6 +24,8 @@ public class GodHandPlayerState implements IGameObject {
 	private final int X = 0, Y = 1;
 	
 	private float intervalBrush;
+	private boolean canSendMessage;
+	
 	private float [][] menuLocation;
 	private Bitmap [] menuButton;
 	
@@ -73,6 +74,12 @@ public class GodHandPlayerState implements IGameObject {
 	
 	public void update(long elapsedTime) {
 		thiefPlayerState.update(elapsedTime);
+		
+		if(playerType == PlayerType.PlayerWithBlueTooth && 
+				((MainActivity) MainActivity.CONTEXT).getChatServiceState() == BluetoothChatService.STATE_CONNECTED)
+			canSendMessage = true;
+		else
+			canSendMessage = false;
 		
 		// 如果是单机 由上帝来给小偷操作指令
 		if(playerType == PlayerType.Player) {
@@ -124,11 +131,11 @@ public class GodHandPlayerState implements IGameObject {
 			Obstacle obstacle = (Obstacle) godLayout.getObstacle(i);
 			if(obstacle.getLeft() - 10 <= businessman.getRight() && obstacle.getRight() > businessman.getRight()) {
 				switch(obstacle.getType()) {
-				case Hole :
+				case Obstacle.HOLE :
 					businessman.setFling(Businessman.DOWN);
 					break;
-				case Stone :
-				case Pit :
+				case Obstacle.STONE :
+				case Obstacle.PIT :
 					businessman.setFling(Businessman.UP);
 				}
 			}
@@ -156,10 +163,15 @@ public class GodHandPlayerState implements IGameObject {
 						&& menuLocation[i][Y] < event.getY() 
 						&& event.getY() < menuLocation[i][Y] + menuButton[i].getHeight()) {
 					intervalBrush = 0;
-					godLayout.addObstacle(4000, i == 0 ? ObstacleType.Hole : ObstacleType.Pit);
-					if(playerType == PlayerType.PlayerWithBlueTooth && 
-							((MainActivity) MainActivity.CONTEXT).getChatServiceState() == BluetoothChatService.STATE_CONNECTED)
-						((MainActivity) MainActivity.CONTEXT).sendMessage("" + i);
+					int obstacleType = -1;
+					if(i == 0)
+						obstacleType = Obstacle.HOLE;
+					if(i == 1)
+						obstacleType = Obstacle.PIT;
+					if(canSendMessage)
+						((MainActivity) MainActivity.CONTEXT).sendMessage(obstacleType + "");
+					
+					godLayout.addObstacle(4000, obstacleType);
 					//Toast.makeText(context, "add a " + (i == 0 ? "hole" : "pit"), Toast.LENGTH_SHORT).show();
 				}
 			}

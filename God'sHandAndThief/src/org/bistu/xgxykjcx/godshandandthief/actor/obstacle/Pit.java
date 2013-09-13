@@ -26,7 +26,7 @@ public class Pit extends Obstacle {
 		actorX = MainSurfaceView.SCREEN_W + incrementWHalf;
 		actorY = Background.FLOOR + incrementHHalf;
 		
-		obstacleType = Obstacle.ObstacleType.Pit;
+		obstacleType = Obstacle.PIT;
 	}
 	
 	public Pit(ActorStatus status) {
