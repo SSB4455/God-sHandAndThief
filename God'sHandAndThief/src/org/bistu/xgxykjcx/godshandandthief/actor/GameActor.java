@@ -83,9 +83,9 @@ public abstract class GameActor {
 		return false;
 	}
 	
-	abstract public int getLeft();
+	abstract public float getLeft();
 	
-	abstract public int getRight();
+	abstract public float getRight();
 	
 	public int getWidth() {
 		return width;

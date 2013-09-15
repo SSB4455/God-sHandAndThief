@@ -9,6 +9,9 @@ public class Obstacle extends GameActor {
 	public static final int HOLE = 0;
 	public static final int STONE = 1;
 	public static final int PIT = 2;
+	public static final String HOLE_STRING = "hole";
+	public static final String STONE_STRING = "stone";
+	public static final String PIT_STRING = "pit";
 	
 	protected int frameW, frameH, incrementWHalf, incrementHHalf;
 	protected int obstacleType;
@@ -31,22 +34,22 @@ public class Obstacle extends GameActor {
 		return obstacleType;
 	}
 	
-	public int setLeft(int left) {
-		return (int) (actorX = left + incrementWHalf);
+	public float setLeft(float left) {
+		return actorX = left + incrementWHalf;
 	}
 	
-	public int setTop(int top) {
-		return (int) (actorY = top + incrementWHalf);
-	}
-	
-	@Override
-	public int getLeft() {
-		return (int) (actorX - incrementWHalf);
+	public float setTop(float top) {
+		return actorY = top + incrementWHalf;
 	}
 	
 	@Override
-	public int getRight() {
-		return (int) (actorX + frameW + incrementWHalf);
+	public float getLeft() {
+		return actorX - incrementWHalf;
+	}
+	
+	@Override
+	public float getRight() {
+		return actorX + frameW + incrementWHalf;
 	}
 	
 }

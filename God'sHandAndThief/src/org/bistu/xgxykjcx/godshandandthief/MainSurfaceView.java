@@ -31,7 +31,7 @@ public class MainSurfaceView extends SurfaceView implements Callback, Runnable {
 	private boolean flag;
 	
 	private Context context;
-	Canvas canvas;
+	private Canvas canvas;
 	private Paint paint;
 	
 	

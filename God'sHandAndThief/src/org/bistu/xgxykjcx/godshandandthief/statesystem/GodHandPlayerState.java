@@ -119,8 +119,8 @@ public class GodHandPlayerState implements IGameObject {
 		}
 		
 		if(playerType == PlayerType.PlayerWithBlueTooth) {
-			canvas.drawText("对方设备：", 50, MainSurfaceView.SCREEN_H - 50, paint);
-			canvas.drawText(((MainActivity) MainActivity.CONTEXT).getConnectedDeviceName(), 110, MainSurfaceView.SCREEN_H - 50, paint);
+			canvas.drawText("对方设备：", 3, MainSurfaceView.SCREEN_H - 7, paint);
+			canvas.drawText(((MainActivity) MainActivity.CONTEXT).getConnectedDeviceName(), 63, MainSurfaceView.SCREEN_H - 7, paint);
 			
 		}
 		
@@ -164,12 +164,17 @@ public class GodHandPlayerState implements IGameObject {
 						&& event.getY() < menuLocation[i][Y] + menuButton[i].getHeight()) {
 					intervalBrush = 0;
 					int obstacleType = -1;
-					if(i == 0)
+					String obstacleTypeString = null;
+					if(i == 0) {
 						obstacleType = Obstacle.HOLE;
-					if(i == 1)
+						obstacleTypeString = Obstacle.HOLE_STRING;
+					}
+					if(i == 1) {
 						obstacleType = Obstacle.PIT;
+						obstacleTypeString = Obstacle.PIT_STRING;
+					}
 					if(canSendMessage)
-						((MainActivity) MainActivity.CONTEXT).sendMessage(obstacleType + "");
+						((MainActivity) MainActivity.CONTEXT).sendMessage(System.currentTimeMillis() % 10000000 + obstacleTypeString);
 					
 					godLayout.addObstacle(4000, obstacleType);
 					//Toast.makeText(context, "add a " + (i == 0 ? "hole" : "pit"), Toast.LENGTH_SHORT).show();

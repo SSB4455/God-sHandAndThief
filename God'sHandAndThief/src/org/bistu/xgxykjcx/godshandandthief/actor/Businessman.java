@@ -18,7 +18,7 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 
 public class Businessman extends GameActor implements OnGestureListener {
-	public static int SPEED = (MainSurfaceView.SCREEN_W / 2);
+	public static float SPEED = (MainSurfaceView.SCREEN_W / 2f) / 1000f;
 	// 标志Fling的方向
 	public static final int UP = 0;
 	public static final int DOWN = 1;
@@ -308,13 +308,13 @@ public class Businessman extends GameActor implements OnGestureListener {
 	}
 	
 	@Override
-	public int getLeft() {
-		return (int) (actorX - incrementWHalf);
+	public float getLeft() {
+		return actorX - incrementWHalf;
 	}
 	
 	@Override
-	public int getRight() {
-		return (int) (actorX + frameW + incrementWHalf);
+	public float getRight() {
+		return actorX + frameW + incrementWHalf;
 	}
 	
 }

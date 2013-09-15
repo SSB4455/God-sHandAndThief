@@ -81,15 +81,18 @@ public class GodLayout extends GameActor {
 		switch(type) {
 		case Obstacle.HOLE : 
 			obstacle = new Hole();
+			Log.i("GodLayout", "add a hole at " + System.currentTimeMillis());
 			break;
+		case Obstacle.STONE:
 		case Obstacle.PIT:
-		default:
 			obstacle = new Pit();
 			break;
+		default:
 		}
-		obstacle.actorX = position / 1000 * Businessman.SPEED;
-		
-		children.add(obstacle);
+		if(obstacle != null) {
+			obstacle.setLeft(position * Businessman.SPEED);
+			children.add(obstacle);
+		}
 	}
 	
 	@Override
@@ -141,13 +144,13 @@ public class GodLayout extends GameActor {
 	}
 	
 	@Override
-	public int getLeft() {
+	public float getLeft() {
 		// TODO Auto-generated method stub
 		return 0;
 	}
 	
 	@Override
-	public int getRight() {
+	public float getRight() {
 		// TODO Auto-generated method stub
 		return 0;
 	}

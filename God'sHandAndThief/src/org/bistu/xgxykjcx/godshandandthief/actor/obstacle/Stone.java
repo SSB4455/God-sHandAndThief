@@ -32,7 +32,7 @@ public class Stone extends Obstacle {
 	@Override
 	public void update(long elapsedTime) {
 		if(!isBreak) {
-			actorX -= (Businessman.SPEED * elapsedTime) / 1000;
+			actorX -= Businessman.SPEED * elapsedTime;
 		}
 		if(getRight() < 0) {
 			status = GameActor.ActorStatus.Dead;

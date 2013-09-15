@@ -74,13 +74,13 @@ public class Cloud extends GameActor {
 	}
 	
 	@Override
-	public int getLeft() {
+	public float getLeft() {
 		// TODO Auto-generated method stub
 		return 0;
 	}
 	
 	@Override
-	public int getRight() {
+	public float getRight() {
 		// TODO Auto-generated method stub
 		return 0;
 	}

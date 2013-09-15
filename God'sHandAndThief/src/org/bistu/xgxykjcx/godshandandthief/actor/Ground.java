@@ -36,9 +36,9 @@ public class Ground extends GameActor {
 	public void update(long elapsedTime) {
 		
 		if(Background.FACE_TO == Background.TO_LEFT)
-			actorX -= (Businessman.SPEED * elapsedTime) / 1000;
+			actorX -= Businessman.SPEED * elapsedTime;
 		else
-			actorX += (Businessman.SPEED * elapsedTime) / 1000;
+			actorX += Businessman.SPEED * elapsedTime;
 		
 		// 超出屏幕转回
 		// 两倍屏幕是为了帮助上帝那边
@@ -62,13 +62,13 @@ public class Ground extends GameActor {
 	}
 
 	@Override
-	public int getLeft() {
+	public float getLeft() {
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
-	public int getRight() {
+	public float getRight() {
 		// TODO Auto-generated method stub
 		return 0;
 	}

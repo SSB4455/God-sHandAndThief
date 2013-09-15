@@ -99,8 +99,8 @@ public class ThiefPlayerState implements IGameObject {
 			canvas.drawBitmap(isLoseBitmap, MainSurfaceView.SCREEN_W / 5, MainSurfaceView.SCREEN_H - isLoseBitmap.getHeight(), paint);
 		
 		if(playerType == PlayerType.PlayerWithBlueTooth) {
-			canvas.drawText("对方设备：", 50, MainSurfaceView.SCREEN_H - 50, paint);
-			canvas.drawText(((MainActivity) MainActivity.CONTEXT).getConnectedDeviceName(), 110, MainSurfaceView.SCREEN_H - 50, paint);
+			canvas.drawText("对方设备：", 3, MainSurfaceView.SCREEN_H - 7, paint);
+			canvas.drawText(((MainActivity) MainActivity.CONTEXT).getConnectedDeviceName(), 63, MainSurfaceView.SCREEN_H - 7, paint);
 			
 		}
 	}
@@ -147,8 +147,8 @@ public class ThiefPlayerState implements IGameObject {
 		return true;		//不让别人做了
 	}
 	
-	public void addObstacleByBluetooth(int obstacleType) {
-		godLayout.addObstacle(4000, obstacleType);
+	public void addObstacleByBluetooth(long distanceLong, int obstacleType) {
+		godLayout.addObstacle(distanceLong, obstacleType);
 	}
 	
 	boolean isOver() {
