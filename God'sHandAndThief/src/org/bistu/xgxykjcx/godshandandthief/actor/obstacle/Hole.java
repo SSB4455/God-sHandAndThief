@@ -8,7 +8,6 @@ import org.bistu.xgxykjcx.godshandandthief.actor.GameActor;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.util.Log;
 
 public class Hole extends Obstacle {
 	private int interval;
@@ -48,9 +47,6 @@ public class Hole extends Obstacle {
 		if(status == ActorStatus.Action) {
 			if(!isBreak) {
 				actorX -= Businessman.SPEED * elapsedTime;
-			}
-			if(getLeft() < 0) {
-				Log.i("Hole", this.name + " left < 0 at " + System.currentTimeMillis());
 			}
 			if(getRight() < 0) {
 				status = GameActor.ActorStatus.Dead;

@@ -2,6 +2,7 @@ package org.bistu.xgxykjcx.godshandandthief;
 
 import java.util.ArrayList;
 
+import org.bistu.xgxykjcx.godshandandthief.actor.Businessman;
 import org.bistu.xgxykjcx.godshandandthief.actor.obstacle.Obstacle;
 import org.bistu.xgxykjcx.godshandandthief.statesystem.GodHandPlayerState;
 import org.bistu.xgxykjcx.godshandandthief.statesystem.IGameObject;
@@ -46,8 +47,10 @@ public class MainActivity extends Activity {
 	private static final int REQUEST_ENABLE_BT = 3;
 	
 	public static Context CONTEXT;
+	public static boolean CAN_SENDMESSAGE;
 	
 	private int mtype;
+	private int [] bluetoothConnetedTime;
 	private ThiefPlayerState thiefPlayerState;
 	private GodHandPlayerState godHandPlayerState;
 	// Name of the connected device
@@ -68,6 +71,7 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		Log.d(this.getClass().toString(), "- ON CREATR -");
 		CONTEXT = this;
+		CAN_SENDMESSAGE = false;
 		
 		BitmapStorage.setResources(this.getResources());
 		
@@ -267,6 +271,7 @@ public class MainActivity extends Activity {
 		public void handleMessage(Message msg) {
 			switch (msg.what) {
             case MESSAGE_STATE_CHANGE:
+            	CAN_SENDMESSAGE = false;
                 switch (msg.arg1) {
                 case BluetoothChatService.STATE_NONE:
                 	mConnectedDeviceName = null;
@@ -291,13 +296,18 @@ public class MainActivity extends Activity {
                     break;
                 case BluetoothChatService.STATE_CONNECTED:
                 	Log.i(BluetoothTag, "STATE_CONNECTED");
+                	// 取消扫描蓝牙
+                	mBluetoothAdapter.cancelDiscovery();
+                	CAN_SENDMESSAGE = true;
+                	// 
+                	bluetoothConnetedTime = new int[3];
+                	bluetoothConnetedTime[0] = (int) (System.currentTimeMillis() % 10000000);
+                	((MainActivity) CONTEXT).sendMessage(System.currentTimeMillis() % 10000000 + "BCT");
                 	// 已经连接上 去掉小偷的尾巴
                 	String name = mBluetoothAdapter.getName();
                 	while(name.endsWith(THIEF_TAIL))
             			name = name.substring(0, name.lastIndexOf(THIEF_TAIL));
                 	mBluetoothAdapter.setName(name);
-                	// 取消扫描蓝牙
-                	mBluetoothAdapter.cancelDiscovery();
                     break;
                 }
                 break;
@@ -307,27 +317,46 @@ public class MainActivity extends Activity {
                 String writeMessage = new String(writeBuf);
                 String writeMessage2 = "Me writeMessage：" + writeMessage;
                 Log.i(BluetoothTag, writeMessage2);
-                Toast.makeText(CONTEXT, writeMessage2, Toast.LENGTH_SHORT).show();
+                //Toast.makeText(CONTEXT, writeMessage2, Toast.LENGTH_SHORT).show();
                 break;
             case MESSAGE_READ:
                 byte[] readBuf = (byte[]) msg.obj;
                 // construct a string from the valid bytes in the buffer
                 String readMessage = new String(readBuf, 0, msg.arg1);
+                String readMessage2 = "readMessage from " + mConnectedDeviceName + "：" + readMessage;
+                if(readMessage.contains("BCT")) {
+        			readMessage = readMessage.substring(0, readMessage.indexOf("BCT"));
+        			bluetoothConnetedTime[1] = Integer.parseInt(readMessage);
+        			bluetoothConnetedTime[2] = bluetoothConnetedTime[0] - bluetoothConnetedTime[1];
+        		}
                 if(mtype == GODSHAND) {
-                	//Businessman.UP
-                	godHandPlayerState.setFling(Integer.parseInt(readMessage));
+                	if(readMessage.contains(Businessman.UP_FLING_STRING)) {
+            			godHandPlayerState.setFling(Businessman.UP_FLING);
+            		}
+                	if(readMessage.contains(Businessman.DOWN_FLING_STRING)) {
+            			godHandPlayerState.setFling(Businessman.DOWN_FLING);
+            		}
+                	if(readMessage.contains(Businessman.IS_INJURED_STRING)) {
+            			godHandPlayerState.businessmanbeInjured();
+            		}
             	}
             	if(mtype == THIEF) {
             		int obstacleType = -1;
-            		if(readMessage.contains("0"))
+            		long distanceLong = 4000;
+            		if(readMessage.contains(Obstacle.HOLE_STRING)) {
+            			readMessage = readMessage.substring(0, readMessage.indexOf(Obstacle.HOLE_STRING));
             			obstacleType = Obstacle.HOLE;
-            		if(readMessage.contains("2"))
+            		}
+            		if(readMessage.contains(Obstacle.PIT_STRING)) {
+            			readMessage = readMessage.substring(0, readMessage.indexOf(Obstacle.PIT_STRING));
             			obstacleType = Obstacle.PIT;
-            		thiefPlayerState.addObstacleByBluetooth(obstacleType);
+            		}
+            		distanceLong = 4000 - ((System.currentTimeMillis() % 10000000 - bluetoothConnetedTime[0]) - (Integer.parseInt(readMessage) - bluetoothConnetedTime[1]));
+            		Log.i(BluetoothTag, "distanceLong = " + distanceLong);
+            		thiefPlayerState.addObstacleByBluetooth(distanceLong, obstacleType);
             	}
-                String readMessage2 = "readMessage from " + mConnectedDeviceName + "：" + readMessage;
                 Log.i(BluetoothTag, readMessage2);
-                Toast.makeText(CONTEXT, readMessage2, Toast.LENGTH_SHORT).show();
+                //Toast.makeText(CONTEXT, readMessage2, Toast.LENGTH_SHORT).show();
                 break;
             case MESSAGE_DEVICE_NAME:
                 // save the connected device's name

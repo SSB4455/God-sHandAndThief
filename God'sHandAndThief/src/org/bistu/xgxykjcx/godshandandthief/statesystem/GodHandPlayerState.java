@@ -1,7 +1,6 @@
 package org.bistu.xgxykjcx.godshandandthief.statesystem;
 
 import org.bistu.xgxykjcx.godshandandthief.BitmapStorage;
-import org.bistu.xgxykjcx.godshandandthief.BluetoothChatService;
 import org.bistu.xgxykjcx.godshandandthief.MainActivity;
 import org.bistu.xgxykjcx.godshandandthief.MainSurfaceView;
 import org.bistu.xgxykjcx.godshandandthief.actor.Businessman;
@@ -19,12 +18,12 @@ import android.view.MotionEvent;
 
 public class GodHandPlayerState implements IGameObject {
 	//private Context context;
+	private MainActivity mainActivity;
 	private StateSystem stateSystem;
 	
 	private final int X = 0, Y = 1;
 	
 	private float intervalBrush;
-	private boolean canSendMessage;
 	
 	private float [][] menuLocation;
 	private Bitmap [] menuButton;
@@ -41,6 +40,7 @@ public class GodHandPlayerState implements IGameObject {
 	
 	public GodHandPlayerState(StateSystem stateSystem, PlayerType playerType) {
 		//this.context = MainActivity.CONTEXT;
+		mainActivity = (MainActivity) MainActivity.CONTEXT;
 		this.stateSystem = stateSystem;
 		this.playerType = playerType;
 		
@@ -69,17 +69,10 @@ public class GodHandPlayerState implements IGameObject {
 		
 		paint = new Paint();
 		brushPaint = new Paint();
-		
 	}
 	
 	public void update(long elapsedTime) {
 		thiefPlayerState.update(elapsedTime);
-		
-		if(playerType == PlayerType.PlayerWithBlueTooth && 
-				((MainActivity) MainActivity.CONTEXT).getChatServiceState() == BluetoothChatService.STATE_CONNECTED)
-			canSendMessage = true;
-		else
-			canSendMessage = false;
 		
 		// 如果是单机 由上帝来给小偷操作指令
 		if(playerType == PlayerType.Player) {
@@ -132,11 +125,11 @@ public class GodHandPlayerState implements IGameObject {
 			if(obstacle.getLeft() - 10 <= businessman.getRight() && obstacle.getRight() > businessman.getRight()) {
 				switch(obstacle.getType()) {
 				case Obstacle.HOLE :
-					businessman.setFling(Businessman.DOWN);
+					businessman.setFling(Businessman.DOWN_FLING);
 					break;
 				case Obstacle.STONE :
 				case Obstacle.PIT :
-					businessman.setFling(Businessman.UP);
+					businessman.setFling(Businessman.UP_FLING);
 				}
 			}
 		}
@@ -144,6 +137,10 @@ public class GodHandPlayerState implements IGameObject {
 	
 	public void setFling(int direction) {
 		businessman.setFling(direction);
+	}
+	
+	public void businessmanbeInjured() {
+		businessman.beInjured();
 	}
 	
 	public boolean onTouchEvent(MotionEvent event) {
@@ -173,8 +170,8 @@ public class GodHandPlayerState implements IGameObject {
 						obstacleType = Obstacle.PIT;
 						obstacleTypeString = Obstacle.PIT_STRING;
 					}
-					if(canSendMessage)
-						((MainActivity) MainActivity.CONTEXT).sendMessage(System.currentTimeMillis() % 10000000 + obstacleTypeString);
+					if(MainActivity.CAN_SENDMESSAGE)
+						mainActivity.sendMessage(System.currentTimeMillis() % 10000000 + obstacleTypeString);
 					
 					godLayout.addObstacle(4000, obstacleType);
 					//Toast.makeText(context, "add a " + (i == 0 ? "hole" : "pit"), Toast.LENGTH_SHORT).show();
@@ -189,7 +186,7 @@ public class GodHandPlayerState implements IGameObject {
 		if(keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_DOWN) {
 			Log.d(this.getClass().toString(), "onKeyDown ——> back");
 			stateSystem.changeState("MenuState");
-			((MainActivity) MainActivity.CONTEXT).stopBluetooth();
+			mainActivity.stopBluetooth();
 		}
 		return true;		//不让别人做了
 	}

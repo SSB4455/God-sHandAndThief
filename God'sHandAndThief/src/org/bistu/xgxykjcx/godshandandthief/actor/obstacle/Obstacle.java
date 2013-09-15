@@ -33,6 +33,13 @@ public class Obstacle extends GameActor {
 	public int getType() {
 		return obstacleType;
 	}
+	public String getTypeString() {
+		if(obstacleType == HOLE)
+			return HOLE_STRING;
+		if(obstacleType == PIT)
+			return PIT_STRING;
+		return null;
+	}
 	
 	public float setLeft(float left) {
 		return actorX = left + incrementWHalf;

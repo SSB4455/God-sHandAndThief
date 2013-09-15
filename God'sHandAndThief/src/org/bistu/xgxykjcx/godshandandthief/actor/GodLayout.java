@@ -54,18 +54,20 @@ public class GodLayout extends GameActor {
 		Random random = new Random();
 		GodLayout godLayout = new GodLayout();
 		level = level % 10;
+		
 		long interval = GodLayout.INTERVAL_LONG;		// 间隔时间
 		long partLong = (ProgressBar.TOTAL_Long - 4000 - interval * level) / level;		//多减4s是为了给第一个障碍的间隔预留2s为最后一个障碍预留2s
 		for(int i = 0; i < level; i++) {
+			int obstacleType = -1;
+			if(i % 2 == 0)
+				obstacleType = Obstacle.HOLE;
+			else
+				obstacleType = Obstacle.PIT;
+			
 			// 第一个障碍多添加2s的准备时间
 			long position = 2000 + i * (partLong + interval) + random.nextInt((int) partLong);
 			
-			if(i == 0)
-				godLayout.addObstacle(position, Obstacle.HOLE);
-			if(i == 1)
-				godLayout.addObstacle(position, Obstacle.PIT);
-			
-			Log.d("GodLayout", "create a obstacle, position = " + position + " type = " + (i % 2 == 0 ? "pit" : "Hole"));
+			godLayout.addObstacle(position, obstacleType);
 		}
 		return godLayout;
 	}
@@ -76,22 +78,20 @@ public class GodLayout extends GameActor {
 	 * @param type 障碍的种类
 	 */
 	public void addObstacle(long position, int type) {
-		
 		Obstacle obstacle = null;
 		switch(type) {
-		case Obstacle.HOLE : 
+		case Obstacle.HOLE :
 			obstacle = new Hole();
-			Log.i("GodLayout", "add a hole at " + System.currentTimeMillis());
 			break;
 		case Obstacle.STONE:
 		case Obstacle.PIT:
 			obstacle = new Pit();
 			break;
-		default:
 		}
 		if(obstacle != null) {
 			obstacle.setLeft(position * Businessman.SPEED);
 			children.add(obstacle);
+			Log.i("GodLayout", "add a obstacle, position = " + position + " type = " + obstacle.getTypeString());
 		}
 	}
 	

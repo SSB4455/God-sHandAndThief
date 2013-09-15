@@ -10,7 +10,6 @@ import org.bistu.xgxykjcx.godshandandthief.actor.GodLayout;
 import org.bistu.xgxykjcx.godshandandthief.actor.obstacle.Obstacle;
 import org.bistu.xgxykjcx.godshandandthief.statesystem.StateSystem.PlayerType;
 
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -23,7 +22,8 @@ public class ThiefPlayerState implements IGameObject {
 	public final static int MODEL_BRAND_NEW = 0;
 	public final static int MODEL_NORMAL = 1;
 	
-	private Context context;
+	//private Context context;
+	private MainActivity mainActivity;
 	private StateSystem stateSystem;
 	
 	private PlayerType playerType;
@@ -38,18 +38,21 @@ public class ThiefPlayerState implements IGameObject {
 	
 	
 	public ThiefPlayerState(StateSystem stateSystem, GodLayout godLayout, PlayerType playerType) {
-		this.context = MainActivity.CONTEXT;
+		//this.context = MainActivity.CONTEXT;
+		mainActivity = (MainActivity) MainActivity.CONTEXT;
 		this.stateSystem = stateSystem;
 		this.playerType = playerType;
 		
 		this.godLayout = godLayout;
-		background = new Background(context);
+		background = new Background();
 		
 		isLoseBitmap = BitmapStorage.getLose();
 		isWinBitmap = BitmapStorage.getWin();
 		
 		if(playerType == PlayerType.PlayerWithBlueTooth)
 			businessman = new Businessman(PlayerType.PlayerWithBlueTooth);
+		else if(playerType == PlayerType.AutoWithBlueTooth)
+			businessman = new Businessman(PlayerType.AutoWithBlueTooth);
 		else
 			businessman = new Businessman();
 		
@@ -75,6 +78,8 @@ public class ThiefPlayerState implements IGameObject {
 			for(int i = 0; i < godLayout.getObstacleSize(); i++)
 				if(businessman.isCollisionWith((Obstacle) godLayout.getObstacle(i))) {
 					businessman.beInjured();
+					if(MainActivity.CAN_SENDMESSAGE)
+						mainActivity.sendMessage(Businessman.IS_INJURED_STRING);
 				}
 			
 			if(businessman.getHreat() < 1) {

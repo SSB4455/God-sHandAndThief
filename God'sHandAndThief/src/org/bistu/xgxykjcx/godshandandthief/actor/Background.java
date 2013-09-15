@@ -1,8 +1,8 @@
 package org.bistu.xgxykjcx.godshandandthief.actor;
 
+import org.bistu.xgxykjcx.godshandandthief.MainActivity;
 import org.bistu.xgxykjcx.godshandandthief.MainSurfaceView;
 
-import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.util.Log;
@@ -19,9 +19,9 @@ public class Background extends GameActor {
 	
 	
 	
-	public Background(Context context) {
-		cloud = new Cloud(context);
-		ground = new Ground(context);
+	public Background() {
+		cloud = new Cloud(MainActivity.CONTEXT);
+		ground = new Ground(MainActivity.CONTEXT);
 		
 		Log.i(this.getClass().toString(), "FLOOR = " + FLOOR);
 		paint = new Paint();

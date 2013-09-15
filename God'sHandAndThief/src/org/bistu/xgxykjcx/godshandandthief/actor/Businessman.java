@@ -1,6 +1,5 @@
 package org.bistu.xgxykjcx.godshandandthief.actor;
 
-import org.bistu.xgxykjcx.godshandandthief.BluetoothChatService;
 import org.bistu.xgxykjcx.godshandandthief.MainActivity;
 import org.bistu.xgxykjcx.godshandandthief.MainSurfaceView;
 import org.bistu.xgxykjcx.godshandandthief.R;
@@ -19,9 +18,12 @@ import android.view.MotionEvent;
 
 public class Businessman extends GameActor implements OnGestureListener {
 	public static float SPEED = (MainSurfaceView.SCREEN_W / 2f) / 1000f;
-	// 标志Fling的方向
-	public static final int UP = 0;
-	public static final int DOWN = 1;
+	// 操作的标志
+	public static final int UP_FLING = 0;
+	public static final int DOWN_FLING = 1;
+	public static final String UP_FLING_STRING = "UP_FLING";
+	public static final String DOWN_FLING_STRING = "DOWN_FLING";
+	public static final String IS_INJURED_STRING = "IS_INJURED";
 	
 	private final int IS_RUN = 0;
 	private final int IS_UP = 1;
@@ -29,6 +31,7 @@ public class Businessman extends GameActor implements OnGestureListener {
 	private final int IS_INJURED = 3;
 	
 	private Context context;
+	private MainActivity mainActivity;
 	
 	private int health, frameW, frameH, incrementWHalf, incrementHHalf, currentFrame, bodyMotion;
 	private int heartStartX, heartY, heartInterval;
@@ -47,6 +50,7 @@ public class Businessman extends GameActor implements OnGestureListener {
 	
 	public Businessman() {
 		this.context = MainActivity.CONTEXT;
+		mainActivity = (MainActivity) MainActivity.CONTEXT;
 		playerType = null;
 		
 		frameTotal = new int[4];
@@ -125,21 +129,21 @@ public class Businessman extends GameActor implements OnGestureListener {
 		brushTime += elapsedTime;
 		
 		//处理输入操作
-		if(fling[DOWN]) {
+		if(fling[DOWN_FLING]) {
 			if(bodyMotion == IS_RUN)
 				bodyMotion = IS_DOWN;
 		}
-		if(fling[UP]) {
+		if(fling[UP_FLING]) {
 			if(bodyMotion == IS_RUN || bodyMotion == IS_DOWN)
 				bodyMotion = IS_UP;
 		}
-		fling[DOWN] = false;
-		fling[UP] = false;
+		fling[DOWN_FLING] = false;
+		fling[UP_FLING] = false;
 		
 		// 处理身体姿势
 		if(bodyMotion == IS_UP) {
 			actorY = Background.FLOOR - frameH - incrementHHalf - hight;
-			if(upTime < 800 || fling[UP])
+			if(upTime < 800 || fling[UP_FLING])
 				upTime += elapsedTime;
 			else {
 				upTime = 0;
@@ -148,7 +152,7 @@ public class Businessman extends GameActor implements OnGestureListener {
 			}
 		}
 		if(bodyMotion == IS_DOWN)
-			if(downTime < 800 || fling[DOWN])
+			if(downTime < 800 || fling[DOWN_FLING])
 				downTime += elapsedTime;
 			else {
 				downTime = 0;
@@ -211,13 +215,13 @@ public class Businessman extends GameActor implements OnGestureListener {
 	}
 	
 	public int setFling(int direction) {
-		if(direction == UP) {
-			fling[UP] = true;
-			return UP;
+		if(direction == UP_FLING) {
+			fling[UP_FLING] = true;
+			return UP_FLING;
 		}
-		if(direction == DOWN) {
-			fling[DOWN] = true;
-			return DOWN;
+		if(direction == DOWN_FLING) {
+			fling[DOWN_FLING] = true;
+			return DOWN_FLING;
 		}
 		return -1;
 	}
@@ -263,22 +267,19 @@ public class Businessman extends GameActor implements OnGestureListener {
 	public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
 		scrollX -= distanceX;
 		scrollY -= distanceY;
+		int scrollLength = MainSurfaceView.SCREEN_W / 10;
 		Log.d(this.getClass().toString(), "onScroll ——> distanceX = " + distanceX + ", distanceY = " + distanceY);
 		
-		int scrollLength = MainSurfaceView.SCREEN_W / 10;
-		
 		if(scrollLength < -scrollY) {
-			if(playerType == PlayerType.PlayerWithBlueTooth && 
-					((MainActivity) MainActivity.CONTEXT).getChatServiceState() == BluetoothChatService.STATE_CONNECTED)
-				((MainActivity) MainActivity.CONTEXT).sendMessage(UP + "");
-			fling[UP] = true;
+			if(MainActivity.CAN_SENDMESSAGE)
+				mainActivity.sendMessage(UP_FLING_STRING);
+			fling[UP_FLING] = true;
 			Log.d(this.getClass().toString(), "onScroll to up.");
 		}
 		if((scrollX > scrollLength && scrollY < scrollLength / 2) || scrollY > scrollLength) {
-			if(playerType == PlayerType.PlayerWithBlueTooth && 
-					((MainActivity) MainActivity.CONTEXT).getChatServiceState() == BluetoothChatService.STATE_CONNECTED)
-				((MainActivity) MainActivity.CONTEXT).sendMessage(DOWN + "");
-			fling[DOWN] = true;
+			if(MainActivity.CAN_SENDMESSAGE)
+				mainActivity.sendMessage(DOWN_FLING_STRING);
+			fling[DOWN_FLING] = true;
 			Log.d(this.getClass().toString(), "onScroll to right.");
 		}
 		return false;

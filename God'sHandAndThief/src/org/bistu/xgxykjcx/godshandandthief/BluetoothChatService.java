@@ -30,10 +30,10 @@ public class BluetoothChatService {
 
     // Name for the SDP record when creating server socket
     private static final String NAME = "BluetoothChat";
-
+    
     // Unique UUID for this application
     private static final UUID MY_UUID = UUID.fromString("fa87c0d0-afac-11de-8a39-0800200c9a66");
-
+    
     // Member fields
     private final BluetoothAdapter mAdapter;
     private final Handler mHandler;
@@ -384,18 +384,18 @@ public class BluetoothChatService {
             mmInStream = tmpIn;
             mmOutStream = tmpOut;
         }
-
+        
         public void run() {
             Log.i(TAG, "BEGIN mConnectedThread");
             byte[] buffer = new byte[1024];
             int bytes;
-
+            
             // Keep listening to the InputStream while connected
             while (true) {
                 try {
                     // Read from the InputStream
                     bytes = mmInStream.read(buffer);
-
+                    
                     // Send the obtained bytes to the UI Activity
                     mHandler.obtainMessage(MainActivity.MESSAGE_READ, bytes, -1, buffer)
                             .sendToTarget();
@@ -406,7 +406,7 @@ public class BluetoothChatService {
                 }
             }
         }
-
+        
         /**
          * Write to the connected OutStream.
          * @param buffer  The bytes to write
