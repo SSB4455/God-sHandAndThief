@@ -227,9 +227,11 @@ public class Businessman extends GameActor implements OnGestureListener {
 	}
 	
 	public void beInjured() {
-		health--;
-		bodyMotion = IS_INJURED;
-		Log.i(this.getClass().toString(), "businessman is injured.");
+		if(bodyMotion != IS_INJURED) {
+			health--;
+			bodyMotion = IS_INJURED;
+			Log.i(this.getClass().toString(), "businessman is injured.");
+		}
 	}
 	
 	public boolean onTouchEvent(MotionEvent event) {

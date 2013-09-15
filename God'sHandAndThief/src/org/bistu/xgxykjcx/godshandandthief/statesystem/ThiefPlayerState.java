@@ -166,4 +166,8 @@ public class ThiefPlayerState implements IGameObject {
 		return businessman;
 	}
 	
+	public void businessmanbeInjured() {
+		businessman.beInjured();
+	}
+	
 }

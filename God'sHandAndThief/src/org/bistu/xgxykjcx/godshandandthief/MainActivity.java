@@ -351,7 +351,11 @@ public class MainActivity extends Activity {
             			readMessage = readMessage.substring(0, readMessage.indexOf(Obstacle.PIT_STRING));
             			obstacleType = Obstacle.PIT;
             		}
-            		distanceLong = 4000 - ((System.currentTimeMillis() % 10000000 - bluetoothConnetedTime[0]) - (Integer.parseInt(readMessage) - bluetoothConnetedTime[1]));
+            		if(readMessage.contains(Businessman.IS_INJURED_STRING)) {
+            			thiefPlayerState.businessmanbeInjured();
+            		} else {
+            			distanceLong = 4000 - ((System.currentTimeMillis() % 10000000 - bluetoothConnetedTime[0]) - (Integer.parseInt(readMessage) - bluetoothConnetedTime[1]));
+            		}
             		Log.i(BluetoothTag, "distanceLong = " + distanceLong);
             		thiefPlayerState.addObstacleByBluetooth(distanceLong, obstacleType);
             	}
