@@ -80,6 +80,12 @@ public class MainActivity extends Activity {
 	}
 	
 	@Override
+	protected void onStart() {
+		super.onStart();
+		Log.e(this.getClass().toString(), "- ON START -");
+	}
+
+	@Override
 	public synchronized void onPause() {
 		super.onPause();
 		Log.e(this.getClass().toString(), "- ON PAUSE -");
