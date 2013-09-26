@@ -1,14 +1,13 @@
 package org.bistu.xgxykjcx.godshandandthief.statesystem;
 
+import org.bistu.xgxykjcx.godshandandthief.BitmapStorage;
 import org.bistu.xgxykjcx.godshandandthief.MainActivity;
 import org.bistu.xgxykjcx.godshandandthief.MainSurfaceView;
-import org.bistu.xgxykjcx.godshandandthief.R;
 import org.bistu.xgxykjcx.godshandandthief.actor.GodLayout;
 import org.bistu.xgxykjcx.godshandandthief.statesystem.StateSystem.PlayerType;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -33,10 +32,10 @@ public class ThiefChooseState implements IGameObject {
 		this.stateSystem = stateSystem;
 		
 		menuButton = new Bitmap[4];
-		menuButton[0] = BitmapFactory.decodeResource(context.getResources(), R.drawable.im_thief_come_on);
-		menuButton[1] = BitmapFactory.decodeResource(context.getResources(), R.drawable.computer_pursue_me);
-		menuButton[2] = BitmapFactory.decodeResource(context.getResources(), R.drawable.god_pursue_me);
-		menuButton[3] = BitmapFactory.decodeResource(context.getResources(), R.drawable.thief_happy);
+		menuButton[0] = BitmapStorage.getImThiefComeOn();
+		menuButton[1] = BitmapStorage.getComputerPursueMe();
+		menuButton[2] = BitmapStorage.getGodPursueMe();
+		menuButton[3] = BitmapStorage.getThiefHappy();
 		
 		menuLocation = new float[4][];
 		menuLocation[0] = new float[2];

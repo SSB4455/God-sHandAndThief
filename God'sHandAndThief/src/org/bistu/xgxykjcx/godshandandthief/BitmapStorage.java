@@ -107,6 +107,73 @@ public class BitmapStorage {
 			return null;
 	}
 	
+	public static Bitmap getGround() {
+		if(RESOURCES != null)
+			return BitmapFactory.decodeResource(RESOURCES, R.drawable.super_mario_ground);
+		else
+			return null;
+	}
+	
+	public static Bitmap getCloud() {
+		if(RESOURCES != null)
+			return BitmapFactory.decodeResource(RESOURCES, R.drawable.super_mario_cloud);
+		else
+			return null;
+	}
+	
+	public static Bitmap getBeat() {
+		if(RESOURCES != null)
+			return BitmapFactory.decodeResource(RESOURCES, R.drawable.beta);
+		else
+			return null;
+	}
+	
+	public static Bitmap getThief() {
+		if(RESOURCES != null)
+			return BitmapFactory.decodeResource(RESOURCES, R.drawable.thief);
+		else
+			return null;
+	}
+	
+	public static Bitmap getGodHand() {
+		if(RESOURCES != null)
+			return BitmapFactory.decodeResource(RESOURCES, R.drawable.god_hand);
+		else
+			return null;
+	}
+	
+	public static Bitmap getImThiefComeOn() {
+		if(RESOURCES != null)
+			return BitmapFactory.decodeResource(RESOURCES, R.drawable.im_thief_come_on);
+		else
+			return null;
+	}
+	
+	public static Bitmap getThiefHappy() {
+		if(RESOURCES != null)
+			return BitmapFactory.decodeResource(RESOURCES, R.drawable.thief_happy);
+		else
+			return null;
+	}
+	
+	public static Bitmap getGodPursueMe() {
+		if(RESOURCES != null)
+			return BitmapFactory.decodeResource(RESOURCES, R.drawable.god_pursue_me);
+		else
+			return null;
+	}
+	
+	public static Bitmap getComputerPursueMe() {
+		if(RESOURCES != null)
+			return BitmapFactory.decodeResource(RESOURCES, R.drawable.computer_pursue_me);
+		else
+			return null;
+	}
+	
+	
+	
+	
+	
 	
 	
 	

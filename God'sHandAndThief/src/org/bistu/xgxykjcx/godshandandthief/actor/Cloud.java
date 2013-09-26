@@ -1,10 +1,9 @@
 package org.bistu.xgxykjcx.godshandandthief.actor;
 
+import org.bistu.xgxykjcx.godshandandthief.BitmapStorage;
 import org.bistu.xgxykjcx.godshandandthief.MainSurfaceView;
-import org.bistu.xgxykjcx.godshandandthief.R;
 
 import android.content.Context;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.util.Log;
@@ -18,7 +17,7 @@ public class Cloud extends GameActor {
 	public Cloud(Context context) {
 		
 		cloudSpeed = 100;
-		actorBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.super_mario_cloud);
+		actorBitmap = BitmapStorage.getCloud();
 		
 		frameW = actorBitmap.getWidth();
 		frameH = actorBitmap.getHeight();

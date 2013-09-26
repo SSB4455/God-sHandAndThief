@@ -1,12 +1,11 @@
 package org.bistu.xgxykjcx.godshandandthief.statesystem;
 
+import org.bistu.xgxykjcx.godshandandthief.BitmapStorage;
 import org.bistu.xgxykjcx.godshandandthief.MainActivity;
 import org.bistu.xgxykjcx.godshandandthief.MainSurfaceView;
-import org.bistu.xgxykjcx.godshandandthief.R;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -32,9 +31,9 @@ public class MenuState implements IGameObject {
 		this.stateSystem = stateSystem;
 		
 		menuButton = new Bitmap[3];
-		menuButton[0] = BitmapFactory.decodeResource(context.getResources(), R.drawable.god_hand);
-		menuButton[1] = BitmapFactory.decodeResource(context.getResources(), R.drawable.thief);
-		menuButton[2] = BitmapFactory.decodeResource(context.getResources(), R.drawable.beta);
+		menuButton[0] = BitmapStorage.getGodHand();
+		menuButton[1] = BitmapStorage.getThief();
+		menuButton[2] = BitmapStorage.getBeat();
 		
 		menuLocation = new float[3][];
 		menuLocation[0] = new float[2];

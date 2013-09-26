@@ -1,10 +1,9 @@
 package org.bistu.xgxykjcx.godshandandthief.actor;
 
+import org.bistu.xgxykjcx.godshandandthief.BitmapStorage;
 import org.bistu.xgxykjcx.godshandandthief.MainSurfaceView;
-import org.bistu.xgxykjcx.godshandandthief.R;
 
 import android.content.Context;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.util.Log;
@@ -17,7 +16,7 @@ public class Ground extends GameActor {
 	
 	public Ground(Context context) {
 		
-		actorBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.super_mario_ground);
+		actorBitmap = BitmapStorage.getGround();
 		
 		frameW = actorBitmap.getWidth();
 		frameH = actorBitmap.getHeight();
