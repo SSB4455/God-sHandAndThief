@@ -1,6 +1,6 @@
-package org.bistu.xgxykjcx.godshandandthief;
+package edu.bistu.xgxykjcx.godshandandthief;
 
-import org.bistu.xgxykjcx.godshandandthief.statesystem.*;
+import edu.bistu.xgxykjcx.godshandandthief.statesystem.*;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -16,7 +16,7 @@ import android.view.SurfaceHolder.Callback;
 import android.view.SurfaceView;
 import android.widget.Toast;
 
-public class MainSurfaceView extends SurfaceView implements Callback, Runnable {
+public class GHTSurfaceView extends SurfaceView implements Callback, Runnable {
 	
 	public static int SCREEN_H, SCREEN_W, DENSITY_DPI;
 	public static float DENSITY;
@@ -36,7 +36,7 @@ public class MainSurfaceView extends SurfaceView implements Callback, Runnable {
 	
 	
 	
-	public MainSurfaceView(Context context) {
+	public GHTSurfaceView(Context context) {
 		super(context);
 		
 		this.context = context;
@@ -46,7 +46,7 @@ public class MainSurfaceView extends SurfaceView implements Callback, Runnable {
 		DENSITY_DPI = metric.densityDpi;  // 屏幕密度DPI（120 / 160 / 240）
 		SCREEN_H = metric.heightPixels;
 		SCREEN_W = metric.widthPixels;
-		Log.d(this.getClass().toString(), "SCREEN_H = " + SCREEN_H + ", SCREEN_W = " + SCREEN_W);
+		Log.d(this.getClass().getSimpleName(), "SCREEN_H = " + SCREEN_H + ", SCREEN_W = " + SCREEN_W);
 		
 		setBrushFrameFrequency(100);
 		time = new long[3];
@@ -61,7 +61,7 @@ public class MainSurfaceView extends SurfaceView implements Callback, Runnable {
 		this.setFocusable(true);
 		this.setFocusableInTouchMode(true);
 		this.setLongClickable(true);
-		//Log.d(this.getClass().toString(), "structure ——> isFocused = " + isFocused());
+		//Log.d(this.getClass().getSimpleName(), "structure ——> isFocused = " + isFocused());
 		
 		sfh = this.getHolder();		// 获取当前SurfaceView的SurfaceHolder
 		sfh.addCallback(this);		// 设置当前SurfaceView的回调
@@ -79,7 +79,7 @@ public class MainSurfaceView extends SurfaceView implements Callback, Runnable {
 	
 	public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {		//Callback
 		Toast.makeText(context, "surfaceChanged", Toast.LENGTH_SHORT).show();
-		Log.d(this.getClass().toString(), "surfaceChanged");
+		Log.d(this.getClass().getSimpleName(), "surfaceChanged");
 		//flag = false;
 	}
 	
@@ -114,24 +114,24 @@ public class MainSurfaceView extends SurfaceView implements Callback, Runnable {
 	
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		//Log.i(this.getClass().toString(), "onKeyDown");
+		//Log.i(this.getClass().getSimpleName(), "onKeyDown");
 		//Toast.makeText(context, "MainSurfaceView --> onKeyDown", Toast.LENGTH_SHORT).show();
 		
 		switch(keyCode) {
 		case KeyEvent.KEYCODE_DPAD_UP:
-			Log.d(this.getClass().toString(), "onKeyDown ——> up");break;
+			Log.d(this.getClass().getSimpleName(), "onKeyDown ——> up");break;
 		
 		case KeyEvent.KEYCODE_DPAD_DOWN:
-			Log.d(this.getClass().toString(), "onKeyDown ——> down");break;
+			Log.d(this.getClass().getSimpleName(), "onKeyDown ——> down");break;
 		
 		case KeyEvent.KEYCODE_DPAD_LEFT:
-			Log.d(this.getClass().toString(), "onKeyDown ——> left");break;
+			Log.d(this.getClass().getSimpleName(), "onKeyDown ——> left");break;
 		
 		case KeyEvent.KEYCODE_DPAD_RIGHT:
-			Log.d(this.getClass().toString(), "onKeyDown ——> right");break;
+			Log.d(this.getClass().getSimpleName(), "onKeyDown ——> right");break;
 			
 		case KeyEvent.KEYCODE_BACK:
-			Log.d(this.getClass().toString(), "onKeyDown ——> back");
+			Log.d(this.getClass().getSimpleName(), "onKeyDown ——> back");
 		}
 		
 		//return false;		// false是继续做
@@ -141,7 +141,7 @@ public class MainSurfaceView extends SurfaceView implements Callback, Runnable {
 	
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
-		//Log.d(this.getClass().toString(), "onTouchEvent ——> onTouch");
+		//Log.d(this.getClass().getSimpleName(), "onTouchEvent ——> onTouch");
 		
 		//return super.onTouchEvent(event);
 		return stateSystem.onTouchEvent(event);

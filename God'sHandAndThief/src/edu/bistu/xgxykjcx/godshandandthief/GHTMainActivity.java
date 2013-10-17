@@ -1,12 +1,13 @@
-package org.bistu.xgxykjcx.godshandandthief;
+package edu.bistu.xgxykjcx.godshandandthief;
 
 import java.util.ArrayList;
 
-import org.bistu.xgxykjcx.godshandandthief.actor.Businessman;
-import org.bistu.xgxykjcx.godshandandthief.actor.obstacle.Obstacle;
-import org.bistu.xgxykjcx.godshandandthief.statesystem.GodHandPlayerState;
-import org.bistu.xgxykjcx.godshandandthief.statesystem.IGameObject;
-import org.bistu.xgxykjcx.godshandandthief.statesystem.ThiefPlayerState;
+
+import edu.bistu.xgxykjcx.godshandandthief.actor.Businessman;
+import edu.bistu.xgxykjcx.godshandandthief.actor.obstacle.Obstacle;
+import edu.bistu.xgxykjcx.godshandandthief.statesystem.GodHandPlayerState;
+import edu.bistu.xgxykjcx.godshandandthief.statesystem.IGameObject;
+import edu.bistu.xgxykjcx.godshandandthief.statesystem.ThiefPlayerState;
 
 import android.os.Bundle;
 import android.os.Handler;
@@ -22,7 +23,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 
-public class MainActivity extends Activity {
+public class GHTMainActivity extends Activity {
 	// Debugging
 	private final String BluetoothTag = "BluetoothState";
 	// Message types sent from the BluetoothChatService Handler
@@ -69,38 +70,38 @@ public class MainActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		Log.d(this.getClass().toString(), "- ON CREATR -");
+		Log.d(this.getClass().getSimpleName(), "- ON CREATR -");
 		CONTEXT = this;
 		CAN_SENDMESSAGE = false;
 		
 		BitmapStorage.setResources(this.getResources());
 		
 		// 启动游戏界面
-		setContentView(new MainSurfaceView(this));
+		setContentView(new GHTSurfaceView(this));
 	}
 	
 	@Override
 	protected void onStart() {
 		super.onStart();
-		Log.e(this.getClass().toString(), "- ON START -");
+		Log.e(this.getClass().getSimpleName(), "- ON START -");
 	}
 
 	@Override
 	public synchronized void onPause() {
 		super.onPause();
-		Log.e(this.getClass().toString(), "- ON PAUSE -");
+		Log.e(this.getClass().getSimpleName(), "- ON PAUSE -");
 	}
 	
 	@Override
 	public void onStop() {
 		super.onStop();
-		Log.e(this.getClass().toString(), "-- ON STOP --");
+		Log.e(this.getClass().getSimpleName(), "-- ON STOP --");
 	}
 	
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
-		Log.e(this.getClass().toString(), "- ON DESTROY -");
+		Log.e(this.getClass().getSimpleName(), "- ON DESTROY -");
 		
 		// Make sure we're not doing discovery anymore
 		if (mBluetoothAdapter != null) {
@@ -308,7 +309,7 @@ public class MainActivity extends Activity {
                 	// 
                 	bluetoothConnetedTime = new int[3];
                 	bluetoothConnetedTime[0] = (int) (System.currentTimeMillis() % 10000000);
-                	((MainActivity) CONTEXT).sendMessage(System.currentTimeMillis() % 10000000 + "BCT");
+                	((GHTMainActivity) CONTEXT).sendMessage(System.currentTimeMillis() % 10000000 + "BCT");
                 	// 已经连接上 去掉小偷的尾巴
                 	String name = mBluetoothAdapter.getName();
                 	while(name.endsWith(THIEF_TAIL))

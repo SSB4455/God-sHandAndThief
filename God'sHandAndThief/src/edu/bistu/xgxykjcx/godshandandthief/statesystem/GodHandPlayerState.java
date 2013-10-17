@@ -1,12 +1,13 @@
-package org.bistu.xgxykjcx.godshandandthief.statesystem;
+package edu.bistu.xgxykjcx.godshandandthief.statesystem;
 
-import org.bistu.xgxykjcx.godshandandthief.BitmapStorage;
-import org.bistu.xgxykjcx.godshandandthief.MainActivity;
-import org.bistu.xgxykjcx.godshandandthief.MainSurfaceView;
-import org.bistu.xgxykjcx.godshandandthief.actor.Businessman;
-import org.bistu.xgxykjcx.godshandandthief.actor.GodLayout;
-import org.bistu.xgxykjcx.godshandandthief.actor.obstacle.Obstacle;
-import org.bistu.xgxykjcx.godshandandthief.statesystem.StateSystem.PlayerType;
+
+import edu.bistu.xgxykjcx.godshandandthief.BitmapStorage;
+import edu.bistu.xgxykjcx.godshandandthief.GHTMainActivity;
+import edu.bistu.xgxykjcx.godshandandthief.GHTSurfaceView;
+import edu.bistu.xgxykjcx.godshandandthief.actor.Businessman;
+import edu.bistu.xgxykjcx.godshandandthief.actor.GodLayout;
+import edu.bistu.xgxykjcx.godshandandthief.actor.obstacle.Obstacle;
+import edu.bistu.xgxykjcx.godshandandthief.statesystem.StateSystem.PlayerType;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -18,7 +19,7 @@ import android.view.MotionEvent;
 
 public class GodHandPlayerState implements IGameObject {
 	//private Context context;
-	private MainActivity mainActivity;
+	private GHTMainActivity mainActivity;
 	private StateSystem stateSystem;
 	
 	private final int X = 0, Y = 1;
@@ -40,7 +41,7 @@ public class GodHandPlayerState implements IGameObject {
 	
 	public GodHandPlayerState(StateSystem stateSystem, PlayerType playerType) {
 		//this.context = MainActivity.CONTEXT;
-		mainActivity = (MainActivity) MainActivity.CONTEXT;
+		mainActivity = (GHTMainActivity) GHTMainActivity.CONTEXT;
 		this.stateSystem = stateSystem;
 		this.playerType = playerType;
 		
@@ -61,11 +62,11 @@ public class GodHandPlayerState implements IGameObject {
 		
 		menuLocation = new float[2][];
 		menuLocation[0] = new float[2];
-		menuLocation[0][X] = (MainSurfaceView.SCREEN_W * 5 / 8);
-		menuLocation[0][Y] = (MainSurfaceView.SCREEN_H / 8);
+		menuLocation[0][X] = (GHTSurfaceView.SCREEN_W * 5 / 8);
+		menuLocation[0][Y] = (GHTSurfaceView.SCREEN_H / 8);
 		menuLocation[1] = new float[2];
-		menuLocation[1][X] = (MainSurfaceView.SCREEN_W * 3 / 4);
-		menuLocation[1][Y] = (MainSurfaceView.SCREEN_H / 6);
+		menuLocation[1][X] = (GHTSurfaceView.SCREEN_W * 3 / 4);
+		menuLocation[1][Y] = (GHTSurfaceView.SCREEN_H / 6);
 		
 		paint = new Paint();
 		brushPaint = new Paint();
@@ -91,8 +92,8 @@ public class GodHandPlayerState implements IGameObject {
 		canvas.drawColor(Color.BLACK);
 		
 		canvas.save();		// 开始渲染小偷的画面
-		canvas.clipRect(0, MainSurfaceView.SCREEN_H / 2, MainSurfaceView.SCREEN_W, MainSurfaceView.SCREEN_H);
-		canvas.scale(0.5f, 0.5f, 0, MainSurfaceView.SCREEN_H);
+		canvas.clipRect(0, GHTSurfaceView.SCREEN_H / 2, GHTSurfaceView.SCREEN_W, GHTSurfaceView.SCREEN_H);
+		canvas.scale(0.5f, 0.5f, 0, GHTSurfaceView.SCREEN_H);
 		thiefPlayerState.render(canvas);
 		canvas.restore();
 		
@@ -112,8 +113,8 @@ public class GodHandPlayerState implements IGameObject {
 		}
 		
 		if(playerType == PlayerType.PlayerWithBlueTooth) {
-			canvas.drawText("对方设备：", 3, MainSurfaceView.SCREEN_H - 7, paint);
-			canvas.drawText(((MainActivity) MainActivity.CONTEXT).getConnectedDeviceName(), 63, MainSurfaceView.SCREEN_H - 7, paint);
+			canvas.drawText("对方设备：", 3, GHTSurfaceView.SCREEN_H - 7, paint);
+			canvas.drawText(((GHTMainActivity) GHTMainActivity.CONTEXT).getConnectedDeviceName(), 63, GHTSurfaceView.SCREEN_H - 7, paint);
 			
 		}
 		
@@ -151,7 +152,7 @@ public class GodHandPlayerState implements IGameObject {
 			}
 			if(playerType == PlayerType.PlayerWithBlueTooth) {
 				stateSystem.changeState("MenuState");
-				((MainActivity) MainActivity.CONTEXT).stopBluetooth();
+				((GHTMainActivity) GHTMainActivity.CONTEXT).stopBluetooth();
 			}
 		} else if(event.getAction() == MotionEvent.ACTION_DOWN && intervalBrush >= GodLayout.INTERVAL_LONG) {
 			for(int i = 0; i < menuButton.length; i++) {
@@ -170,7 +171,7 @@ public class GodHandPlayerState implements IGameObject {
 						obstacleType = Obstacle.PIT;
 						obstacleTypeString = Obstacle.PIT_STRING;
 					}
-					if(MainActivity.CAN_SENDMESSAGE)
+					if(GHTMainActivity.CAN_SENDMESSAGE)
 						mainActivity.sendMessage(System.currentTimeMillis() % 10000000 + obstacleTypeString);
 					
 					godLayout.addObstacle(4000, obstacleType);

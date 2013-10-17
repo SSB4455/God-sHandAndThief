@@ -1,9 +1,10 @@
-package org.bistu.xgxykjcx.godshandandthief.statesystem;
+package edu.bistu.xgxykjcx.godshandandthief.statesystem;
 
-import org.bistu.xgxykjcx.godshandandthief.BitmapStorage;
-import org.bistu.xgxykjcx.godshandandthief.MainActivity;
-import org.bistu.xgxykjcx.godshandandthief.MainSurfaceView;
-import org.bistu.xgxykjcx.godshandandthief.statesystem.StateSystem.PlayerType;
+
+import edu.bistu.xgxykjcx.godshandandthief.BitmapStorage;
+import edu.bistu.xgxykjcx.godshandandthief.GHTMainActivity;
+import edu.bistu.xgxykjcx.godshandandthief.GHTSurfaceView;
+import edu.bistu.xgxykjcx.godshandandthief.statesystem.StateSystem.PlayerType;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -27,7 +28,7 @@ public class GodChooseState implements IGameObject {
 	
 	
 	public GodChooseState(StateSystem stateSystem) {
-		this.context = MainActivity.CONTEXT;
+		this.context = GHTMainActivity.CONTEXT;
 		this.stateSystem = stateSystem;
 		
 		menuButton = new Bitmap[4];
@@ -38,17 +39,17 @@ public class GodChooseState implements IGameObject {
 		
 		menuLocation = new float[4][];
 		menuLocation[0] = new float[2];
-		menuLocation[0][X] = MainSurfaceView.SCREEN_W / 8;
-		menuLocation[0][Y] = MainSurfaceView.SCREEN_H / 8;
+		menuLocation[0][X] = GHTSurfaceView.SCREEN_W / 8;
+		menuLocation[0][Y] = GHTSurfaceView.SCREEN_H / 8;
 		menuLocation[1] = new float[2];
-		menuLocation[1][X] = MainSurfaceView.SCREEN_W / 3;
-		menuLocation[1][Y] = MainSurfaceView.SCREEN_H / 2;
+		menuLocation[1][X] = GHTSurfaceView.SCREEN_W / 3;
+		menuLocation[1][Y] = GHTSurfaceView.SCREEN_H / 2;
 		menuLocation[2] = new float[2];
-		menuLocation[2][X] = MainSurfaceView.SCREEN_W / 3;
-		menuLocation[2][Y] = MainSurfaceView.SCREEN_H * 3 / 4;
+		menuLocation[2][X] = GHTSurfaceView.SCREEN_W / 3;
+		menuLocation[2][Y] = GHTSurfaceView.SCREEN_H * 3 / 4;
 		menuLocation[3] = new float[2];
 		menuLocation[3][X] = 0;
-		menuLocation[3][Y] = MainSurfaceView.SCREEN_H / 4;
+		menuLocation[3][Y] = GHTSurfaceView.SCREEN_H / 4;
 		
 		paint = new Paint();
 		
@@ -85,7 +86,7 @@ public class GodChooseState implements IGameObject {
 						// 启动用蓝牙连接的上帝之手状态
 						GodHandPlayerState godHandPlayerState = new GodHandPlayerState(stateSystem, PlayerType.PlayerWithBlueTooth);
 						// start bluetooth
-						((MainActivity) MainActivity.CONTEXT).startBluetooth(MainActivity.GODSHAND, godHandPlayerState);
+						((GHTMainActivity) GHTMainActivity.CONTEXT).startBluetooth(GHTMainActivity.GODSHAND, godHandPlayerState);
 						stateSystem.addState("GodHandPlayerState", godHandPlayerState);
 						stateSystem.changeState("GodHandPlayerState");
 						Toast.makeText(context, "点击屏幕to扫描小偷...", Toast.LENGTH_LONG).show();

@@ -1,6 +1,6 @@
-package org.bistu.xgxykjcx.godshandandthief.statesystem;
+package edu.bistu.xgxykjcx.godshandandthief.statesystem;
 
-import org.bistu.xgxykjcx.godshandandthief.MainSurfaceView;
+import edu.bistu.xgxykjcx.godshandandthief.GHTSurfaceView;
 
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -37,8 +37,8 @@ public class SplashState implements IGameObject {
 	public void render(Canvas canvas) {
 		
 		canvas.drawColor(Color.BLACK);
-		canvas.drawLine(MainSurfaceView.SCREEN_W / 4, 0, MainSurfaceView.SCREEN_W / 2, MainSurfaceView.SCREEN_H, paint);
-		canvas.drawLine(0, MainSurfaceView.SCREEN_H, MainSurfaceView.SCREEN_W, 0, paint);
+		canvas.drawLine(GHTSurfaceView.SCREEN_W / 4, 0, GHTSurfaceView.SCREEN_W / 2, GHTSurfaceView.SCREEN_H, paint);
+		canvas.drawLine(0, GHTSurfaceView.SCREEN_H, GHTSurfaceView.SCREEN_W, 0, paint);
 		
 		//paint.setARGB(255, 255, 255, 255);		//A透明度越低越透明
 	}

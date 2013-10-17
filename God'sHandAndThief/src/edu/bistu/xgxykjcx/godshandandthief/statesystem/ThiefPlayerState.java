@@ -1,14 +1,15 @@
-package org.bistu.xgxykjcx.godshandandthief.statesystem;
+package edu.bistu.xgxykjcx.godshandandthief.statesystem;
 
-import org.bistu.xgxykjcx.godshandandthief.BitmapStorage;
-import org.bistu.xgxykjcx.godshandandthief.BluetoothChatService;
-import org.bistu.xgxykjcx.godshandandthief.MainActivity;
-import org.bistu.xgxykjcx.godshandandthief.MainSurfaceView;
-import org.bistu.xgxykjcx.godshandandthief.actor.Background;
-import org.bistu.xgxykjcx.godshandandthief.actor.Businessman;
-import org.bistu.xgxykjcx.godshandandthief.actor.GodLayout;
-import org.bistu.xgxykjcx.godshandandthief.actor.obstacle.Obstacle;
-import org.bistu.xgxykjcx.godshandandthief.statesystem.StateSystem.PlayerType;
+
+import edu.bistu.xgxykjcx.godshandandthief.BitmapStorage;
+import edu.bistu.xgxykjcx.godshandandthief.BluetoothChatService;
+import edu.bistu.xgxykjcx.godshandandthief.GHTMainActivity;
+import edu.bistu.xgxykjcx.godshandandthief.GHTSurfaceView;
+import edu.bistu.xgxykjcx.godshandandthief.actor.Background;
+import edu.bistu.xgxykjcx.godshandandthief.actor.Businessman;
+import edu.bistu.xgxykjcx.godshandandthief.actor.GodLayout;
+import edu.bistu.xgxykjcx.godshandandthief.actor.obstacle.Obstacle;
+import edu.bistu.xgxykjcx.godshandandthief.statesystem.StateSystem.PlayerType;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -23,7 +24,7 @@ public class ThiefPlayerState implements IGameObject {
 	public final static int MODEL_NORMAL = 1;
 	
 	//private Context context;
-	private MainActivity mainActivity;
+	private GHTMainActivity mainActivity;
 	private StateSystem stateSystem;
 	
 	private PlayerType playerType;
@@ -39,7 +40,7 @@ public class ThiefPlayerState implements IGameObject {
 	
 	public ThiefPlayerState(StateSystem stateSystem, GodLayout godLayout, PlayerType playerType) {
 		//this.context = MainActivity.CONTEXT;
-		mainActivity = (MainActivity) MainActivity.CONTEXT;
+		mainActivity = (GHTMainActivity) GHTMainActivity.CONTEXT;
 		this.stateSystem = stateSystem;
 		this.playerType = playerType;
 		
@@ -63,10 +64,10 @@ public class ThiefPlayerState implements IGameObject {
 	public void update(long elapsedTime) {
 		
 		if(playerType == PlayerType.PlayerWithBlueTooth || playerType == PlayerType.AutoWithBlueTooth) {
-			if(((MainActivity) MainActivity.CONTEXT).getChatServiceState() != BluetoothChatService.STATE_CONNECTED)
+			if(((GHTMainActivity) GHTMainActivity.CONTEXT).getChatServiceState() != BluetoothChatService.STATE_CONNECTED)
 				godLayout.getProgressBar().stop();
 
-			if(((MainActivity) MainActivity.CONTEXT).getChatServiceState() == BluetoothChatService.STATE_CONNECTED 
+			if(((GHTMainActivity) GHTMainActivity.CONTEXT).getChatServiceState() == BluetoothChatService.STATE_CONNECTED 
 					&& !isOver() && !godLayout.getProgressBar().isOver())
 				godLayout.getProgressBar().start();
 		}
@@ -78,7 +79,7 @@ public class ThiefPlayerState implements IGameObject {
 			for(int i = 0; i < godLayout.getObstacleSize(); i++)
 				if(businessman.isCollisionWith((Obstacle) godLayout.getObstacle(i))) {
 					businessman.beInjured();
-					if(MainActivity.CAN_SENDMESSAGE)
+					if(GHTMainActivity.CAN_SENDMESSAGE)
 						mainActivity.sendMessage(Businessman.IS_INJURED_STRING);
 				}
 			
@@ -99,13 +100,13 @@ public class ThiefPlayerState implements IGameObject {
 		godLayout.render(canvas);
 		businessman.render(canvas);
 		if(isWin)
-			canvas.drawBitmap(isWinBitmap, MainSurfaceView.SCREEN_W / 5, MainSurfaceView.SCREEN_H - isWinBitmap.getHeight(), paint);
+			canvas.drawBitmap(isWinBitmap, GHTSurfaceView.SCREEN_W / 5, GHTSurfaceView.SCREEN_H - isWinBitmap.getHeight(), paint);
 		if(isLose)
-			canvas.drawBitmap(isLoseBitmap, MainSurfaceView.SCREEN_W / 5, MainSurfaceView.SCREEN_H - isLoseBitmap.getHeight(), paint);
+			canvas.drawBitmap(isLoseBitmap, GHTSurfaceView.SCREEN_W / 5, GHTSurfaceView.SCREEN_H - isLoseBitmap.getHeight(), paint);
 		
 		if(playerType == PlayerType.PlayerWithBlueTooth) {
-			canvas.drawText("对方设备：", 3, MainSurfaceView.SCREEN_H - 7, paint);
-			canvas.drawText(((MainActivity) MainActivity.CONTEXT).getConnectedDeviceName(), 63, MainSurfaceView.SCREEN_H - 7, paint);
+			canvas.drawText("对方设备：", 3, GHTSurfaceView.SCREEN_H - 7, paint);
+			canvas.drawText(((GHTMainActivity) GHTMainActivity.CONTEXT).getConnectedDeviceName(), 63, GHTSurfaceView.SCREEN_H - 7, paint);
 			
 		}
 	}
@@ -135,7 +136,7 @@ public class ThiefPlayerState implements IGameObject {
 				}
 				if(playerType == PlayerType.PlayerWithBlueTooth) {
 					stateSystem.changeState("MenuState");
-					((MainActivity) MainActivity.CONTEXT).stopBluetooth();
+					((GHTMainActivity) GHTMainActivity.CONTEXT).stopBluetooth();
 				}
 			}
 		}
@@ -147,7 +148,7 @@ public class ThiefPlayerState implements IGameObject {
 		if(keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_DOWN) {
 			Log.i(this.getClass().toString(), "onKeyDown ——> back");
 			stateSystem.changeState("MenuState");
-			((MainActivity) MainActivity.CONTEXT).stopBluetooth();
+			((GHTMainActivity) GHTMainActivity.CONTEXT).stopBluetooth();
 		}
 		return true;		//不让别人做了
 	}

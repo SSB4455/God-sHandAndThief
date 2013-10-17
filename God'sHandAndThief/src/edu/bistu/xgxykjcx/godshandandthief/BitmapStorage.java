@@ -1,4 +1,6 @@
-package org.bistu.xgxykjcx.godshandandthief;
+package edu.bistu.xgxykjcx.godshandandthief;
+
+import edu.bistu.xgxykjcx.godshandandthief.R;
 
 import android.content.Context;
 import android.content.res.Resources;
@@ -21,6 +23,13 @@ public class BitmapStorage {
 	
 	public static void setResources(Resources resources) {
 		BitmapStorage.RESOURCES = resources;
+	}
+	
+	public static Bitmap getBitmap(int RdrawableID) {
+		if(RESOURCES != null)
+			return BitmapFactory.decodeResource(RESOURCES, RdrawableID);
+		else
+			return null;
 	}
 	
 	public static Bitmap getBusinessmanRun() {

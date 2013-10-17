@@ -1,7 +1,7 @@
-package org.bistu.xgxykjcx.godshandandthief.actor;
+package edu.bistu.xgxykjcx.godshandandthief.actor;
 
-import org.bistu.xgxykjcx.godshandandthief.BitmapStorage;
-import org.bistu.xgxykjcx.godshandandthief.MainSurfaceView;
+import edu.bistu.xgxykjcx.godshandandthief.BitmapStorage;
+import edu.bistu.xgxykjcx.godshandandthief.GHTSurfaceView;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -22,10 +22,10 @@ public class Cloud extends GameActor {
 		frameW = actorBitmap.getWidth();
 		frameH = actorBitmap.getHeight();
 
-		shrink = (MainSurfaceView.SCREEN_W / 6) / (float) frameW;
+		shrink = (GHTSurfaceView.SCREEN_W / 6) / (float) frameW;
 		
-		actorX = Background.FACE_TO == Background.TO_LEFT ? MainSurfaceView.SCREEN_W : -frameW;
-		actorY = MainSurfaceView.SCREEN_H / 9 + frameH * (shrink - 1) / 2;
+		actorX = Background.FACE_TO == Background.TO_LEFT ? GHTSurfaceView.SCREEN_W : -frameW;
+		actorY = GHTSurfaceView.SCREEN_H / 9 + frameH * (shrink - 1) / 2;
 		
 		Log.i(this.getClass().toString(), "cloudShrink = " + shrink);
 		paint = new Paint();
@@ -46,9 +46,9 @@ public class Cloud extends GameActor {
 		
 		//³¬³öÆÁÄ»×ª»Ø
 		if(actorX < -frameW * shrink) {
-			actorX = MainSurfaceView.SCREEN_W + (frameW * (shrink - 1) / 2);
+			actorX = GHTSurfaceView.SCREEN_W + (frameW * (shrink - 1) / 2);
 		}
-		if(actorX > MainSurfaceView.SCREEN_W + (frameW * (shrink - 1) / 2)) {
+		if(actorX > GHTSurfaceView.SCREEN_W + (frameW * (shrink - 1) / 2)) {
 			actorX = -frameW * shrink;
 		}
 	}

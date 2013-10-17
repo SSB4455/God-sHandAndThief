@@ -1,4 +1,4 @@
-package org.bistu.xgxykjcx.godshandandthief.actor;
+package edu.bistu.xgxykjcx.godshandandthief.actor;
 
 import java.util.ArrayList;
 

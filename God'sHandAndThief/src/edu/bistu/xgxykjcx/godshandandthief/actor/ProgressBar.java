@@ -1,6 +1,6 @@
-package org.bistu.xgxykjcx.godshandandthief.actor;
+package edu.bistu.xgxykjcx.godshandandthief.actor;
 
-import org.bistu.xgxykjcx.godshandandthief.MainSurfaceView;
+import edu.bistu.xgxykjcx.godshandandthief.GHTSurfaceView;
 
 import android.graphics.Canvas;
 import android.graphics.Paint;
@@ -34,8 +34,8 @@ public class ProgressBar extends GameActor {
 	@Override
 	public void render(Canvas canvas) {
 		
-		canvas.drawLine(MainSurfaceView.SCREEN_W / 4, 14, MainSurfaceView.SCREEN_W * 3 / 4, 14, paint);
-		canvas.drawCircle(MainSurfaceView.SCREEN_W / 4 + MainSurfaceView.SCREEN_W / 2 * (playTime / (float) TOTAL_Long), 14, 7, paint);
+		canvas.drawLine(GHTSurfaceView.SCREEN_W / 4, 14, GHTSurfaceView.SCREEN_W * 3 / 4, 14, paint);
+		canvas.drawCircle(GHTSurfaceView.SCREEN_W / 4 + GHTSurfaceView.SCREEN_W / 2 * (playTime / (float) TOTAL_Long), 14, 7, paint);
 		
 	}
 	

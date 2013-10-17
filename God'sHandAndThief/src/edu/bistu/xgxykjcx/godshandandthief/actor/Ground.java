@@ -1,7 +1,7 @@
-package org.bistu.xgxykjcx.godshandandthief.actor;
+package edu.bistu.xgxykjcx.godshandandthief.actor;
 
-import org.bistu.xgxykjcx.godshandandthief.BitmapStorage;
-import org.bistu.xgxykjcx.godshandandthief.MainSurfaceView;
+import edu.bistu.xgxykjcx.godshandandthief.BitmapStorage;
+import edu.bistu.xgxykjcx.godshandandthief.GHTSurfaceView;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -21,10 +21,10 @@ public class Ground extends GameActor {
 		frameW = actorBitmap.getWidth();
 		frameH = actorBitmap.getHeight();
 		
-		shrink = (MainSurfaceView.SCREEN_H - Background.FLOOR) / (float) frameH;
+		shrink = (GHTSurfaceView.SCREEN_H - Background.FLOOR) / (float) frameH;
 		
 		actorX = frameW * (shrink - 1) / 2;
-		actorY = MainSurfaceView.SCREEN_H * 3 / 4 + (MainSurfaceView.SCREEN_H / 4 - frameH) / 2;
+		actorY = GHTSurfaceView.SCREEN_H * 3 / 4 + (GHTSurfaceView.SCREEN_H / 4 - frameH) / 2;
 		
 		Log.i(this.getClass().toString(), "groundShrink = " + shrink + "\nactorX = " + actorX + "  actorY = " + actorY);
 		paint = new Paint();
@@ -41,11 +41,11 @@ public class Ground extends GameActor {
 		
 		// 超出屏幕转回
 		// 两倍屏幕是为了帮助上帝那边
-		if(actorX < MainSurfaceView.SCREEN_W * 2 - frameW * (shrink + 1) / 2) {
+		if(actorX < GHTSurfaceView.SCREEN_W * 2 - frameW * (shrink + 1) / 2) {
 			actorX = frameW * (shrink - 1) / 2;
 		}
 		if(actorX > frameW * (shrink - 1) / 2) {
-			actorX = MainSurfaceView.SCREEN_W - frameW * (shrink + 1) / 2;
+			actorX = GHTSurfaceView.SCREEN_W - frameW * (shrink + 1) / 2;
 		}
 	}
 	

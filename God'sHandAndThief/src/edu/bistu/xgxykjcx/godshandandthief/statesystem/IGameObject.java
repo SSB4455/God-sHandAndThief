@@ -1,4 +1,4 @@
-package org.bistu.xgxykjcx.godshandandthief.statesystem;
+package edu.bistu.xgxykjcx.godshandandthief.statesystem;
 
 import android.graphics.Canvas;
 import android.view.KeyEvent;

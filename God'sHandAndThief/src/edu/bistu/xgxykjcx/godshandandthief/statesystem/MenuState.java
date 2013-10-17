@@ -1,8 +1,8 @@
-package org.bistu.xgxykjcx.godshandandthief.statesystem;
+package edu.bistu.xgxykjcx.godshandandthief.statesystem;
 
-import org.bistu.xgxykjcx.godshandandthief.BitmapStorage;
-import org.bistu.xgxykjcx.godshandandthief.MainActivity;
-import org.bistu.xgxykjcx.godshandandthief.MainSurfaceView;
+import edu.bistu.xgxykjcx.godshandandthief.BitmapStorage;
+import edu.bistu.xgxykjcx.godshandandthief.GHTMainActivity;
+import edu.bistu.xgxykjcx.godshandandthief.GHTSurfaceView;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -27,7 +27,7 @@ public class MenuState implements IGameObject {
 	
 	
 	public MenuState(StateSystem stateSystem) {
-		this.context = MainActivity.CONTEXT;
+		this.context = GHTMainActivity.CONTEXT;
 		this.stateSystem = stateSystem;
 		
 		menuButton = new Bitmap[3];
@@ -37,14 +37,14 @@ public class MenuState implements IGameObject {
 		
 		menuLocation = new float[3][];
 		menuLocation[0] = new float[2];
-		menuLocation[0][X] = MainSurfaceView.SCREEN_W / 4;
-		menuLocation[0][Y] = MainSurfaceView.SCREEN_H / 3 - menuButton[0].getHeight();
+		menuLocation[0][X] = GHTSurfaceView.SCREEN_W / 4;
+		menuLocation[0][Y] = GHTSurfaceView.SCREEN_H / 3 - menuButton[0].getHeight();
 		menuLocation[1] = new float[2];
-		menuLocation[1][X] = MainSurfaceView.SCREEN_W / 2;
-		menuLocation[1][Y] = MainSurfaceView.SCREEN_H / 2;
+		menuLocation[1][X] = GHTSurfaceView.SCREEN_W / 2;
+		menuLocation[1][Y] = GHTSurfaceView.SCREEN_H / 2;
 		menuLocation[2] = new float[2];
 		menuLocation[2][X] = 0;
-		menuLocation[2][Y] = MainSurfaceView.SCREEN_H - menuButton[2].getHeight();
+		menuLocation[2][Y] = GHTSurfaceView.SCREEN_H - menuButton[2].getHeight();
 		
 		paint = new Paint();
 		paint.setColor(Color.WHITE);

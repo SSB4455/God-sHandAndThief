@@ -1,6 +1,6 @@
-package org.bistu.xgxykjcx.godshandandthief.actor.obstacle;
+package edu.bistu.xgxykjcx.godshandandthief.actor.obstacle;
 
-import org.bistu.xgxykjcx.godshandandthief.actor.GameActor;
+import edu.bistu.xgxykjcx.godshandandthief.actor.GameActor;
 
 import android.graphics.Paint;
 

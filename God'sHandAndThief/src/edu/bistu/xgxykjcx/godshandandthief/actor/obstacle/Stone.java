@@ -1,9 +1,10 @@
-package org.bistu.xgxykjcx.godshandandthief.actor.obstacle;
+package edu.bistu.xgxykjcx.godshandandthief.actor.obstacle;
 
-import org.bistu.xgxykjcx.godshandandthief.MainSurfaceView;
-import org.bistu.xgxykjcx.godshandandthief.actor.Background;
-import org.bistu.xgxykjcx.godshandandthief.actor.Businessman;
-import org.bistu.xgxykjcx.godshandandthief.actor.GameActor;
+
+import edu.bistu.xgxykjcx.godshandandthief.GHTSurfaceView;
+import edu.bistu.xgxykjcx.godshandandthief.actor.Background;
+import edu.bistu.xgxykjcx.godshandandthief.actor.Businessman;
+import edu.bistu.xgxykjcx.godshandandthief.actor.GameActor;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -17,13 +18,13 @@ public class Stone extends Obstacle {
 		frameW = actorBitmap.getWidth();
 		frameH = actorBitmap.getHeight();
 		
-		hight = MainSurfaceView.SCREEN_H / 6;
+		hight = GHTSurfaceView.SCREEN_H / 6;
 		shrink = hight / (float) frameH;
 		width = (int) (frameW * shrink);
 		incrementWHalf = (int) (frameW * (shrink - 1) / 2);
 		incrementHHalf = (int) (frameH * (shrink - 1) / 2);
 		
-		actorX = MainSurfaceView.SCREEN_W + incrementWHalf;
+		actorX = GHTSurfaceView.SCREEN_W + incrementWHalf;
 		actorY = Background.FLOOR - frameH - incrementHHalf;
 		
 		obstacleType = Obstacle.STONE;

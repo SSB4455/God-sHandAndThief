@@ -1,7 +1,7 @@
-package org.bistu.xgxykjcx.godshandandthief.statesystem;
+package edu.bistu.xgxykjcx.godshandandthief.statesystem;
 
-import org.bistu.xgxykjcx.godshandandthief.BitmapStorage;
-import org.bistu.xgxykjcx.godshandandthief.MainSurfaceView;
+import edu.bistu.xgxykjcx.godshandandthief.BitmapStorage;
+import edu.bistu.xgxykjcx.godshandandthief.GHTSurfaceView;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -38,7 +38,7 @@ public class PleaseWaitState implements IGameObject {
 	public void render(Canvas canvas) {
 		canvas.drawColor(Color.BLACK);
 		
-		canvas.drawBitmap(waitMoment, MainSurfaceView.SCREEN_W / 5, MainSurfaceView.SCREEN_H /5, paint);
+		canvas.drawBitmap(waitMoment, GHTSurfaceView.SCREEN_W / 5, GHTSurfaceView.SCREEN_H /5, paint);
 	}
 	
 	public boolean onKeyDown(int keyCode, KeyEvent event) {

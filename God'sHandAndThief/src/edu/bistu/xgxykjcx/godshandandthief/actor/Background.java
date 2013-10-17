@@ -1,7 +1,7 @@
-package org.bistu.xgxykjcx.godshandandthief.actor;
+package edu.bistu.xgxykjcx.godshandandthief.actor;
 
-import org.bistu.xgxykjcx.godshandandthief.MainActivity;
-import org.bistu.xgxykjcx.godshandandthief.MainSurfaceView;
+import edu.bistu.xgxykjcx.godshandandthief.GHTMainActivity;
+import edu.bistu.xgxykjcx.godshandandthief.GHTSurfaceView;
 
 import android.graphics.Canvas;
 import android.graphics.Paint;
@@ -12,7 +12,7 @@ public class Background extends GameActor {
 	public static int FACE_TO = 0;
 	public static final int TO_RIGHT = 1;
 	public static final int TO_LEFT = 0;
-	public static final int FLOOR = MainSurfaceView.SCREEN_H * 3 / 4;
+	public static final int FLOOR = GHTSurfaceView.SCREEN_H * 3 / 4;
 	
 	private Ground ground;
 	private Cloud cloud;
@@ -20,10 +20,10 @@ public class Background extends GameActor {
 	
 	
 	public Background() {
-		cloud = new Cloud(MainActivity.CONTEXT);
-		ground = new Ground(MainActivity.CONTEXT);
+		cloud = new Cloud(GHTMainActivity.CONTEXT);
+		ground = new Ground(GHTMainActivity.CONTEXT);
 		
-		Log.i(this.getClass().toString(), "FLOOR = " + FLOOR);
+		Log.i(this.getClass().getSimpleName(), "FLOOR = " + FLOOR);
 		paint = new Paint();
 	}
 	

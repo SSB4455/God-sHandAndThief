@@ -1,10 +1,11 @@
-package org.bistu.xgxykjcx.godshandandthief.statesystem;
+package edu.bistu.xgxykjcx.godshandandthief.statesystem;
 
-import org.bistu.xgxykjcx.godshandandthief.BitmapStorage;
-import org.bistu.xgxykjcx.godshandandthief.MainActivity;
-import org.bistu.xgxykjcx.godshandandthief.MainSurfaceView;
-import org.bistu.xgxykjcx.godshandandthief.actor.GodLayout;
-import org.bistu.xgxykjcx.godshandandthief.statesystem.StateSystem.PlayerType;
+
+import edu.bistu.xgxykjcx.godshandandthief.BitmapStorage;
+import edu.bistu.xgxykjcx.godshandandthief.GHTMainActivity;
+import edu.bistu.xgxykjcx.godshandandthief.GHTSurfaceView;
+import edu.bistu.xgxykjcx.godshandandthief.actor.GodLayout;
+import edu.bistu.xgxykjcx.godshandandthief.statesystem.StateSystem.PlayerType;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -28,7 +29,7 @@ public class ThiefChooseState implements IGameObject {
 	
 	
 	public ThiefChooseState(StateSystem stateSystem) {
-		this.context = MainActivity.CONTEXT;
+		this.context = GHTMainActivity.CONTEXT;
 		this.stateSystem = stateSystem;
 		
 		menuButton = new Bitmap[4];
@@ -39,17 +40,17 @@ public class ThiefChooseState implements IGameObject {
 		
 		menuLocation = new float[4][];
 		menuLocation[0] = new float[2];
-		menuLocation[0][X] = MainSurfaceView.SCREEN_W / 8;
-		menuLocation[0][Y] = MainSurfaceView.SCREEN_H / 8;
+		menuLocation[0][X] = GHTSurfaceView.SCREEN_W / 8;
+		menuLocation[0][Y] = GHTSurfaceView.SCREEN_H / 8;
 		menuLocation[1] = new float[2];
-		menuLocation[1][X] = MainSurfaceView.SCREEN_W / 3;
-		menuLocation[1][Y] = MainSurfaceView.SCREEN_H / 2;
+		menuLocation[1][X] = GHTSurfaceView.SCREEN_W / 3;
+		menuLocation[1][Y] = GHTSurfaceView.SCREEN_H / 2;
 		menuLocation[2] = new float[2];
-		menuLocation[2][X] = MainSurfaceView.SCREEN_W / 3;
-		menuLocation[2][Y] = MainSurfaceView.SCREEN_H * 3 / 4;
+		menuLocation[2][X] = GHTSurfaceView.SCREEN_W / 3;
+		menuLocation[2][Y] = GHTSurfaceView.SCREEN_H * 3 / 4;
 		menuLocation[3] = new float[2];
 		menuLocation[3][X] = 0;
-		menuLocation[3][Y] = MainSurfaceView.SCREEN_H / 4;
+		menuLocation[3][Y] = GHTSurfaceView.SCREEN_H / 4;
 		
 		paint = new Paint();
 		
@@ -86,7 +87,7 @@ public class ThiefChooseState implements IGameObject {
 						// 启动用蓝牙连接的小偷状态
 						ThiefPlayerState thiefPlayerState = new ThiefPlayerState(stateSystem, new GodLayout(), PlayerType.PlayerWithBlueTooth);
 						// start bluetooth
-						((MainActivity) MainActivity.CONTEXT).startBluetooth(MainActivity.THIEF, thiefPlayerState);
+						((GHTMainActivity) GHTMainActivity.CONTEXT).startBluetooth(GHTMainActivity.THIEF, thiefPlayerState);
 						stateSystem.addState("ThiefPlayerState", thiefPlayerState);
 						stateSystem.changeState("ThiefPlayerState");
 						Toast.makeText(context, "请允许开启蓝牙to链接上帝之手...", Toast.LENGTH_LONG).show();

@@ -1,10 +1,10 @@
-package org.bistu.xgxykjcx.godshandandthief.actor;
+package edu.bistu.xgxykjcx.godshandandthief.actor;
 
-import org.bistu.xgxykjcx.godshandandthief.MainActivity;
-import org.bistu.xgxykjcx.godshandandthief.MainSurfaceView;
-import org.bistu.xgxykjcx.godshandandthief.R;
-import org.bistu.xgxykjcx.godshandandthief.actor.obstacle.Obstacle;
-import org.bistu.xgxykjcx.godshandandthief.statesystem.StateSystem.PlayerType;
+import edu.bistu.xgxykjcx.godshandandthief.GHTMainActivity;
+import edu.bistu.xgxykjcx.godshandandthief.GHTSurfaceView;
+import edu.bistu.xgxykjcx.godshandandthief.actor.obstacle.Obstacle;
+import edu.bistu.xgxykjcx.godshandandthief.statesystem.StateSystem.PlayerType;
+import edu.bistu.xgxykjcx.godshandandthief.R;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -17,21 +17,23 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 
 public class Businessman extends GameActor implements OnGestureListener {
-	public static float SPEED = (MainSurfaceView.SCREEN_W / 2f) / 1000f;
-	// 操作的标志
-	public static final int UP_FLING = 0;
-	public static final int DOWN_FLING = 1;
+	public static float SPEED = (GHTSurfaceView.SCREEN_W / 2f) / 1000f;
+	
 	public static final String UP_FLING_STRING = "UP_FLING";
 	public static final String DOWN_FLING_STRING = "DOWN_FLING";
 	public static final String IS_INJURED_STRING = "IS_INJURED";
 	
+	// 操作的标志
+	public static final int UP_FLING = 0;
+	public static final int DOWN_FLING = 1;
+	// 身体状态的标志
 	private final int IS_RUN = 0;
 	private final int IS_UP = 1;
 	private final int IS_DOWN = 2;
 	private final int IS_INJURED = 3;
 	
 	private Context context;
-	private MainActivity mainActivity;
+	private GHTMainActivity mainActivity;
 	
 	private int health, frameW, frameH, incrementWHalf, incrementHHalf, currentFrame, bodyMotion;
 	private int heartStartX, heartY, heartInterval;
@@ -49,8 +51,8 @@ public class Businessman extends GameActor implements OnGestureListener {
 	
 	
 	public Businessman() {
-		this.context = MainActivity.CONTEXT;
-		mainActivity = (MainActivity) MainActivity.CONTEXT;
+		this.context = GHTMainActivity.CONTEXT;
+		mainActivity = (GHTMainActivity) GHTMainActivity.CONTEXT;
 		playerType = null;
 		
 		frameTotal = new int[4];
@@ -91,22 +93,22 @@ public class Businessman extends GameActor implements OnGestureListener {
 		}
 		
 		heart = BitmapFactory.decodeResource(context.getResources(), R.drawable.heart);
-		heartStartX = MainSurfaceView.SCREEN_W / 17;
-		heartY = MainSurfaceView.SCREEN_H / 17;
+		heartStartX = GHTSurfaceView.SCREEN_W / 17;
+		heartY = GHTSurfaceView.SCREEN_H / 17;
 		heartInterval = heart.getWidth();
 		
 		brushTime = 0;
 		
-		hight = MainSurfaceView.SCREEN_H / 4;		// 高度是屏幕高度1/4
+		hight = GHTSurfaceView.SCREEN_H / 4;		// 高度是屏幕高度1/4
 		shrink = hight / (float) frameH;
 		width = (int) (frameW * shrink);
 		incrementWHalf = (int) (frameW * (shrink - 1) / 2);
 		incrementHHalf = (int) (frameH * (shrink - 1) / 2);
 		
-		actorX = MainSurfaceView.SCREEN_W / 5 + incrementWHalf;		// 定位
+		actorX = GHTSurfaceView.SCREEN_W / 5 + incrementWHalf;		// 定位
 		actorY = Background.FLOOR - frameH - incrementHHalf;
-		Log.d(this.getClass().toString(), "actorX = " + actorX + ", frameW = " + frameW + ", frameH = " + frameH);
-		Log.d(this.getClass().toString(), "incrementWHalf = " + incrementWHalf + ", incrementHHalf = " + incrementHHalf);
+		Log.d(this.getClass().getSimpleName(), "actorX = " + actorX + ", frameW = " + frameW + ", frameH = " + frameH);
+		Log.d(this.getClass().getSimpleName(), "incrementWHalf = " + incrementWHalf + ", incrementHHalf = " + incrementHHalf);
 		
 		fling = new boolean[2];
 		
@@ -193,8 +195,8 @@ public class Businessman extends GameActor implements OnGestureListener {
 		int allowMistake = obstacle.getWidth() / 4;
 		if(obstacle.getLeft() < getRight() - allowMistake && getLeft() + allowMistake < obstacle.getRight()) {
 			
-			//Log.d(this.getClass().toString(), "businessman left = " + getLeft() + ", right = " + getRight());
-			//Log.d(this.getClass().toString(), "obstacle left = " + obstacle.getLeft() + ", right = " + obstacle.getRight());
+			//Log.d(this.getClass().getSimpleName(), "businessman left = " + getLeft() + ", right = " + getRight());
+			//Log.d(this.getClass().getSimpleName(), "obstacle left = " + obstacle.getLeft() + ", right = " + obstacle.getRight());
 			switch(obstacle.getType()) {
 			case Obstacle.HOLE :
 				if(bodyMotion == IS_DOWN || bodyMotion == IS_INJURED)
@@ -230,12 +232,12 @@ public class Businessman extends GameActor implements OnGestureListener {
 		if(bodyMotion != IS_INJURED) {
 			health--;
 			bodyMotion = IS_INJURED;
-			Log.i(this.getClass().toString(), "businessman is injured.");
+			Log.i(this.getClass().getSimpleName(), "businessman is injured.");
 		}
 	}
 	
 	public boolean onTouchEvent(MotionEvent event) {
-		//Log.v(this.getClass().toString(), "onTouchEvent");
+		//Log.v(this.getClass().getSimpleName(), "onTouchEvent");
 		if(event.getAction() ==  MotionEvent.ACTION_UP) {
 	    	Log.d(this.getClass().toString(), "scrollX = " + scrollX + ", scrollY = " + scrollY);
 	    	scrollX = 0;
@@ -248,7 +250,7 @@ public class Businessman extends GameActor implements OnGestureListener {
 	@Override
 	public boolean onDown(MotionEvent arg0) {
 		// 一次点击只唤醒一次
-		//Log.v(this.getClass().toString(), "onDonw");
+		//Log.v(this.getClass().getSimpleName(), "onDonw");
 		return true;
 	}
 	
@@ -262,24 +264,24 @@ public class Businessman extends GameActor implements OnGestureListener {
 	@Override
 	public void onLongPress(MotionEvent e) {
 		// 一旦点击稍有移动就进入scroll再进入filing 不走长按这条线了 只有按住不动才能唤醒这个方法（只唤醒一次）
-		//Log.v(this.getClass().toString(), "onLongPress");
+		//Log.v(this.getClass().getSimpleName(), "onLongPress");
 	}
 	
 	@Override
 	public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
 		scrollX -= distanceX;
 		scrollY -= distanceY;
-		int scrollLength = MainSurfaceView.SCREEN_W / 10;
-		Log.d(this.getClass().toString(), "onScroll ——> distanceX = " + distanceX + ", distanceY = " + distanceY);
+		int scrollLength = GHTSurfaceView.SCREEN_W / 10;
+		Log.d(this.getClass().getSimpleName(), "onScroll ——> distanceX = " + distanceX + ", distanceY = " + distanceY);
 		
 		if(scrollLength < -scrollY) {
-			if(MainActivity.CAN_SENDMESSAGE)
+			if(GHTMainActivity.CAN_SENDMESSAGE)
 				mainActivity.sendMessage(UP_FLING_STRING);
 			fling[UP_FLING] = true;
 			Log.d(this.getClass().toString(), "onScroll to up.");
 		}
 		if((scrollX > scrollLength && scrollY < scrollLength / 2) || scrollY > scrollLength) {
-			if(MainActivity.CAN_SENDMESSAGE)
+			if(GHTMainActivity.CAN_SENDMESSAGE)
 				mainActivity.sendMessage(DOWN_FLING_STRING);
 			fling[DOWN_FLING] = true;
 			Log.d(this.getClass().toString(), "onScroll to right.");
@@ -289,14 +291,14 @@ public class Businessman extends GameActor implements OnGestureListener {
 	
 	@Override
 	public void onShowPress(MotionEvent e) {
-		//Log.v(this.getClass().toString(), "onShowPress");
+		//Log.v(this.getClass().getSimpleName(), "onShowPress");
 		// TODO Auto-generated method stub
 		
 	}
 	
 	@Override
 	public boolean onSingleTapUp(MotionEvent e) {
-		//Log.v(this.getClass().toString(), "onSingleTapUp");
+		//Log.v(this.getClass().getSimpleName(), "onSingleTapUp");
 		// TODO Auto-generated method stub
 		return true;
 	}
